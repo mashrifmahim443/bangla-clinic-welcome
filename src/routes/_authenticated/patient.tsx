@@ -148,7 +148,7 @@ function Page() {
                       {formatNumber(r.value_mgdl, lang)} <span className="text-sm font-normal text-muted-foreground">mg/dL</span>
                       {s !== "ok" && <span className="ml-2 text-sm font-normal">{s === "low" ? t("কম", "low") : t("বেশি", "high")}</span>}
                     </td>
-                    <td className="px-4 py-2.5">{r.meal_slot && mealLabels[r.meal_slot] ? `${t(...mealLabels[r.meal_slot])} · ` : ""}{t(...typeLabels[r.reading_type as ReadingType])}</td>
+                    <td className="px-4 py-2.5">{r.meal_slot && mealLabels[r.meal_slot] ? `${t(...(mealLabels[r.meal_slot] as [string, string]))} · ` : ""}{t(...typeLabels[r.reading_type as ReadingType])}</td>
                     <td className="px-4 py-2.5 text-muted-foreground">{r.note || "—"}</td>
                   </tr>
                 );
