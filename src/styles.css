@@ -74,3 +74,6 @@
 }
 html[lang="bn"] body { font-family: "Hind Siliguri", "DM Sans", sans-serif; }
 html[lang="bn"] h1, html[lang="bn"] h2, html[lang="bn"] h3 { font-family: "Fraunces", "Hind Siliguri", serif; letter-spacing: 0; line-height: 1.35; }
+
+/* Larger text mode for older readers (toggled from the header / sidebar) */
+html.big-text { font-size: 20px; }

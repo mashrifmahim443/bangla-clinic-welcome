@@ -1,3 +1,4 @@
+import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
@@ -44,6 +45,9 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
           <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className="block text-primary underline underline-offset-4">
             {lang === "bn" ? "English" : "বাংলা"}
           </button>
+          <TextSizeToggle className="block text-primary underline underline-offset-4" />
+          <Link to="/profile" className="block text-primary underline underline-offset-4">{t("আমার তথ্য", "My details")}</Link>
+          {!roles.includes("doctor") && <Link to="/doctor-apply" className="block text-primary underline underline-offset-4">{t("ডাক্তার হিসেবে যোগ দিন", "Join as a doctor")}</Link>}
           <button onClick={signOut} className="block text-primary underline underline-offset-4">{t("বের হন", "Sign out")}</button>
         </div>
       </aside>

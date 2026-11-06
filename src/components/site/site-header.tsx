@@ -1,3 +1,4 @@
+import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 
@@ -24,6 +25,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-3 md:ml-0">
+          <TextSizeToggle className="rounded-md border border-border px-2.5 py-1 text-sm text-foreground hover:bg-secondary" />
           <button
             onClick={() => setLang(lang === "bn" ? "en" : "bn")}
             className="rounded-md border border-border px-2.5 py-1 text-sm text-foreground hover:bg-secondary"
