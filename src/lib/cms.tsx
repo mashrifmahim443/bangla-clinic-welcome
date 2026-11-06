@@ -15,6 +15,9 @@ export const sections: Record<string, [string, string]> = {
   pricing: ["ফি", "Pricing"],
   faq: ["সাধারণ প্রশ্ন", "FAQ"],
   footer: ["ফুটার ও যোগাযোগ", "Footer & contact"],
+  header: ["উপরের মেনু", "Top bar"],
+  pages: ["অন্য পাতার শিরোনাম", "Other page headings"],
+  subscription: ["প্ল্যান পাতা", "Plans page"],
 };
 
 const PAIR: [string, string] = ["প্রতি লাইনে একটা, বাম পাশ | ডান পাশ", "One per line, left | right"];
@@ -47,6 +50,29 @@ export const fields: Field[] = [
   { key: "footer.hours", section: "footer", kind: "text", label: ["খোলার সময়", "Opening hours"], bn: "শনি–বৃহস্পতি, সকাল ৯টা – রাত ৯টা", en: "Sat–Thu, 9am – 9pm" },
   { key: "footer.bmdc", section: "footer", kind: "long", label: ["BMDC নোট", "BMDC note"], bn: "সব ডাক্তার BMDC নিবন্ধিত। নিবন্ধন নম্বর প্রত্যেক ডাক্তারের পাতায় দেওয়া আছে।", en: "Every doctor is BMDC registered. Registration numbers are on each doctor's page." },
   { key: "footer.emergency", section: "footer", kind: "long", label: ["জরুরি সতর্কতা", "Emergency notice"], bn: "জরুরি অবস্থায় এই প্ল্যাটফর্ম হাসপাতালের বিকল্প নয়।", en: "In an emergency, this platform is not a substitute for a hospital." },
+  { key: "header.cta", section: "header", kind: "text", label: ["উপরের সবুজ বোতাম", "Top green button"], bn: "সুগার লিখুন", en: "Log your sugar" },
+  { key: "doctors.see_all", section: "doctors", kind: "text", label: ["সব ডাক্তার লিংক", "See-all link"], bn: "সব ডাক্তার দেখুন", en: "See all doctors" },
+  { key: "doctors.join_btn", section: "doctors", kind: "text", label: ["যোগ দেওয়ার বোতাম", "Join button"], bn: "ডাক্তার হিসেবে যোগ দিন", en: "Join as a doctor" },
+  { key: "food.eat_title", section: "food", kind: "text", label: ["খাবেন শিরোনাম", "Eat heading"], bn: "খাবেন", en: "Eat" },
+  { key: "food.avoid_title", section: "food", kind: "text", label: ["এড়াবেন শিরোনাম", "Avoid heading"], bn: "এড়াবেন", en: "Avoid" },
+  { key: "pricing.title", section: "pricing", kind: "text", label: ["শিরোনাম", "Heading"], bn: "ফি", en: "Pricing" },
+  { key: "faq.title", section: "faq", kind: "text", label: ["শিরোনাম", "Heading"], bn: "সাধারণ প্রশ্ন", en: "Questions" },
+  { key: "pages.doctors_title", section: "pages", kind: "text", label: ["ডাক্তার পাতা: শিরোনাম", "Doctors page: heading"], bn: "ডাক্তার খুঁজুন", en: "Find a doctor" },
+  { key: "pages.doctors_sub", section: "pages", kind: "long", label: ["ডাক্তার পাতা: নিচের লেখা", "Doctors page: sub text"], bn: "সবাই BMDC নিবন্ধিত। নিবন্ধন নম্বর পাশে দেওয়া আছে।", en: "All are BMDC registered. The number is shown beside each name." },
+  { key: "pages.articles_title", section: "pages", kind: "text", label: ["লেখা পাতা: শিরোনাম", "Articles page: heading"], bn: "লেখা", en: "Articles" },
+  { key: "pages.articles_sub", section: "pages", kind: "long", label: ["লেখা পাতা: নিচের লেখা", "Articles page: sub text"], bn: "ডাক্তার ও পুষ্টিবিদদের লেখা, সহজ ভাষায়।", en: "Written by doctors and nutritionists, in plain words." },
+  { key: "pages.diet_kicker", section: "pages", kind: "text", label: ["খাদ্য পাতা: ছোট লেখা", "Diet page: small label"], bn: "সাপ্তাহিক খাদ্য তালিকা", en: "Weekly diet chart" },
+  { key: "pages.diet_title", section: "pages", kind: "text", label: ["খাদ্য পাতা: শিরোনাম", "Diet page: heading"], bn: "এই সপ্তাহে কী খাবেন", en: "What to eat this week" },
+  { key: "pages.diet_sub", section: "pages", kind: "long", label: ["খাদ্য পাতা: নিচের লেখা", "Diet page: sub text"], bn: "প্রায় ১৫০০–১৮০০ ক্যালরি। আপনার ডাক্তার পরিমাণ বদলে দিতে পারেন।", en: "About 1500\u20131800 kcal. Your doctor may adjust portions." },
+  { key: "pages.ex_kicker", section: "pages", kind: "text", label: ["ব্যায়াম পাতা: ছোট লেখা", "Exercise page: small label"], bn: "ব্যায়াম", en: "Exercise" },
+  { key: "pages.ex_title", section: "pages", kind: "text", label: ["ব্যায়াম পাতা: শিরোনাম", "Exercise page: heading"], bn: "সহজ তিনটা ব্যায়াম", en: "Three simple exercises" },
+  { key: "pages.ex_sub", section: "pages", kind: "long", label: ["ব্যায়াম পাতা: নিচের লেখা", "Exercise page: sub text"], bn: "নতুন ব্যায়াম শুরুর আগে ডাক্তারকে জানান। সুগার ৭০-এর নিচে থাকলে ব্যায়াম করবেন না।", en: "Tell your doctor before starting. Don't exercise if your sugar is below 70." },
+  { key: "sub.title", section: "subscription", kind: "text", label: ["শিরোনাম", "Heading"], bn: "প্ল্যান ও ফি", en: "Plans and fees" },
+  { key: "sub.sub", section: "subscription", kind: "long", label: ["নিচের লেখা", "Sub text"], bn: "যেকোনো সময় বাদ দিতে পারবেন। বিকাশ ও নগদে ফি দেওয়া যাবে।", en: "Cancel any time. Pay by bKash or Nagad." },
+  { key: "header.links", section: "header", kind: "lines", hint: PAIR, label: ["মেনুর লিংক (নাম | ঠিকানা)", "Menu links (name | address)"], bn: "লেখা | /articles\nডাক্তার | /doctors\nখাদ্য তালিকা | /diet\nব্যায়াম | /exercise", en: "Articles | /articles\nDoctors | /doctors\nDiet chart | /diet\nExercise | /exercise" },
+  { key: "pricing.plan_names", section: "pricing", kind: "lines", hint: LINE, label: ["প্ল্যানের নাম (৩টা)", "Plan names (3)"], bn: "বিনামূল্যে\nমাসিক\nপরিবার", en: "Free\nMonthly\nFamily" },
+  { key: "pricing.rows", section: "pricing", kind: "lines", hint: ["প্রতি লাইনে: বিষয় | বিনামূল্যে | মাসিক | পরিবার", "Each line: feature | free | monthly | family"], label: ["প্রথম পাতার তুলনা", "Home page comparison"], bn: "সুগারের হিসাব | আছে | আছে | আছে\nডাক্তারের পরামর্শ | — | মাসে ১ বার | মাসে ৩ বার\nখাদ্য তালিকা | সাধারণ | ব্যক্তিগত | ব্যক্তিগত\nকতজন | ১ | ১ | ৪", en: "Sugar log | Yes | Yes | Yes\nDoctor consults | — | 1 per month | 3 per month\nFood list | Basic | Personal | Personal\nPeople | 1 | 1 | 4" },
+  { key: "sub.rows", section: "subscription", kind: "lines", hint: ["প্রতি লাইনে: বিষয় | বিনামূল্যে | মাসিক | পরিবার", "Each line: feature | free | monthly | family"], label: ["তুলনার সারি", "Comparison rows"], bn: "সুগারের খাতা ও চার্ট | আছে | আছে | আছে\nএসএমএস/হোয়াটসঅ্যাপ চেক-ইন | — | দিনে ৩ বার | দিনে ৩ বার\nডাক্তারের পরামর্শ | — | মাসে ১ বার | মাসে ৩ বার\nসাপ্তাহিক খাদ্য তালিকা | সাধারণ | ব্যক্তিগত | ব্যক্তিগত\nপ্রিন্টযোগ্য প্রেসক্রিপশন | — | আছে | আছে\nকতজন | ১ জন | ১ জন | ৪ জন পর্যন্ত", en: "Sugar diary and chart | Yes | Yes | Yes\nSMS / WhatsApp check-ins | — | 3 a day | 3 a day\nDoctor consults | — | 1 a month | 3 a month\nWeekly diet chart | General | Personal | Personal\nPrintable prescription | — | Yes | Yes\nPeople | 1 | 1 | Up to 4" },
 ];
 export const fieldByKey = Object.fromEntries(fields.map((f) => [f.key, f]));
 

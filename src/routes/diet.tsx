@@ -23,6 +23,7 @@ const giStyle: Record<GI, string> = {
 };
 function GiTag({ gi }: { gi: GI }) {
   const { t } = useLang();
+  const { c } = useCms();
   const label = { low: t("কম GI", "Low GI"), medium: t("মাঝারি GI", "Med GI"), high: t("বেশি GI", "High GI") }[gi];
   return <span className={`inline-block rounded-[3px] border px-1 text-[11px] leading-4 ${giStyle[gi]}`}>{label}</span>;
 }
@@ -37,9 +38,9 @@ function Page() {
       <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-primary pb-4">
           <div>
-            <p className="text-sm text-muted-foreground">{t("সাপ্তাহিক খাদ্য তালিকা", "Weekly diet chart")}</p>
-            <h1 className="font-display text-3xl font-semibold">{t("এই সপ্তাহে কী খাবেন", "What to eat this week")}</h1>
-            <p className="mt-1 text-muted-foreground">{t("প্রায় ১৫০০–১৮০০ ক্যালরি। আপনার ডাক্তার পরিমাণ বদলে দিতে পারেন।", "About 1500–1800 kcal. Your doctor may adjust portions.")}</p>
+            <p className="text-sm text-muted-foreground">{c("pages.diet_kicker")}</p>
+            <h1 className="font-display text-3xl font-semibold">{c("pages.diet_title")}</h1>
+            <p className="mt-1 text-muted-foreground">{c("pages.diet_sub")}</p>
           </div>
           <div className="flex items-center gap-3 text-sm">
             <GiTag gi="low" /><GiTag gi="medium" /><GiTag gi="high" />

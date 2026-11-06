@@ -19,15 +19,16 @@ export const Route = createFileRoute("/exercise")({
 
 function Page() {
   const { t } = useLang();
+  const { c } = useCms();
   const saved = useCms().json<Ex[] | null>("exercise", null);
   const exercises = Array.isArray(saved) ? saved.map((e, i) => ({ ...e, img: e.img || defaultExercises[i]?.img || walk })) : defaultExercises;
   return (
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-6 py-12">
-        <p className="text-sm text-muted-foreground">{t("ব্যায়াম", "Exercise")}</p>
-        <h1 className="font-display text-4xl font-semibold">{t("সহজ তিনটা ব্যায়াম", "Three simple exercises")}</h1>
-        <p className="mt-2 max-w-2xl text-lg text-muted-foreground">{t("নতুন ব্যায়াম শুরুর আগে ডাক্তারকে জানান। সুগার ৭০-এর নিচে থাকলে ব্যায়াম করবেন না।", "Tell your doctor before starting. Don't exercise if your sugar is below 70.")}</p>
+        <p className="text-sm text-muted-foreground">{c("pages.ex_kicker")}</p>
+        <h1 className="font-display text-4xl font-semibold">{c("pages.ex_title")}</h1>
+        <p className="mt-2 max-w-2xl text-lg text-muted-foreground">{c("pages.ex_sub")}</p>
         {exercises.map((ex, idx) => (
           <section key={ex.titleEn} className="mt-14 grid gap-8 border-t border-border pt-10 md:grid-cols-[22rem_1fr]">
             <img src={ex.img} alt={t(ex.titleBn, ex.titleEn)} loading="lazy" width={816} height={816} className="w-full rounded-[10px] border border-border" />

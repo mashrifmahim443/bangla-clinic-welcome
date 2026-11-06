@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { useArticles } from "@/lib/use-articles";
 import plate from "@/assets/articles/plate.jpg";
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/articles/")({
 
 function Page() {
   const { lang, t } = useLang();
+  const { c } = useCms();
   const articles = useArticles();
   const lead = articles[0]; const rest = articles.slice(1);
   if (!lead) return <div className="min-h-screen"><SiteHeader /><p className="mx-auto max-w-6xl px-6 py-12 text-muted-foreground">{t("এখনো কোনো লেখা নেই।", "No articles yet.")}</p><SiteFooter /></div>;
@@ -28,8 +30,8 @@ function Page() {
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-6 py-12">
         <header className="border-b-2 border-primary pb-4">
-          <h1 className="font-display text-4xl font-semibold">{t("লেখা", "Articles")}</h1>
-          <p className="mt-1 text-muted-foreground">{t("ডাক্তার ও পুষ্টিবিদদের লেখা, সহজ ভাষায়।", "Written by doctors and nutritionists, in plain words.")}</p>
+          <h1 className="font-display text-4xl font-semibold">{c("pages.articles_title")}</h1>
+          <p className="mt-1 text-muted-foreground">{c("pages.articles_sub")}</p>
         </header>
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.4fr_1fr]">
           <Link to="/articles/$slug" params={{ slug: lead.slug }} className="group block">
