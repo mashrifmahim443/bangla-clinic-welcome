@@ -67,10 +67,10 @@ function Landing() {
     [t("সুগার খুব কমে গেলে কী করব?", "What if my sugar drops very low?"), t("৭০ mg/dL-এর নিচে হলে সঙ্গে সঙ্গে চিনি বা গ্লুকোজ খান। জ্ঞান হারালে নিকটস্থ হাসপাতালে যান।", "Below 70 mg/dL, take sugar or glucose right away. If someone faints, go to the nearest hospital.")],
   ];
 
-  const plans: { name: string; price: number | null; rows: (string | boolean)[] }[] = [
-    { name: t("বিনামূল্যে", "Free"), price: 0, rows: [true, false, t("সাধারণ", "Basic"), "১"] },
-    { name: t("মাসিক", "Monthly"), price: 499, rows: [true, t("মাসে ১ বার", "1 per month"), t("ব্যক্তিগত", "Personal"), "১"] },
-    { name: t("পরিবার", "Family"), price: 1199, rows: [true, t("মাসে ৩ বার", "3 per month"), t("ব্যক্তিগত", "Personal"), "৪"] },
+  const plans: { name: string; price: number | null; rows: (string | boolean | number)[] }[] = [
+    { name: t("বিনামূল্যে", "Free"), price: 0, rows: [true, false, t("সাধারণ", "Basic"), 1] },
+    { name: t("মাসিক", "Monthly"), price: 499, rows: [true, t("মাসে ১ বার", "1 per month"), t("ব্যক্তিগত", "Personal"), 1] },
+    { name: t("পরিবার", "Family"), price: 1199, rows: [true, t("মাসে ৩ বার", "3 per month"), t("ব্যক্তিগত", "Personal"), 4] },
   ];
   const planLabels = [
     t("সুগারের হিসাব", "Sugar log"),
@@ -239,7 +239,7 @@ function Landing() {
                     <td className="p-4 text-muted-foreground">{label}</td>
                     {plans.map((p) => {
                       const v = p.rows[r];
-                      const text = v === true ? t("আছে", "Yes") : v === false ? "—" : lang === "en" && /^[০-৯]+$/.test(v) ? String("০১২৩৪৫৬৭৮৯".indexOf(v)) : v;
+                      const text = v === true ? t("আছে", "Yes") : v === false || v === undefined ? "—" : typeof v === "number" ? formatNumber(v, lang) : v;
                       return <td key={p.name} className="p-4">{text}</td>;
                     })}
                   </tr>
