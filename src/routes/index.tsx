@@ -32,7 +32,7 @@ const doctors = [
   { initials: "মক", bn: "ডা. মাহমুদ করিম", en: "Dr. Mahmud Karim", specBn: "মেডিসিন বিশেষজ্ঞ", specEn: "Internal medicine", fee: 700, online: false },
 ];
 
-const eat = [
+const eat: [string, string][] = [
   ["লাল চালের ভাত, অল্প পরিমাণে", "Red rice, small portion"],
   ["মসুর ও মুগ ডাল", "Masoor and mung dal"],
   ["লাল শাক, পুঁই শাক, কলমি শাক", "Red, malabar and water spinach"],
@@ -40,7 +40,7 @@ const eat = [
   ["রুই, ইলিশ, কাঁচকি মাছ", "Rui, ilish, small fish"],
   ["পেয়ারা, আমড়া, জাম্বুরা", "Guava, hog plum, pomelo"],
 ];
-const avoid = [
+const avoid: [string, string][] = [
   ["সাদা ভাত বেশি পরিমাণে", "Large plates of white rice"],
   ["রসগোল্লা, মিষ্টি, পায়েস", "Roshogolla, mishti, payesh"],
   ["পরোটা, লুচি, সিঙ্গারা", "Paratha, luchi, shingara"],
