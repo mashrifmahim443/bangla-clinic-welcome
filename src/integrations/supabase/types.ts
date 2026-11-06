@@ -192,6 +192,50 @@ export type Database = {
           },
         ]
       }
+      diet_templates: {
+        Row: {
+          calories: number | null
+          cells: Json
+          created_at: string
+          doctor_id: string
+          id: string
+          is_public: boolean
+          notes: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          calories?: number | null
+          cells?: Json
+          created_at?: string
+          doctor_id: string
+          id?: string
+          is_public?: boolean
+          notes?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          calories?: number | null
+          cells?: Json
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          is_public?: boolean
+          notes?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diet_templates_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctor_applications: {
         Row: {
           address: string | null
