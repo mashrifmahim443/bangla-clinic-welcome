@@ -38,7 +38,9 @@ function Page() {
     { key: "spec", label: t("বিশেষত্ব", "Specialty"), value: (a) => a.specialty, render: (a) => t(...(specialties[a.specialty] ?? [a.specialty, a.specialty])) },
     { key: "bmdc", label: "BMDC", value: (a) => a.bmdc_no },
     { key: "fee", label: t("ফি", "Fee"), value: (a) => a.fee_bdt, render: (a) => formatBDT(a.fee_bdt, lang), align: "right" },
-    { key: "phone", label: t("ফোন", "Phone"), value: (a) => a.phone },
+    { key: "post", label: t("পদবি / কর্মস্থল", "Designation / workplace"), value: (a) => a.designation, render: (a) => <span>{a.designation ?? "—"}<br /><span className="text-muted-foreground">{a.workplace ?? ""}{a.experience_years != null ? ` · ${a.experience_years} ${t("বছর", "yrs")}` : ""}</span></span> },
+    { key: "phone", label: t("যোগাযোগ", "Contact"), value: (a) => a.phone, render: (a) => <span className="whitespace-nowrap">{a.phone ?? "—"}<br /><span className="text-muted-foreground">WA {a.whatsapp ?? "—"}</span><br /><span className="text-muted-foreground">{a.email ?? ""}</span></span> },
+    { key: "addr", label: t("ঠিকানা", "Address"), value: (a) => a.address },
     { key: "status", label: t("অবস্থা", "Status"), value: (a) => a.status },
     { key: "act", label: t("কাজ", "Action"), value: () => null, render: (a) => a.status !== "pending" ? <span className="text-muted-foreground">{a.admin_note ?? "—"}</span> : (
       <span className="flex gap-3 whitespace-nowrap">
