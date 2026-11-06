@@ -55,7 +55,8 @@ function Page() {
     if (Number.isNaN(n)) return setErr("শুধু সংখ্যা লিখুন, যেমন ৬.২।");
     if (n < MIN_VALUE || n > MAX_VALUE) return setErr("সংখ্যাটা ১.১ থেকে ৩৩.৩-এর মধ্যে হতে হব।");
     setErr(""); setSaving(true);
-    const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n, _food: [...food, foodText.trim()].filter(Boolean).join(", ") || undefined });
+    const eaten = [...food, foodText.trim()].filter(Boolean).join(", ");
+    const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n, ...(eaten ? { _food: eaten } : {}) });
     setSaving(false);
     if (error || !ok) return setErr("লেখা যায়নি। আবার চাপুন।");
     setStep(4);
