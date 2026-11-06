@@ -64,6 +64,13 @@
       "when": 1793977550818,
       "tag": "0008_add_meal_slot",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793977761540,
+      "tag": "0009_glucose_mmol_unit",
+      "breakpoints": true
     }
   ]
 }
