@@ -80,7 +80,7 @@ function DoctorsPage() {
         <p className="mt-1 text-muted-foreground">{c("pages.doctors_sub")}</p>
 
         <div className="mt-8 grid gap-10 md:grid-cols-[13rem_1fr]">
-          <aside aria-label={t("ছাঁকনি", "Filters")}>
+          <aside className="min-w-0" aria-label={t("ছাঁকনি", "Filters")}>
             {group(t("বিশেষত্ব", "Specialty"), Object.entries(specialties).map(([v, l]) => ({ v, label: t(...l) })), spec, setSpec)}
             {group(t("অবস্থা", "Status"), (["online", "busy", "offline"] as const).map((v) => ({ v, label: t(statusInfo[v].bn, statusInfo[v].en) })), status, setStatus)}
             {group(t("ফি", "Fee"), feeBands.map((b) => ({ v: b.key, label: t(b.bn, b.en) })), fee, setFee)}
@@ -92,9 +92,28 @@ function DoctorsPage() {
             )}
           </aside>
 
-          <section>
+          <section className="min-w-0">
             <p className="mb-3 text-sm text-muted-foreground">{t(`${shown.length.toLocaleString("bn-BD")} জন ডাক্তার`, `${shown.length} doctors`)}</p>
-            <div className="overflow-x-auto border-t border-foreground/80">
+            <ul className="border-t border-foreground/80 md:hidden">
+              {shown.map((d) => (
+                <li key={d.id} className="flex gap-3 border-b border-border py-3">
+                  <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 shrink-0 rounded-md border border-border object-cover" />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
+                    <p className="text-sm text-muted-foreground">{d.degrees}</p>
+                    <p className="text-sm">{t(...(specialties[d.specialty] ?? [d.specialty, d.specialty]))} · BMDC {d.bmdc_no}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                      <span className="whitespace-nowrap font-medium">{formatBDT(d.fee_bdt, lang)}</span>
+                      <StatusDot status={d.status} label={t(statusInfo[d.status].bn, statusInfo[d.status].en)} />
+                      <Link to="/doctors/$slug" params={{ slug: d.slug }} className="ml-auto rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground">
+                        {t("সময় নিন", "Book")}
+                      </Link>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="hidden overflow-x-auto border-t border-foreground/80 md:block">
               <table className="w-full min-w-[760px] text-left">
                 <thead className="border-b border-border text-sm text-muted-foreground">
                   <tr>
