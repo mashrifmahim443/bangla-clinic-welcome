@@ -26,7 +26,7 @@ function Page() {
       return { id: u.user!.id, ...data };
     },
   });
-  const [form, setForm] = useState<Partial<Record<"full_name" | "phone" | "diabetes_type" | "birth_year" | "gender" | "address" | "diagnosed_year" | "medicines" | "weight_kg" | "height_cm" | "other_conditions" | "emergency_contact", string>>>({});
+  const [form, setForm] = useState<Partial<Record<"full_name" | "phone" | "diabetes_type" | "birth_year" | "gender" | "address" | "diagnosed_year" | "medicines" | "weight_kg" | "height_ft" | "height_in" | "other_conditions" | "emergency_contact", string>>>({});
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
   if (isLoading || !data) return <p className="p-10 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p>;
@@ -40,11 +40,12 @@ function Page() {
     diagnosed_year: form.diagnosed_year ?? (data.diagnosed_year ? String(data.diagnosed_year) : ""),
     medicines: form.medicines ?? data.medicines ?? "",
     weight_kg: form.weight_kg ?? (data.weight_kg ? String(data.weight_kg) : ""),
-    height_cm: form.height_cm ?? (data.height_cm ? String(data.height_cm) : ""),
+    height_ft: form.height_ft ?? (data.height_cm ? String(Math.floor(Math.round(Number(data.height_cm) / 2.54) / 12)) : ""),
+    height_in: form.height_in ?? (data.height_cm ? String(Math.round(Number(data.height_cm) / 2.54) % 12) : ""),
     other_conditions: form.other_conditions ?? data.other_conditions ?? "",
     emergency_contact: form.emergency_contact ?? data.emergency_contact ?? "",
   };
-  const pct = profileCompletion(v);
+  const pct = profileCompletion({ ...v, height_cm: v.height_ft });
   const set = (k: keyof typeof v, val: string) => { setForm({ ...form, [k]: val }); setSaved(false); };
 
   async function save(e: React.FormEvent) {
@@ -57,11 +58,13 @@ function Page() {
     if (v.birth_year && (!by || by < 1920 || by > 2015)) er["birth_year"] = t("জন্মসাল ১৯২০ থেকে ২০১৫-এর মধ্যে লিখুন, যেমন ১৯৬৫।", "Enter a birth year between 1920 and 2015, e.g. 1965.");
     const dy = Number(bnDigits(v.diagnosed_year));
     const wt = Number(bnDigits(v.weight_kg).replace(",", "."));
-    const ht = Number(bnDigits(v.height_cm).replace(",", "."));
+    const ft = Number(bnDigits(v.height_ft));
+    const inch = v.height_in ? Number(bnDigits(v.height_in)) : 0;
+    const ht = Math.round((ft * 12 + inch) * 2.54 * 10) / 10;
     const nowY = new Date().getFullYear();
     if (v.diagnosed_year && (!dy || dy < 1930 || dy > nowY)) er["diagnosed_year"] = t(`সালটা ১৯৩০ থেকে ${formatNumber(nowY, "bn")}-এর মধ্যে লিখুন, যেমন ২০১৫।`, `Enter a year between 1930 and ${nowY}, e.g. 2015.`);
     if (v.weight_kg && (!wt || wt < 20 || wt > 250)) er["weight_kg"] = t("ওজন ২০ থেকে ২৫০ কেজির মধ্যে লিখুন।", "Enter a weight between 20 and 250 kg.");
-    if (v.height_cm && (!ht || ht < 90 || ht > 230)) er["height_cm"] = t("উচ্চতা ৯০ থেকে ২৩০ সেমির মধ্যে লিখুন।", "Enter a height between 90 and 230 cm.");
+    if ((v.height_ft || v.height_in) && (!Number.isInteger(ft) || ft < 3 || ft > 7 || !Number.isInteger(inch) || inch < 0 || inch > 11)) er["height"] = t("উচ্চতা লিখুন ৩ থেকে ৭ ফুট, ইঞ্চি ০ থেকে ১১, যেমন ৫ ফুট ৪ ইঞ্চি।", "Enter 3–7 feet and 0–11 inches, e.g. 5 ft 4 in.");
     setErrs(er);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("profiles").update({
@@ -69,7 +72,7 @@ function Page() {
       diabetes_type: (v.diabetes_type || null) as DiabetesType | null,
       birth_year: v.birth_year ? by : null, gender: v.gender || null,
       address: v.address.trim() || null, diagnosed_year: v.diagnosed_year ? dy : null,
-      medicines: v.medicines.trim() || null, weight_kg: v.weight_kg ? wt : null, height_cm: v.height_cm ? ht : null,
+      medicines: v.medicines.trim() || null, weight_kg: v.weight_kg ? wt : null, height_cm: v.height_ft ? ht : null,
       other_conditions: v.other_conditions.trim() || null, emergency_contact: v.emergency_contact.trim() || null,
     }).eq("id", data!.id);
     if (error) return setErrs({ form: t("সংরক্ষণ হয়নি। আবার চেষ্টা করুন।", "Couldn't save. Try again.") });
@@ -121,7 +124,14 @@ function Page() {
         <div><label htmlFor="ad" className="font-medium">{t("ঠিকানা", "Address")}</label><textarea id="ad" rows={2} className={field} value={v.address} onChange={(e) => set("address", e.target.value)} placeholder={t("বাসা, এলাকা, জেলা", "House, area, district")} maxLength={300} /></div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div><label htmlFor="wt" className="font-medium">{t("ওজন (কেজি)", "Weight (kg)")}</label><input id="wt" inputMode="decimal" className={field} value={v.weight_kg} onChange={(e) => set("weight_kg", e.target.value)} placeholder="৬৫" /><Err k="weight_kg" /></div>
-          <div><label htmlFor="ht" className="font-medium">{t("উচ্চতা (সেমি)", "Height (cm)")}</label><input id="ht" inputMode="decimal" className={field} value={v.height_cm} onChange={(e) => set("height_cm", e.target.value)} placeholder="১৬০" /><Err k="height_cm" /></div>
+          <div>
+            <span className="font-medium">{t("উচ্চতা", "Height")}</span>
+            <div className="flex gap-2">
+              <label className="flex-1"><span className="sr-only">{t("ফুট", "Feet")}</span><div className="flex items-center gap-2"><input inputMode="numeric" className={field} value={v.height_ft} onChange={(e) => set("height_ft", e.target.value)} placeholder="৫" /><span className="mt-1">{t("ফুট", "ft")}</span></div></label>
+              <label className="flex-1"><span className="sr-only">{t("ইঞ্চি", "Inches")}</span><div className="flex items-center gap-2"><input inputMode="numeric" className={field} value={v.height_in} onChange={(e) => set("height_in", e.target.value)} placeholder="৪" /><span className="mt-1">{t("ইঞ্চি", "in")}</span></div></label>
+            </div>
+            <Err k="height" />
+          </div>
         </div>
         <div>
           <label htmlFor="dy" className="font-medium">{t("কোন সালে ডায়াবেটিস ধরা পড়েছে", "Year diabetes was found")}</label>
