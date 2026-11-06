@@ -1,0 +1,1 @@
+ALTER TABLE public.glucose_readings ADD COLUMN meal_slot text CHECK (meal_slot IN ('breakfast','lunch','dinner'));
