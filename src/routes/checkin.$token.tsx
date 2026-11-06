@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { mealLabel, type Slot } from "@/lib/checkin";
-import { glucoseState } from "@/lib/glucose";
+import { MAX_VALUE, MIN_VALUE, UNIT, glucoseState, parseGlucose } from "@/lib/glucose";
 
 export const Route = createFileRoute("/checkin/$token")({
   ssr: false,
@@ -11,7 +11,6 @@ export const Route = createFileRoute("/checkin/$token")({
   component: Page,
 });
 
-const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
 const foodChoices: Record<Slot, string[]> = {
   morning: ["রুটি", "পরোটা", "ডিম", "সবজি", "ডাল", "চিড়া/মুড়ি", "চা", "ফল"],
   lunch: ["ভাত", "মাছ", "মুরগি", "ডাল", "সবজি", "শাক", "সালাদ", "মাংস"],
@@ -92,15 +91,16 @@ function Page() {
     </>,
   );
   if (step === 2) return shell(<>{progress}<h1 className="font-display text-4xl leading-tight font-semibold">ওষুধ খেয়েছেন?</h1><YesNo onPick={(v) => { setMeds(v); setStep(3); }} /></>);
-  const st = Number(bnDigits(value)) ? glucoseState(Number(bnDigits(value))) : null;
+  const parsed = parseGlucose(value);
+  const st = Number.isNaN(parsed) ? null : glucoseState(parsed);
   return shell(
     <>
       {progress}
       <label htmlFor="v" className="block font-display text-4xl leading-tight font-semibold">সুগার কত?</label>
       <div className="mt-10 flex items-center gap-3 rounded-md border-2 border-border bg-card px-4 focus-within:border-primary">
-        <input id="v" inputMode="numeric" autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder="১২০"
+        <input id="v" inputMode="decimal" autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder="৬.২"
           className="w-full bg-transparent py-5 text-5xl font-semibold outline-none" />
-        <span className="text-2xl text-muted-foreground">mg/dL</span>
+        <span className="text-2xl text-muted-foreground">{UNIT}</span>
       </div>
       {st === "low" && <p className="mt-3 text-glucose-low">সুগার কম। এখনই একটু চিনি-পানি খান।</p>}
       {err && <p role="alert" className="mt-3 text-destructive">{err}</p>}
