@@ -19,7 +19,7 @@ export const Route = createFileRoute("/articles/")({
 
 function Page() {
   const { lang, t } = useLang();
-  const [lead, ...rest] = articles;
+  const lead = articles[0]!; const rest = articles.slice(1);
   const meta = (a: typeof lead) => `${t(a.author.bn, a.author.en)} · ${formatNumber(a.minutes, lang)} ${t("মিনিটে পড়া", "min read")}`;
   return (
     <div className="min-h-screen">
