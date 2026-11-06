@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
-import { days, meals, plan, type GI } from "@/lib/diet";
+import { days, meals, plan as defaultPlan, type Cell, type GI } from "@/lib/diet";
+import { useCms } from "@/lib/cms";
 
 export const Route = createFileRoute("/diet")({
   head: () => ({ meta: [
@@ -28,6 +29,8 @@ function GiTag({ gi }: { gi: GI }) {
 
 function Page() {
   const { t } = useLang();
+  const saved = useCms().json<Cell[][] | null>("diet_plan", null);
+  const plan = Array.isArray(saved) && saved.length === 5 ? saved : defaultPlan;
   return (
     <div className="min-h-screen">
       <div className="print:hidden"><SiteHeader /></div>
