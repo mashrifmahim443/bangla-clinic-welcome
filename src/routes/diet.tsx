@@ -30,7 +30,8 @@ function GiTag({ gi }: { gi: GI }) {
 
 function Page() {
   const { t } = useLang();
-  const saved = useCms().json<Cell[][] | null>("diet_plan", null);
+  const { c, json } = useCms();
+  const saved = json<Cell[][] | null>("diet_plan", null);
   const plan = Array.isArray(saved) && saved.length === 5 ? saved : defaultPlan;
   return (
     <div className="min-h-screen">
