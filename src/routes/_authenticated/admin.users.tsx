@@ -95,7 +95,7 @@ function Page() {
         <h1 className="text-lg font-semibold">{t("ব্যবহারকারী", "Users")} <span className="font-normal text-muted-foreground">({rows.length})</span></h1>
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("নাম, ইমেইল বা ফোন খুঁজুন", "Search name, email or phone")} className="w-64 rounded-md border border-input bg-card px-2 py-1 text-[13px]" />
       </div>
-      <p className="mt-1 text-muted-foreground">{t("নতুন অ্যাকাউন্ট অনুমোদন না দেওয়া পর্যন্ত ডাক্তার বুক বা সুগার লেখা যাবে না।", "New accounts can't book doctors or log sugar until approved.")}</p>
+      <p className="mt-1 text-muted-foreground">{t("নতুন অ্যাকাউন্ট অনুমোদন পাওয়ার পরেই অ্যাপ ব্যবহার করতে পারবে। বন্ধ অ্যাকাউন্ট কিছুই করতে পারবে না।", "New accounts can use the app only after approval. Blocked accounts can do nothing.")}</p>
       <div className="mt-3 flex flex-wrap gap-1">
         {tabs.map(([k, l]) => <button key={k} onClick={() => setFilter(k)} className={`rounded-md border px-2 py-1 transition-colors duration-150 ${filter === k ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-secondary"}`}>{l}</button>)}
       </div>
