@@ -18,7 +18,7 @@ export function SiteFooter() {
         <ul className="space-y-1.5 text-sm">
           <li><a href="/#how" className="hover:text-primary">{t("কীভাবে কাজ করে", "How it works")}</a></li>
           <li><a href="/doctors" className="hover:text-primary">{t("ডাক্তার", "Doctors")}</a></li>
-          <li><a href="/#pricing" className="hover:text-primary">{t("ফি", "Pricing")}</a></li>
+          <li><a href="/subscription" className="hover:text-primary">{t("ফি", "Pricing")}</a></li>
           <li><a href="/#faq" className="hover:text-primary">{t("প্রশ্ন", "FAQ")}</a></li>
         </ul>
         <p className="text-sm text-muted-foreground">

@@ -49,6 +49,39 @@ export type Database = {
           },
         ]
       }
+      checkin_links: {
+        Row: {
+          ate: boolean | null
+          created_at: string
+          expires_at: string
+          slot: Database["public"]["Enums"]["checkin_slot"]
+          token: string
+          took_medicine: boolean | null
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          ate?: boolean | null
+          created_at?: string
+          expires_at?: string
+          slot: Database["public"]["Enums"]["checkin_slot"]
+          token?: string
+          took_medicine?: boolean | null
+          used_at?: string | null
+          user_id?: string
+        }
+        Update: {
+          ate?: boolean | null
+          created_at?: string
+          expires_at?: string
+          slot?: Database["public"]["Enums"]["checkin_slot"]
+          token?: string
+          took_medicine?: boolean | null
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       consult_messages: {
         Row: {
           appointment_id: string
@@ -261,6 +294,14 @@ export type Database = {
         Args: { _doctor: string; _from: string; _to: string }
         Returns: string[]
       }
+      checkin_info: {
+        Args: { _token: string }
+        Returns: {
+          first_name: string
+          slot: Database["public"]["Enums"]["checkin_slot"]
+          used: boolean
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -271,9 +312,19 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
+      submit_checkin: {
+        Args: {
+          _ate: boolean
+          _token: string
+          _took_medicine: boolean
+          _value: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"
+      checkin_slot: "morning" | "lunch" | "dinner"
       doctor_status: "online" | "busy" | "offline"
       reading_type:
         | "fasting"
@@ -409,6 +460,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "doctor", "patient"],
+      checkin_slot: ["morning", "lunch", "dinner"],
       doctor_status: ["online", "busy", "offline"],
       reading_type: [
         "fasting",
