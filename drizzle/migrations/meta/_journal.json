@@ -106,6 +106,13 @@
       "when": 1793980048488,
       "tag": "0014_doctor_profile_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1793981076451,
+      "tag": "0015_admin_control_panel",
+      "breakpoints": true
     }
   ]
 }
