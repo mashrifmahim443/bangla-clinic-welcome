@@ -24,9 +24,9 @@ export function DoctorAdvice() {
   });
 
   return (
-    <section className="mt-8">
-      <h2 className="text-xl font-semibold">{t("ডাক্তারের পরামর্শ", "Doctor's advice")}</h2>
-      <div className="mt-3 rounded-[10px] border border-border bg-card">
+    <section>
+      <h1 className="font-display text-3xl font-semibold">{t("ডাক্তারের পরামর্শ", "Doctor's advice")}</h1>
+      <div className="mt-5 rounded-[10px] border border-border bg-card">
         {isLoading && <p className="px-5 py-6 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p>}
         {!isLoading && data.length === 0 && (
           <p className="px-5 py-6 text-muted-foreground">{t("এখনো কোনো পরামর্শ আসেনি। ডাক্তার দেখালে তাঁর পরামর্শ এখানে থাকবে।", "No advice yet. After you see a doctor, their advice will appear here.")}</p>
