@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { useLang } from "@/lib/i18n";
@@ -18,53 +19,133 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+type Field = "name" | "phone" | "email" | "password";
+type Errors = Partial<Record<Field, string>>;
+
 function AuthPage() {
   const { t } = useLang();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"in" | "up">("in");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState<string | null>(null);
+  const [form, setForm] = useState({ name: "", phone: "", email: "", password: "" });
+  const [errors, setErrors] = useState<Errors>({});
+  const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const emailRule = z.string().trim().min(1, t("ইমেইল লিখুন।", "Enter your email.")).email(t("ইমেইলটা ঠিক নেই। যেমন: rahim@gmail.com", "That email doesn't look right. Example: rahim@gmail.com")).max(255);
+  const passRule = z.string().min(6, t("পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।", "Password must be at least 6 characters.")).max(72);
+  const schema =
+    mode === "in"
+      ? z.object({ email: emailRule, password: passRule })
+      : z.object({
+          name: z.string().trim().min(2, t("আপনার নাম লিখুন।", "Enter your name.")).max(100, t("নাম ১০০ অক্ষরের মধ্যে রাখুন।", "Keep your name under 100 characters.")),
+          phone: z
+            .string()
+            .trim()
+            .regex(/^\d{11}$/, t("ফোন নম্বর ১১ ডিজিটের হতে হবে।", "Phone number must be 11 digits."))
+            .regex(/^01[3-9]/, t("নম্বরটা ০১ দিয়ে শুরু হতে হবে, যেমন ০১৭১১০০০০০০।", "Number must start with 01, like 01711000000.")),
+          email: emailRule,
+          password: passRule,
+        });
+
+  function set(field: Field, value: string) {
+    const v = field === "phone" ? value.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d))).replace(/\D/g, "") : value;
+    setForm((f) => ({ ...f, [field]: v }));
+    if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }));
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setBusy(true);
     setMsg(null);
+    const parsed = schema.safeParse(form);
+    if (!parsed.success) {
+      const next: Errors = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0] as Field;
+        if (!next[k]) next[k] = issue.message;
+      }
+      setErrors(next);
+      return;
+    }
+    setBusy(true);
     if (mode === "in") {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setMsg(error.message);
+      const { error } = await supabase.auth.signInWithPassword({ email: form.email.trim(), password: form.password });
+      if (error) setMsg({ kind: "err", text: t("ইমেইল বা পাসওয়ার্ড মিলছে না। আবার চেষ্টা করুন।", "Email or password doesn't match. Please try again.") });
       else navigate({ to: "/dashboard" });
     } else {
-      const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
-      setMsg(error ? error.message : t("ইমেইলে একটা লিংক পাঠানো হয়েছে। সেটায় চাপ দিয়ে অ্যাকাউন্ট নিশ্চিত করুন।", "We sent a link to your email. Click it to confirm your account."));
+      const { error } = await supabase.auth.signUp({
+        email: form.email.trim(),
+        password: form.password,
+        options: { emailRedirectTo: window.location.origin, data: { full_name: form.name.trim(), phone: form.phone } },
+      });
+      if (error) setMsg({ kind: "err", text: error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। ঢুকুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.") });
+      else setMsg({ kind: "ok", text: t("আপনার ইমেইলে একটা লিংক পাঠানো হয়েছে। সেটায় চাপ দিলেই অ্যাকাউন্ট চালু হবে।", "We sent a link to your email. Click it to turn on your account.") });
     }
     setBusy(false);
   }
 
-  const input = "w-full rounded-md border border-border bg-card px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring";
+  function switchMode() {
+    setMode(mode === "in" ? "up" : "in");
+    setErrors({});
+    setMsg(null);
+  }
+
+  const fields: { key: Field; label: string; type: string; hint?: string | undefined; auto: string }[] = [
+    ...(mode === "up"
+      ? [
+          { key: "name" as Field, label: t("আপনার নাম", "Your name"), type: "text", auto: "name" },
+          { key: "phone" as Field, label: t("মোবাইল নম্বর", "Mobile number"), type: "tel", hint: t("যেমন: ০১৭১১০০০০০০", "e.g. 01711000000"), auto: "tel" },
+        ]
+      : []),
+    { key: "email", label: t("ইমেইল", "Email"), type: "email", auto: "email" },
+    { key: "password", label: t("পাসওয়ার্ড", "Password"), type: "password", hint: mode === "up" ? t("অন্তত ৬ অক্ষর", "At least 6 characters") : undefined, auto: mode === "in" ? "current-password" : "new-password" },
+  ];
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="mx-auto max-w-md px-6 py-16">
-        <h1 className="font-display text-3xl font-semibold">{mode === "in" ? t("ঢুকুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open an account")}</h1>
-        <form onSubmit={submit} className="mt-8 space-y-4">
-          <label className="block">
-            <span className="mb-1 block text-sm">{t("ইমেইল", "Email")}</span>
-            <input className={input} type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-sm">{t("পাসওয়ার্ড", "Password")}</span>
-            <input className={input} type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          {msg && <p className="text-sm text-accent">{msg}</p>}
-          <button disabled={busy} className="w-full rounded-md bg-primary py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
-            {mode === "in" ? t("ঢুকুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open account")}
-          </button>
-        </form>
-        <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-6 text-sm text-primary underline underline-offset-4">
-          {mode === "in" ? t("নতুন? অ্যাকাউন্ট খুলুন", "New here? Open an account") : t("আগে থেকে অ্যাকাউন্ট আছে? ঢুকুন", "Have an account? Sign in")}
-        </button>
+      <main className="mx-auto max-w-md px-6 py-14">
+        <div className="rounded-[10px] border border-border bg-card p-8">
+          <h1 className="font-display text-3xl font-semibold">{mode === "in" ? t("ঢুকুন", "Sign in") : t("নতুন অ্যাকাউন্ট খুলুন", "Open a new account")}</h1>
+          <p className="mt-1 text-muted-foreground">
+            {mode === "in" ? t("আপনার ইমেইল আর পাসওয়ার্ড দিন।", "Enter your email and password.") : t("দুই মিনিট লাগবে।", "It takes two minutes.")}
+          </p>
+          <form onSubmit={submit} noValidate className="mt-7 space-y-5">
+            {fields.map((f) => {
+              const err = errors[f.key];
+              return (
+                <div key={f.key}>
+                  <label htmlFor={f.key} className="mb-1.5 block font-medium">{f.label}</label>
+                  <input
+                    id={f.key}
+                    type={f.type}
+                    inputMode={f.key === "phone" ? "numeric" : undefined}
+                    autoComplete={f.auto}
+                    value={form[f.key]}
+                    onChange={(e) => set(f.key, e.target.value)}
+                    aria-invalid={!!err}
+                    aria-describedby={`${f.key}-note`}
+                    className={`w-full rounded-md border bg-card px-3 py-2.5 focus:outline-none focus:ring-2 ${err ? "border-destructive focus:ring-destructive/30" : "border-border focus:ring-ring/30"}`}
+                  />
+                  <p id={`${f.key}-note`} className={`mt-1 text-sm ${err ? "text-destructive" : "text-muted-foreground"}`}>
+                    {err ?? f.hint ?? ""}
+                  </p>
+                </div>
+              );
+            })}
+            {msg && (
+              <p className={`rounded-md border px-3 py-2 text-sm ${msg.kind === "ok" ? "border-glucose-ok text-glucose-ok" : "border-destructive text-destructive"}`}>{msg.text}</p>
+            )}
+            <button disabled={busy} className="w-full rounded-md bg-primary py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
+              {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : mode === "in" ? t("ঢুকুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open account")}
+            </button>
+          </form>
+          <p className="mt-6 border-t border-border pt-5 text-sm text-muted-foreground">
+            {mode === "in" ? t("নতুন এসেছেন?", "New here?") : t("আগে থেকে অ্যাকাউন্ট আছে?", "Already have an account?")}{" "}
+            <button onClick={switchMode} className="font-medium text-primary underline underline-offset-4">
+              {mode === "in" ? t("অ্যাকাউন্ট খুলুন", "Open an account") : t("ঢুকুন", "Sign in")}
+            </button>
+          </p>
+        </div>
       </main>
     </div>
   );
