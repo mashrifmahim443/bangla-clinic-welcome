@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { glucoseState } from "@/lib/glucose";
+import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
 import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
@@ -50,7 +51,8 @@ function Page() {
           <Chat appointmentId={id} me={appt.me} />
         </div>
         <aside className="overflow-y-auto border-t border-border bg-card p-6 md:border-t-0 md:border-l">
-          <Summary patientId={appt.patient_id} appointmentId={id} phone={appt.patient?.phone ?? null} />
+          <Summary patientId={appt.patient_id} appointmentId={id} phone={appt.patient?.phone ?? null} dtype={appt.patient?.diabetes_type ?? null} birthYear={appt.patient?.birth_year ?? null} />
+          {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
         </aside>
       </div>
@@ -114,12 +116,28 @@ function Chat({ appointmentId, me }: { appointmentId: string; me: string }) {
   );
 }
 
-function Summary({ patientId, appointmentId, phone }: { patientId: string; appointmentId: string; phone: string | null }) {
+function CompleteButton({ id, status }: { id: string; status: string }) {
+  const { t } = useLang();
+  const qc = useQueryClient();
+  if (status === "completed") return <p className="mt-4 text-sm text-glucose-ok">{t("এই পরামর্শ শেষ হয়েছে।", "This consultation is complete.")}</p>;
+  return (
+    <button onClick={async () => {
+      const { error } = await supabase.from("appointments").update({ status: "completed" }).eq("id", id);
+      if (error) return alert(t("সম্পন্ন করা যায়নি।", "Couldn't mark as complete."));
+      qc.invalidateQueries({ queryKey: ["appointment", id] });
+    }} className="mt-4 w-full rounded-md border border-primary px-4 py-2 text-primary transition-colors duration-150 hover:bg-secondary">
+      {t("পরামর্শ শেষ হয়েছে", "Mark consultation complete")}
+    </button>
+  );
+}
+
+function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patientId: string; appointmentId: string; phone: string | null; dtype: DiabetesType | null; birthYear: number | null }) {
+  const age = ageFromBirthYear(birthYear);
   const { lang, t } = useLang();
   const { data: readings = [] } = useQuery({
     queryKey: ["patient-readings", patientId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("glucose_readings").select("id, value_mgdl, reading_type, taken_at").eq("user_id", patientId).order("taken_at", { ascending: false }).limit(10);
+      const { data, error } = await supabase.from("glucose_readings").select("id, value_mgdl, reading_type, taken_at, note").eq("user_id", patientId).order("taken_at", { ascending: false }).limit(10);
       if (error) throw error;
       return data;
     },
@@ -128,7 +146,11 @@ function Summary({ patientId, appointmentId, phone }: { patientId: string; appoi
   return (
     <div>
       <h2 className="font-display text-lg font-semibold">{t("রোগীর সারাংশ", "Patient summary")}</h2>
-      {phone && <p className="text-sm text-muted-foreground">{t("ফোন", "Phone")}: {phone}</p>}
+      <p className="text-sm text-muted-foreground">
+        {dtype ? t(...diabetesTypes[dtype]) : t("ধরন জানানো হয়নি", "Type not given")}
+        {age ? <> · {formatNumber(age, lang)} {t("বছর", "yrs")}</> : null}
+        {phone && <> · {phone}</>}
+      </p>
       <h3 className="mt-5 text-sm font-medium text-muted-foreground">{t("সাম্প্রতিক সুগার (mg/dL)", "Recent sugar (mg/dL)")}</h3>
       {readings.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("এখনো কোনো রিডিং লেখা হয়নি।", "No readings logged yet.")}</p> : (
         <table className="mt-2 w-full text-sm">
@@ -136,6 +158,7 @@ function Summary({ patientId, appointmentId, phone }: { patientId: string; appoi
             {readings.map((r) => (
               <tr key={r.id} className="border-b border-border">
                 <td className="py-1.5">{formatDhaka(new Date(r.taken_at), lang, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}</td>
+                <td className="py-1.5 pl-2 text-xs text-muted-foreground">{r.note}</td>
                 <td className={`py-1.5 text-right font-medium ${stateClass[glucoseState(r.value_mgdl)]}`}>{formatNumber(r.value_mgdl, lang)}</td>
               </tr>
             ))}
