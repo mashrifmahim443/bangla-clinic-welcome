@@ -1,15 +1,15 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { articles } from "@/lib/articles";
+import { useArticles } from "@/lib/use-articles";
 import { doctorPhotos } from "@/lib/doctors";
 
 export const Route = createFileRoute("/articles/$slug")({
   loader: ({ params }) => {
     const article = articles.find((a) => a.slug === params.slug);
-    if (!article) throw notFound();
     return { article };
   },
   head: ({ loaderData }) => {
@@ -27,8 +27,10 @@ export const Route = createFileRoute("/articles/$slug")({
 });
 
 function Page() {
-  const { article: a } = Route.useLoaderData();
+  const { slug } = Route.useParams();
   const { lang, t } = useLang();
+  const a = useArticles().find((x) => x.slug === slug);
+  if (!a) return <div className="min-h-screen"><SiteHeader /><p className="mx-auto max-w-[680px] px-6 py-12">{t("লেখাটা পাওয়া গেল না।", "Article not found.")} <Link to="/articles" className="text-primary underline">{t("সব লেখা", "All articles")}</Link></p><SiteFooter /></div>;
   const photo = doctorPhotos[a.author.slug];
   return (
     <div className="min-h-screen">
@@ -37,6 +39,7 @@ function Page() {
         <Link to="/articles" className="text-sm text-primary underline underline-offset-4">{t("← সব লেখা", "← All articles")}</Link>
         <p className="mt-8 text-sm font-medium tracking-wide text-accent uppercase">{t(a.catBn, a.catEn)}</p>
         <h1 className="mt-2 font-display text-5xl leading-[1.1] font-semibold">{t(a.titleBn, a.titleEn)}</h1>
+        {a.image && <img src={a.image} alt="" className="mt-6 aspect-[16/9] w-full rounded-[10px] border border-border object-cover" />}
         {a.deckBn && <p className="mt-4 text-xl text-muted-foreground">{t(a.deckBn, a.deckEn)}</p>}
         <p className="mt-5 border-b border-border pb-6 text-sm">
           {t(a.author.bn, a.author.en)} · {formatDhaka(new Date(a.date), lang, { dateStyle: "long" })} · {formatNumber(a.minutes, lang)} {t("মিনিটে পড়া", "min read")}

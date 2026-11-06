@@ -117,6 +117,30 @@ export type Database = {
           },
         ]
       }
+      deletion_requests: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       diet_plans: {
         Row: {
           appointment_id: string | null
@@ -263,6 +287,7 @@ export type Database = {
       }
       doctors: {
         Row: {
+          active: boolean
           bmdc_no: string
           created_at: string
           degrees: string
@@ -274,6 +299,7 @@ export type Database = {
           languages: string[]
           name_bn: string
           name_en: string
+          photo_url: string | null
           slug: string
           specialty: string
           status: Database["public"]["Enums"]["doctor_status"]
@@ -281,6 +307,7 @@ export type Database = {
           workplace: string | null
         }
         Insert: {
+          active?: boolean
           bmdc_no: string
           created_at?: string
           degrees: string
@@ -292,6 +319,7 @@ export type Database = {
           languages?: string[]
           name_bn: string
           name_en: string
+          photo_url?: string | null
           slug: string
           specialty: string
           status?: Database["public"]["Enums"]["doctor_status"]
@@ -299,6 +327,7 @@ export type Database = {
           workplace?: string | null
         }
         Update: {
+          active?: boolean
           bmdc_no?: string
           created_at?: string
           degrees?: string
@@ -310,6 +339,7 @@ export type Database = {
           languages?: string[]
           name_bn?: string
           name_en?: string
+          photo_url?: string | null
           slug?: string
           specialty?: string
           status?: Database["public"]["Enums"]["doctor_status"]
@@ -446,6 +476,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_status: string
           address: string | null
           birth_year: number | null
           created_at: string
@@ -462,6 +493,7 @@ export type Database = {
           weight_kg: number | null
         }
         Insert: {
+          account_status?: string
           address?: string | null
           birth_year?: number | null
           created_at?: string
@@ -478,6 +510,7 @@ export type Database = {
           weight_kg?: number | null
         }
         Update: {
+          account_status?: string
           address?: string | null
           birth_year?: number | null
           created_at?: string
@@ -492,6 +525,24 @@ export type Database = {
           other_conditions?: string | null
           phone?: string | null
           weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          data: Json
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          data: Json
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          key?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -518,10 +569,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_set_account_status: {
+        Args: { _status: string; _user: string }
+        Returns: undefined
+      }
       admin_users: {
         Args: never
         Returns: {
+          account_status: string
           created_at: string
+          deletion_requested: boolean
           email: string
           full_name: string
           id: string
@@ -549,6 +606,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_active_user: { Args: { _user: string }; Returns: boolean }
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }

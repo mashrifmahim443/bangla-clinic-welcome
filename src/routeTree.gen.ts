@@ -35,7 +35,11 @@ import { Route as DoctorsSlugRouteImport } from './routes/doctors.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_authenticated/admin.applications'
 import { Route as AuthenticatedAdminAppointmentsRouteImport } from './routes/_authenticated/admin.appointments'
+import { Route as AuthenticatedAdminArticlesRouteImport } from './routes/_authenticated/admin.articles'
+import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authenticated/admin.content'
+import { Route as AuthenticatedAdminDietRouteImport } from './routes/_authenticated/admin.diet'
 import { Route as AuthenticatedAdminDoctorsRouteImport } from './routes/_authenticated/admin.doctors'
+import { Route as AuthenticatedAdminExerciseRouteImport } from './routes/_authenticated/admin.exercise'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authenticated/consult.$id'
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
@@ -175,10 +179,33 @@ const AuthenticatedAdminAppointmentsRoute =
     path: '/appointments',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminArticlesRoute =
+  AuthenticatedAdminArticlesRouteImport.update({
+    id: '/articles',
+    path: '/articles',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminContentRoute =
+  AuthenticatedAdminContentRouteImport.update({
+    id: '/content',
+    path: '/content',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminDietRoute = AuthenticatedAdminDietRouteImport.update({
+  id: '/diet',
+  path: '/diet',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminDoctorsRoute =
   AuthenticatedAdminDoctorsRouteImport.update({
     id: '/doctors',
     path: '/doctors',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminExerciseRoute =
+  AuthenticatedAdminExerciseRouteImport.update({
+    id: '/exercise',
+    path: '/exercise',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
@@ -228,7 +255,11 @@ export interface FileRoutesByFullPath {
   '/doctors/': typeof DoctorsIndexRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/diet': typeof AuthenticatedAdminDietRoute
   '/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
+  '/admin/exercise': typeof AuthenticatedAdminExerciseRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -259,7 +290,11 @@ export interface FileRoutesByTo {
   '/doctors': typeof DoctorsIndexRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
+  '/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/admin/content': typeof AuthenticatedAdminContentRoute
+  '/admin/diet': typeof AuthenticatedAdminDietRoute
   '/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
+  '/admin/exercise': typeof AuthenticatedAdminExerciseRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -293,7 +328,11 @@ export interface FileRoutesById {
   '/doctors/': typeof DoctorsIndexRoute
   '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/_authenticated/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
+  '/_authenticated/admin/articles': typeof AuthenticatedAdminArticlesRoute
+  '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
+  '/_authenticated/admin/diet': typeof AuthenticatedAdminDietRoute
   '/_authenticated/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
+  '/_authenticated/admin/exercise': typeof AuthenticatedAdminExerciseRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/consult/$id': typeof AuthenticatedConsultIdRoute
   '/_authenticated/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -327,7 +366,11 @@ export interface FileRouteTypes {
     | '/doctors/'
     | '/admin/applications'
     | '/admin/appointments'
+    | '/admin/articles'
+    | '/admin/content'
+    | '/admin/diet'
     | '/admin/doctors'
+    | '/admin/exercise'
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
@@ -358,7 +401,11 @@ export interface FileRouteTypes {
     | '/doctors'
     | '/admin/applications'
     | '/admin/appointments'
+    | '/admin/articles'
+    | '/admin/content'
+    | '/admin/diet'
     | '/admin/doctors'
+    | '/admin/exercise'
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
@@ -391,7 +438,11 @@ export interface FileRouteTypes {
     | '/doctors/'
     | '/_authenticated/admin/applications'
     | '/_authenticated/admin/appointments'
+    | '/_authenticated/admin/articles'
+    | '/_authenticated/admin/content'
+    | '/_authenticated/admin/diet'
     | '/_authenticated/admin/doctors'
+    | '/_authenticated/admin/exercise'
     | '/_authenticated/admin/users'
     | '/_authenticated/consult/$id'
     | '/_authenticated/diet-plan/$id'
@@ -599,11 +650,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAppointmentsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/articles': {
+      id: '/_authenticated/admin/articles'
+      path: '/articles'
+      fullPath: '/admin/articles'
+      preLoaderRoute: typeof AuthenticatedAdminArticlesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/content': {
+      id: '/_authenticated/admin/content'
+      path: '/content'
+      fullPath: '/admin/content'
+      preLoaderRoute: typeof AuthenticatedAdminContentRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/diet': {
+      id: '/_authenticated/admin/diet'
+      path: '/diet'
+      fullPath: '/admin/diet'
+      preLoaderRoute: typeof AuthenticatedAdminDietRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/doctors': {
       id: '/_authenticated/admin/doctors'
       path: '/doctors'
       fullPath: '/admin/doctors'
       preLoaderRoute: typeof AuthenticatedAdminDoctorsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/exercise': {
+      id: '/_authenticated/admin/exercise'
+      path: '/exercise'
+      fullPath: '/admin/exercise'
+      preLoaderRoute: typeof AuthenticatedAdminExerciseRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/users': {
@@ -640,7 +719,11 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminApplicationsRoute: typeof AuthenticatedAdminApplicationsRoute
   AuthenticatedAdminAppointmentsRoute: typeof AuthenticatedAdminAppointmentsRoute
+  AuthenticatedAdminArticlesRoute: typeof AuthenticatedAdminArticlesRoute
+  AuthenticatedAdminContentRoute: typeof AuthenticatedAdminContentRoute
+  AuthenticatedAdminDietRoute: typeof AuthenticatedAdminDietRoute
   AuthenticatedAdminDoctorsRoute: typeof AuthenticatedAdminDoctorsRoute
+  AuthenticatedAdminExerciseRoute: typeof AuthenticatedAdminExerciseRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -648,7 +731,11 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
   AuthenticatedAdminAppointmentsRoute: AuthenticatedAdminAppointmentsRoute,
+  AuthenticatedAdminArticlesRoute: AuthenticatedAdminArticlesRoute,
+  AuthenticatedAdminContentRoute: AuthenticatedAdminContentRoute,
+  AuthenticatedAdminDietRoute: AuthenticatedAdminDietRoute,
   AuthenticatedAdminDoctorsRoute: AuthenticatedAdminDoctorsRoute,
+  AuthenticatedAdminExerciseRoute: AuthenticatedAdminExerciseRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }

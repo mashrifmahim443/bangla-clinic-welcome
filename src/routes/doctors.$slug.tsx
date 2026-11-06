@@ -91,7 +91,7 @@ function BookingPage() {
     <Shell>
       <Link to="/doctors" className="text-sm text-primary underline underline-offset-4">← {t("সব ডাক্তার", "All doctors")}</Link>
       <div className="mt-5 flex flex-wrap items-start gap-5 border-b border-border pb-6">
-        <img src={doctorPhotos[doctor.slug]} alt="" width={96} height={96} className="h-24 w-24 rounded-md border border-border object-cover" />
+        <img src={doctor.photo_url || doctorPhotos[doctor.slug]} alt="" width={96} height={96} className="h-24 w-24 rounded-md border border-border object-cover" />
         <div className="flex-1">
           <h1 className="font-display text-3xl font-semibold">{lang === "bn" ? doctor.name_bn : doctor.name_en}</h1>
           <p className="text-muted-foreground">{doctor.degrees}</p>

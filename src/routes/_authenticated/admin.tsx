@@ -15,6 +15,10 @@ const links = [
   { to: "/admin/appointments", bn: "অ্যাপয়েন্টমেন্ট", en: "Appointments" },
   { to: "/admin/doctors", bn: "ডাক্তার", en: "Doctors" },
   { to: "/admin/applications", bn: "ডাক্তারের আবেদন", en: "Doctor applications" },
+  { to: "/admin/content", bn: "সাইটের লেখা ও ছবি", en: "Site text & images" },
+  { to: "/admin/articles", bn: "লেখা", en: "Articles" },
+  { to: "/admin/diet", bn: "খাদ্য তালিকা", en: "Diet chart" },
+  { to: "/admin/exercise", bn: "ব্যায়াম", en: "Exercises" },
 ] as const;
 
 function AdminLayout() {
