@@ -10,11 +10,11 @@ export function useAppointment(id: string) {
       const { data: u } = await supabase.auth.getUser();
       const { data, error } = await supabase
         .from("appointments")
-        .select("id, slot_start, patient_id, doctor_id, doctors(id, name_bn, name_en, degrees, specialty, bmdc_no, user_id)")
+        .select("id, slot_start, status, patient_id, doctor_id, doctors(id, name_bn, name_en, degrees, specialty, bmdc_no, user_id)")
         .eq("id", id).maybeSingle();
       if (error) throw error;
       if (!data) return null;
-      const { data: profile } = await supabase.from("profiles").select("full_name, phone").eq("id", data.patient_id).maybeSingle();
+      const { data: profile } = await supabase.from("profiles").select("full_name, phone, diabetes_type, birth_year").eq("id", data.patient_id).maybeSingle();
       return { ...data, me: u.user?.id ?? "", isDoctor: data.doctors?.user_id === u.user?.id, patient: profile };
     },
   });
