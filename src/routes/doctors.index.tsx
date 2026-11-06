@@ -107,7 +107,7 @@ function DoctorsPage() {
                 </thead>
                 <tbody>
                   {isLoading && <tr><td colSpan={7} className="py-6 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</td></tr>}
-                  {!isLoading && shown.length === 0 && <tr><td colSpan={7} className="py-6 text-muted-foreground">{t("এই ছাঁকনিতে কোনো ডাক্তার নেই।", "No doctors match these filters.")}</td></tr>}
+                  {!isLoading && shown.length === 0 && <tr><td colSpan={7} className="py-6 text-muted-foreground">{t("এই বাছাইয়ে কোনো ডাক্তার মিলল না।", "No doctors match these filters.")}</td></tr>}
                   {shown.map((d) => (
                     <tr key={d.id} className="border-b border-border align-middle">
                       <td className="py-3 pr-3">

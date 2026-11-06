@@ -63,7 +63,7 @@ function Landing() {
     [t("আমার গ্লুকোমিটার লাগবে?", "Do I need a glucometer?"), t("হ্যাঁ। যেকোনো ব্র্যান্ডের গ্লুকোমিটার চলবে। রিডিং হাতে লিখে দিলেই হবে।", "Yes. Any brand works. You type the reading in yourself.")],
     [t("ডাক্তাররা কি সত্যিই BMDC নিবন্ধিত?", "Are the doctors really BMDC registered?"), t("হ্যাঁ। আমরা প্রত্যেকের নিবন্ধন নম্বর যাচাই করি এবং তাদের পাতায় দেখাই।", "Yes. We check each registration number and show it on their page.")],
     [t("বিকাশ বা নগদে ফি দেওয়া যাবে?", "Can I pay with bKash or Nagad?"), t("হ্যাঁ, বিকাশ, নগদ আর কার্ড — তিনটাই চলবে।", "Yes — bKash, Nagad and card all work.")],
-    [t("আমার বাবা-মায়ের হিসাব কি আমি রাখতে পারব?", "Can I keep a log for my parents?"), t("পারবেন। পরিবার প্যাকে একটা অ্যাকাউন্টে চারজন পর্যন্ত রাখা যায়।", "Yes. The family plan holds up to four people on one account.")],
+    [t("আমার বাবা-মায়ের হিসাব কি আমি রাখতে পারব?", "Can I keep a log for my parents?"), t("পারবেন। পরিবার প্ল্যানে একটা অ্যাকাউন্টে চারজন পর্যন্ত রাখা যায়।", "Yes. The family plan holds up to four people on one account.")],
     [t("সুগার খুব কমে গেলে কী করব?", "What if my sugar drops very low?"), t("৭০ mg/dL-এর নিচে হলে সঙ্গে সঙ্গে চিনি বা গ্লুকোজ খান। জ্ঞান হারালে নিকটস্থ হাসপাতালে যান।", "Below 70 mg/dL, take sugar or glucose right away. If someone faints, go to the nearest hospital.")],
   ];
 
