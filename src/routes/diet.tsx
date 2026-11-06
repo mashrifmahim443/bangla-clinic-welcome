@@ -31,7 +31,7 @@ function Page() {
   return (
     <div className="min-h-screen">
       <div className="print:hidden"><SiteHeader /></div>
-      <main className="mx-auto max-w-7xl px-4 py-12">
+      <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-primary pb-4">
           <div>
             <p className="text-sm text-muted-foreground">{t("সাপ্তাহিক খাদ্য তালিকা", "Weekly diet chart")}</p>

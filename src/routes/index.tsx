@@ -143,7 +143,7 @@ function Landing() {
       </section>
 
       {/* How it works */}
-      <section id="how" className="mx-auto grid max-w-6xl gap-10 px-6 py-24 md:grid-cols-[1fr_2fr]">
+      <section id="how" className="mx-auto grid max-w-6xl gap-10 px-6 py-20 md:grid-cols-[1fr_2fr]">
         <h2 className="font-display text-4xl font-semibold">{t("কীভাবে কাজ করে", "How it works")}</h2>
         <ol className="divide-y divide-border">
           {steps.map(([title, body], i) => (
@@ -194,7 +194,7 @@ function Landing() {
       </section>
 
       {/* Food */}
-      <section id="food" className="mx-auto max-w-6xl px-6 py-24">
+      <section id="food" className="mx-auto max-w-6xl px-6 py-20">
         <h2 className="font-display text-4xl font-semibold">{t("কী খাবেন, কী এড়াবেন", "What to eat, what to avoid")}</h2>
         <p className="mt-2 max-w-lg text-muted-foreground">{t("ঘরের খাবার দিয়েই শুরু। পরিমাণটাই আসল।", "Start with home food. Portion is what matters.")}</p>
         <div className="mt-10 grid gap-12 md:grid-cols-2">

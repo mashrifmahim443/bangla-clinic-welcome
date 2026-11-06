@@ -24,7 +24,7 @@ function Page() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-6xl px-4 py-12">
+      <main className="mx-auto max-w-6xl px-6 py-12">
         <header className="border-b-2 border-primary pb-4">
           <h1 className="font-display text-4xl font-semibold">{t("লেখা", "Articles")}</h1>
           <p className="mt-1 text-muted-foreground">{t("ডাক্তার ও পুষ্টিবিদদের লেখা, সহজ ভাষায়।", "Written by doctors and nutritionists, in plain words.")}</p>
