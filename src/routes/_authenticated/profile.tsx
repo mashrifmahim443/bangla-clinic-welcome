@@ -1,3 +1,4 @@
+import { DeletionRequest } from "@/components/account/deletion-request";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -147,6 +148,7 @@ function Page() {
         {saved && <p className="text-glucose-ok">{t("সংরক্ষণ হয়েছে।", "Saved.")}</p>}
       </form>
       <p className="mt-6 text-muted-foreground">{t("লেখা ছোট লাগলে:", "If the text feels small:")} <TextSizeToggle className="text-primary underline underline-offset-4" /></p>
+      <DeletionRequest />
     </main>
   );
 }
