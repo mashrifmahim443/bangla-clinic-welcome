@@ -49,6 +49,38 @@ export type Database = {
           },
         ]
       }
+      consult_messages: {
+        Row: {
+          appointment_id: string
+          body: string
+          created_at: string
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          appointment_id: string
+          body: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Update: {
+          appointment_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consult_messages_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctors: {
         Row: {
           bmdc_no: string
@@ -63,6 +95,7 @@ export type Database = {
           slug: string
           specialty: string
           status: Database["public"]["Enums"]["doctor_status"]
+          user_id: string | null
         }
         Insert: {
           bmdc_no: string
@@ -77,6 +110,7 @@ export type Database = {
           slug: string
           specialty: string
           status?: Database["public"]["Enums"]["doctor_status"]
+          user_id?: string | null
         }
         Update: {
           bmdc_no?: string
@@ -91,6 +125,7 @@ export type Database = {
           slug?: string
           specialty?: string
           status?: Database["public"]["Enums"]["doctor_status"]
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -121,6 +156,81 @@ export type Database = {
           taken_at?: string
           user_id?: string
           value_mgdl?: number
+        }
+        Relationships: []
+      }
+      prescriptions: {
+        Row: {
+          advice: string | null
+          appointment_id: string
+          chief_complaints: string | null
+          created_at: string
+          doctor_id: string
+          follow_up_date: string | null
+          id: string
+          items: Json
+          patient_id: string
+          updated_at: string
+        }
+        Insert: {
+          advice?: string | null
+          appointment_id: string
+          chief_complaints?: string | null
+          created_at?: string
+          doctor_id: string
+          follow_up_date?: string | null
+          id?: string
+          items?: Json
+          patient_id: string
+          updated_at?: string
+        }
+        Update: {
+          advice?: string | null
+          appointment_id?: string
+          chief_complaints?: string | null
+          created_at?: string
+          doctor_id?: string
+          follow_up_date?: string | null
+          id?: string
+          items?: Json
+          patient_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescriptions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
         }
         Relationships: []
       }
@@ -158,6 +268,9 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
+      is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
+      my_doctor_id: { Args: never; Returns: string }
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import { CartesianGrid, Line, LineChart, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { AppointmentList } from "@/components/consult/appointment-list";
 import { RoleShell } from "@/components/site/role-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
@@ -139,7 +140,8 @@ function Page() {
           </table>
         </div>
       </section>
-    </RoleShell>
+    <AppointmentList as="patient" />
+      </RoleShell>
   );
 }
 
