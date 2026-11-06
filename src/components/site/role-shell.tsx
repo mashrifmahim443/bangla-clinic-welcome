@@ -1,6 +1,6 @@
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link, Navigate, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
@@ -17,6 +17,15 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
   const { lang, setLang, t } = useLang();
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const { data: status } = useQuery({
+    queryKey: ["my-account-status"],
+    queryFn: async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return null;
+      const { data: p } = await supabase.from("profiles").select("account_status").eq("id", u.user.id).maybeSingle();
+      return p?.account_status ?? "pending";
+    },
+  });
 
   if (isLoading) return <p className="p-10 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p>;
   const roles = data?.roles ?? [];
@@ -27,6 +36,23 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
     qc.clear();
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
+  }
+
+  if (status && status !== "active" && !roles.includes("admin")) {
+    const blocked = status === "blocked";
+    return (
+      <main className="min-h-screen px-6 py-16 md:px-16">
+        <div className="max-w-xl rounded-[10px] border border-border bg-card p-6">
+          <p className="font-display text-xl font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</p>
+          <h1 className="mt-4 font-display text-2xl font-semibold">{blocked ? t("আপনার অ্যাকাউন্ট বন্ধ আছে।", "Your account is blocked.") : t("আপনার অ্যাকাউন্ট অনুমোদনের অপেক্ষায়।", "Your account is waiting for approval.")}</h1>
+          <p className="mt-2 text-muted-foreground">{blocked ? t("কোনো প্রশ্ন থাকলে আমাদের ফোন করুন।", "Please call us if you have any questions.") : t("আমরা সাধারণত এক কর্মদিবসের মধ্যে অনুমোদন দিই। অনুমোদন হলে এই পাতা নিজে খুলে যাবে।", "We usually approve within one working day. This page opens by itself once approved.")}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <button onClick={() => qc.invalidateQueries({ queryKey: ["my-account-status"] })} className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("আবার দেখুন", "Check again")}</button>
+            <button onClick={signOut} className="rounded-md border border-border px-4 py-2 font-medium transition-colors duration-150 hover:bg-secondary">{t("বের হন", "Sign out")}</button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
