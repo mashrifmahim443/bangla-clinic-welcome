@@ -61,6 +61,7 @@ function Page() {
             <h3 className="mb-2 text-sm font-medium text-muted-foreground">{t("রোগীর টেস্ট রিপোর্ট", "Patient's test reports")}</h3>
             <OldPrescriptions patientId={appt.patient_id} kind="test_report" />
           </div>
+          {appt.isDoctor && <Link to="/diet-plan/$id" params={{ id }} className="block rounded-md border border-primary px-4 py-2.5 text-center font-medium text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground">{t("খাদ্য তালিকা লিখুন", "Write diet plan")}</Link>}
           {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
         </aside>
