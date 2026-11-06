@@ -54,6 +54,7 @@ export type Database = {
           ate: boolean | null
           created_at: string
           expires_at: string
+          food: string | null
           slot: Database["public"]["Enums"]["checkin_slot"]
           token: string
           took_medicine: boolean | null
@@ -64,6 +65,7 @@ export type Database = {
           ate?: boolean | null
           created_at?: string
           expires_at?: string
+          food?: string | null
           slot: Database["public"]["Enums"]["checkin_slot"]
           token?: string
           took_medicine?: boolean | null
@@ -74,6 +76,7 @@ export type Database = {
           ate?: boolean | null
           created_at?: string
           expires_at?: string
+          food?: string | null
           slot?: Database["public"]["Enums"]["checkin_slot"]
           token?: string
           took_medicine?: boolean | null
@@ -113,6 +116,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      doctor_applications: {
+        Row: {
+          admin_note: string | null
+          bmdc_no: string
+          created_at: string
+          degrees: string
+          fee_bdt: number
+          gender: string | null
+          id: string
+          name_bn: string
+          name_en: string
+          phone: string | null
+          specialty: string
+          status: Database["public"]["Enums"]["application_status"]
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          bmdc_no: string
+          created_at?: string
+          degrees: string
+          fee_bdt: number
+          gender?: string | null
+          id?: string
+          name_bn: string
+          name_en: string
+          phone?: string | null
+          specialty: string
+          status?: Database["public"]["Enums"]["application_status"]
+          user_id?: string
+        }
+        Update: {
+          admin_note?: string | null
+          bmdc_no?: string
+          created_at?: string
+          degrees?: string
+          fee_bdt?: number
+          gender?: string | null
+          id?: string
+          name_bn?: string
+          name_en?: string
+          phone?: string | null
+          specialty?: string
+          status?: Database["public"]["Enums"]["application_status"]
+          user_id?: string
+        }
+        Relationships: []
       }
       doctors: {
         Row: {
@@ -248,20 +299,29 @@ export type Database = {
       }
       profiles: {
         Row: {
+          birth_year: number | null
           created_at: string
+          diabetes_type: Database["public"]["Enums"]["diabetes_type"] | null
           full_name: string | null
+          gender: string | null
           id: string
           phone: string | null
         }
         Insert: {
+          birth_year?: number | null
           created_at?: string
+          diabetes_type?: Database["public"]["Enums"]["diabetes_type"] | null
           full_name?: string | null
+          gender?: string | null
           id: string
           phone?: string | null
         }
         Update: {
+          birth_year?: number | null
           created_at?: string
+          diabetes_type?: Database["public"]["Enums"]["diabetes_type"] | null
           full_name?: string | null
+          gender?: string | null
           id?: string
           phone?: string | null
         }
@@ -324,19 +384,41 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
-      submit_checkin: {
-        Args: {
-          _ate: boolean
-          _token: string
-          _took_medicine: boolean
-          _value: number
-        }
-        Returns: boolean
+      review_doctor_application: {
+        Args: { _approve: boolean; _id: string; _note?: string }
+        Returns: undefined
       }
+      submit_checkin:
+        | {
+            Args: {
+              _ate: boolean
+              _token: string
+              _took_medicine: boolean
+              _value: number
+            }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              _ate: boolean
+              _food?: string
+              _token: string
+              _took_medicine: boolean
+              _value: number
+            }
+            Returns: boolean
+          }
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"
+      application_status: "pending" | "approved" | "rejected"
       checkin_slot: "morning" | "lunch" | "dinner"
+      diabetes_type:
+        | "type1"
+        | "type2"
+        | "gestational"
+        | "prediabetes"
+        | "unsure"
       doctor_status: "online" | "busy" | "offline"
       reading_type:
         | "fasting"
@@ -472,7 +554,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "doctor", "patient"],
+      application_status: ["pending", "approved", "rejected"],
       checkin_slot: ["morning", "lunch", "dinner"],
+      diabetes_type: ["type1", "type2", "gestational", "prediabetes", "unsure"],
       doctor_status: ["online", "busy", "offline"],
       reading_type: [
         "fasting",
