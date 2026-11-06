@@ -4,10 +4,10 @@ import { useLang } from "@/lib/i18n";
 export function SiteHeader() {
   const { lang, setLang, t } = useLang();
   const links = [
-    { href: "#how", bn: "কীভাবে কাজ করে", en: "How it works" },
-    { href: "#doctors", bn: "ডাক্তার", en: "Doctors" },
-    { href: "#food", bn: "খাবার", en: "Food" },
-    { href: "#pricing", bn: "ফি", en: "Pricing" },
+    { href: "/#how", bn: "কীভাবে কাজ করে", en: "How it works" },
+    { href: "/doctors", bn: "ডাক্তার", en: "Doctors" },
+    { href: "/#food", bn: "খাবার", en: "Food" },
+    { href: "/#pricing", bn: "ফি", en: "Pricing" },
   ];
   return (
     <header className="border-b border-border bg-background">

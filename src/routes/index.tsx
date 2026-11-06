@@ -165,7 +165,7 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="font-display text-4xl font-semibold">{t("আমাদের ডাক্তার", "Our doctors")}</h2>
-            <Link to="/auth" className="font-medium text-primary underline underline-offset-4">{t("সব ডাক্তার দেখুন", "See all doctors")}</Link>
+            <Link to="/doctors" className="font-medium text-primary underline underline-offset-4">{t("সব ডাক্তার দেখুন", "See all doctors")}</Link>
           </div>
           <div className="mt-8 overflow-hidden rounded-[10px] border border-border bg-card">
             <div className="hidden grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr] gap-4 border-b border-border px-5 py-3 text-sm text-muted-foreground md:grid">
