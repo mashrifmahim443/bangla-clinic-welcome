@@ -44,7 +44,7 @@ function Page() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-5xl px-4 py-12">
+      <main className="mx-auto max-w-5xl px-6 py-12">
         <p className="text-sm text-muted-foreground">{t("ব্যায়াম", "Exercise")}</p>
         <h1 className="font-display text-4xl font-semibold">{t("সহজ তিনটা ব্যায়াম", "Three simple exercises")}</h1>
         <p className="mt-2 max-w-2xl text-lg text-muted-foreground">{t("নতুন ব্যায়াম শুরুর আগে ডাক্তারকে জানান। সুগার ৭০-এর নিচে থাকলে ব্যায়াম করবেন না।", "Tell your doctor before starting. Don't exercise if your sugar is below 70.")}</p>

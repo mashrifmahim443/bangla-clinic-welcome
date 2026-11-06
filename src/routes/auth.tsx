@@ -77,7 +77,7 @@ function AuthPage() {
         password: form.password,
         options: { emailRedirectTo: window.location.origin, data: { full_name: form.name.trim(), phone: form.phone } },
       });
-      if (error) setMsg({ kind: "err", text: error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। ঢুকুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.") });
+      if (error) setMsg({ kind: "err", text: error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.") });
       else setMsg({ kind: "ok", text: t("আপনার ইমেইলে একটা লিংক পাঠানো হয়েছে। সেটায় চাপ দিলেই অ্যাকাউন্ট চালু হবে।", "We sent a link to your email. Click it to turn on your account.") });
     }
     setBusy(false);

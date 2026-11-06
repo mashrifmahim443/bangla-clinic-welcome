@@ -32,7 +32,7 @@ const A = [
   c("ছোলা সেদ্ধ","Boiled chickpeas","আধা কাপ","½ cup","low"),
   c("চিনি ছাড়া চা, ২টা বিস্কুট","Tea, 2 marie biscuits","২টা","2","medium"),
   c("টক দই","Plain yoghurt","১ ছোট বাটি","1 small bowl","low"),
-  c("ডাবের পানি নয়, লেবু পানি","Lemon water (no sugar)","১ গ্লাস","1 glass","low"),
+  c("চিনি ছাড়া লেবু পানি","Lemon water (no sugar)","১ গ্লাস","1 glass","low"),
   c("পেয়ারা","Guava","১টা","1","low"),
   c("চিনি ছাড়া চা, চানাচুর","Tea, chanachur","২ চামচ","2 spoons","medium"),
 ];

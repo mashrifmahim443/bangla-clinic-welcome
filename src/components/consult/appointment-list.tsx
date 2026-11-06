@@ -30,7 +30,7 @@ export function AppointmentList({ as }: { as: "patient" | "doctor" }) {
                 <td className="py-3 pr-4">{formatDhaka(new Date(a.slot_start), lang, { dateStyle: "medium", timeStyle: "short" })}</td>
                 <td className="py-3 pr-4">{as === "patient" ? t(a.doctors?.name_bn ?? "", a.doctors?.name_en ?? "") : t("রোগী", "Patient")}</td>
                 <td className="py-3 text-right whitespace-nowrap">
-                  <Link to="/consult/$id" params={{ id: a.id }} className="text-primary underline underline-offset-4">{t("কক্ষে ঢুকুন", "Enter room")}</Link>
+                  <Link to="/consult/$id" params={{ id: a.id }} className="text-primary underline underline-offset-4">{t("পরামর্শ কক্ষে যান", "Enter room")}</Link>
                   <Link to="/prescription/$id" params={{ id: a.id }} className="ml-4 text-primary underline underline-offset-4">{t("প্রেসক্রিপশন", "Prescription")}</Link>
                 </td>
               </tr>
