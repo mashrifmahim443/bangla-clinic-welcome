@@ -40,6 +40,7 @@ function Page() {
     if (!f.degrees.trim()) er.degrees = t("ডিগ্রি লিখুন, যেমন MBBS, FCPS (Medicine)।", "Enter degrees, e.g. MBBS, FCPS (Medicine).");
     if (!/^[A-Z]?-?\d{3,7}$/.test(bmdc)) er.bmdc_no = t("BMDC নম্বর ঠিক নেই। যেমন A-12345 বা 12345।", "BMDC number looks wrong. E.g. A-12345 or 12345.");
     if (!fee || fee < 100 || fee > 10000) er.fee = t("ফি ১০০ থেকে ১০,০০০ টাকার মধ্যে লিখুন।", "Enter a fee between 100 and 10,000 taka.");
+    if (!f.gender) er.gender = t("লিঙ্গ বেছে নিন।", "Choose a gender.");
     setErrs(er);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("doctor_applications").insert({
@@ -98,6 +99,7 @@ function Page() {
               ))}
             </div>
           </fieldset>
+          <Err k="gender" />
           <Err k="form" />
           <button className="w-full rounded-md bg-primary px-4 py-2.5 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("আবেদন পাঠান", "Send application")}</button>
         </form>

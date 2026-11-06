@@ -14,6 +14,7 @@ const links = [
   { to: "/admin/users", bn: "ব্যবহারকারী", en: "Users" },
   { to: "/admin/appointments", bn: "অ্যাপয়েন্টমেন্ট", en: "Appointments" },
   { to: "/admin/doctors", bn: "ডাক্তার", en: "Doctors" },
+  { to: "/admin/applications", bn: "ডাক্তারের আবেদন", en: "Doctor applications" },
 ] as const;
 
 function AdminLayout() {
