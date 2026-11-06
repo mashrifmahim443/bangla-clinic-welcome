@@ -69,7 +69,7 @@ function AuthPage() {
     setBusy(true);
     if (mode === "in") {
       const { error } = await supabase.auth.signInWithPassword({ email: form.email.trim(), password: form.password });
-      if (error) setMsg({ kind: "err", text: t("ইমেইল বা পাসওয়ার্ড মিলছে না। আবার চেষ্টা করুন।", "Email or password doesn't match. Please try again.") });
+      if (error) setMsg({ kind: "err", text: /confirm/i.test(error.message) ? t("ইমেইলটা এখনো নিশ্চিত হয়নি। ইমেইলে পাঠানো লিংকে চাপ দিন, তারপর লগইন করুন।", "Your email isn't confirmed yet. Click the link we emailed you, then sign in.") : t("ইমেইল বা পাসওয়ার্ড মিলছে না। আবার চেষ্টা করুন।", "Email or password doesn't match. Please try again.") });
       else navigate({ to: "/dashboard" });
     } else {
       const { error } = await supabase.auth.signUp({
@@ -77,7 +77,7 @@ function AuthPage() {
         password: form.password,
         options: { emailRedirectTo: window.location.origin, data: { full_name: form.name.trim(), phone: form.phone } },
       });
-      if (error) setMsg({ kind: "err", text: error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.") });
+      if (error) setMsg({ kind: "err", text: /weak|easy to guess|pwned/i.test(error.message) ? t("এই পাসওয়ার্ডটা খুব সহজ, অনেকে ব্যবহার করেন। অক্ষর, সংখ্যা মিলিয়ে আরেকটু কঠিন পাসওয়ার্ড দিন।", "This password is too common. Please pick a harder one mixing letters and numbers.") : /rate limit/i.test(error.message) ? t("অল্প সময়ে অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।", "Too many tries. Please wait a bit and try again.") : error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.") });
       else setMsg({ kind: "ok", text: t("আপনার ইমেইলে একটা লিংক পাঠানো হয়েছে। সেটায় চাপ দিলেই অ্যাকাউন্ট চালু হবে।", "We sent a link to your email. Click it to turn on your account.") });
     }
     setBusy(false);
