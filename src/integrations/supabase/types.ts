@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      glucose_readings: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          reading_type: Database["public"]["Enums"]["reading_type"]
+          taken_at: string
+          user_id: string
+          value_mgdl: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          reading_type?: Database["public"]["Enums"]["reading_type"]
+          taken_at?: string
+          user_id?: string
+          value_mgdl: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          reading_type?: Database["public"]["Enums"]["reading_type"]
+          taken_at?: string
+          user_id?: string
+          value_mgdl?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -47,6 +77,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"
+      reading_type:
+        | "fasting"
+        | "before_meal"
+        | "after_meal"
+        | "bedtime"
+        | "random"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -175,6 +211,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "doctor", "patient"],
+      reading_type: [
+        "fasting",
+        "before_meal",
+        "after_meal",
+        "bedtime",
+        "random",
+      ],
     },
   },
 } as const
