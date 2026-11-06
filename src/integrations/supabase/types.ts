@@ -170,10 +170,14 @@ export type Database = {
       }
       doctor_applications: {
         Row: {
+          address: string | null
           admin_note: string | null
           bmdc_no: string
           created_at: string
           degrees: string
+          designation: string | null
+          email: string | null
+          experience_years: number | null
           fee_bdt: number
           gender: string | null
           id: string
@@ -183,12 +187,18 @@ export type Database = {
           specialty: string
           status: Database["public"]["Enums"]["application_status"]
           user_id: string
+          whatsapp: string | null
+          workplace: string | null
         }
         Insert: {
+          address?: string | null
           admin_note?: string | null
           bmdc_no: string
           created_at?: string
           degrees: string
+          designation?: string | null
+          email?: string | null
+          experience_years?: number | null
           fee_bdt: number
           gender?: string | null
           id?: string
@@ -198,12 +208,18 @@ export type Database = {
           specialty: string
           status?: Database["public"]["Enums"]["application_status"]
           user_id?: string
+          whatsapp?: string | null
+          workplace?: string | null
         }
         Update: {
+          address?: string | null
           admin_note?: string | null
           bmdc_no?: string
           created_at?: string
           degrees?: string
+          designation?: string | null
+          email?: string | null
+          experience_years?: number | null
           fee_bdt?: number
           gender?: string | null
           id?: string
@@ -213,6 +229,35 @@ export type Database = {
           specialty?: string
           status?: Database["public"]["Enums"]["application_status"]
           user_id?: string
+          whatsapp?: string | null
+          workplace?: string | null
+        }
+        Relationships: []
+      }
+      doctor_contacts: {
+        Row: {
+          address: string
+          email: string
+          phone: string
+          updated_at: string
+          user_id: string
+          whatsapp: string
+        }
+        Insert: {
+          address: string
+          email: string
+          phone: string
+          updated_at?: string
+          user_id: string
+          whatsapp: string
+        }
+        Update: {
+          address?: string
+          email?: string
+          phone?: string
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string
         }
         Relationships: []
       }
@@ -221,6 +266,8 @@ export type Database = {
           bmdc_no: string
           created_at: string
           degrees: string
+          designation: string | null
+          experience_years: number | null
           fee_bdt: number
           gender: string
           id: string
@@ -231,11 +278,14 @@ export type Database = {
           specialty: string
           status: Database["public"]["Enums"]["doctor_status"]
           user_id: string | null
+          workplace: string | null
         }
         Insert: {
           bmdc_no: string
           created_at?: string
           degrees: string
+          designation?: string | null
+          experience_years?: number | null
           fee_bdt: number
           gender?: string
           id?: string
@@ -246,11 +296,14 @@ export type Database = {
           specialty: string
           status?: Database["public"]["Enums"]["doctor_status"]
           user_id?: string | null
+          workplace?: string | null
         }
         Update: {
           bmdc_no?: string
           created_at?: string
           degrees?: string
+          designation?: string | null
+          experience_years?: number | null
           fee_bdt?: number
           gender?: string
           id?: string
@@ -261,6 +314,7 @@ export type Database = {
           specialty?: string
           status?: Database["public"]["Enums"]["doctor_status"]
           user_id?: string | null
+          workplace?: string | null
         }
         Relationships: []
       }
@@ -512,6 +566,15 @@ export type Database = {
           _value: number
         }
         Returns: boolean
+      }
+      update_my_doctor_profile: {
+        Args: {
+          _degrees: string
+          _designation: string
+          _experience: number
+          _workplace: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
