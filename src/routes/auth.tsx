@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -139,6 +139,11 @@ function AuthPage() {
               {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : mode === "in" ? t("ঢুকুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open account")}
             </button>
           </form>
+          {mode === "in" && (
+            <p className="mt-4 text-sm">
+              <Link to="/forgot-password" className="text-primary underline underline-offset-4">{t("পাসওয়ার্ড ভুলে গেছেন?", "Forgot your password?")}</Link>
+            </p>
+          )}
           <p className="mt-6 border-t border-border pt-5 text-sm text-muted-foreground">
             {mode === "in" ? t("নতুন এসেছেন?", "New here?") : t("আগে থেকে অ্যাকাউন্ট আছে?", "Already have an account?")}{" "}
             <button onClick={switchMode} className="font-medium text-primary underline underline-offset-4">
