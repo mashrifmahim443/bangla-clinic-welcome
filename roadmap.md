@@ -1,5 +1,5 @@
 # Roadmap (from product brief)
-- [ ] Video consultation in the consultation room
+- [x] Video consultation (free Jitsi link; move to paid video service before launch)
 - [ ] Food logging in the 3-time check-in (not just sugar)
 - [ ] Doctor sign-up with BMDC verification by admin
 - [ ] Subscription payments (needs payment provider)

@@ -34,12 +34,21 @@ function Page() {
           <p className="text-sm text-muted-foreground">{formatDhaka(new Date(appt.slot_start), lang, { dateStyle: "full", timeStyle: "short" })}</p>
         </div>
         <div className="flex items-center gap-4 text-sm">
+          <a href={`https://meet.jit.si/DiabeCare-${id}`} target="_blank" rel="noreferrer"
+            className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">
+            {t("ভিডিও কলে যান", "Join video call")}
+          </a>
           <Link to="/prescription/$id" params={{ id }} className="text-primary underline underline-offset-4">{t("প্রেসক্রিপশন দেখুন", "View prescription")}</Link>
           <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className="text-primary underline underline-offset-4">{lang === "bn" ? "English" : "বাংলা"}</button>
         </div>
       </header>
       <div className="grid min-h-0 flex-1 md:grid-cols-[1fr_24rem]">
-        <Chat appointmentId={id} me={appt.me} />
+        <div className="flex min-h-0 flex-col">
+          <p className="border-b border-border bg-secondary px-6 py-2 text-sm text-muted-foreground">
+            {t("ভিডিও কল নতুন ট্যাবে খুলবে। ডাক্তার আর রোগী দুজনেই একই বোতাম চাপলে একই কলে যুক্ত হবেন। ক্যামেরা আর মাইকের অনুমতি দিন।", "The video call opens in a new tab. Doctor and patient join the same call with the same button. Allow camera and microphone.")}
+          </p>
+          <Chat appointmentId={id} me={appt.me} />
+        </div>
         <aside className="overflow-y-auto border-t border-border bg-card p-6 md:border-t-0 md:border-l">
           <Summary patientId={appt.patient_id} appointmentId={id} phone={appt.patient?.phone ?? null} />
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
