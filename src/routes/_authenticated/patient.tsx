@@ -8,7 +8,7 @@ import { CheckinPanel } from "@/components/consult/checkin-panel";
 import { RoleShell } from "@/components/site/role-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
-import { formatDhaka, formatNumber } from "@/lib/locale";
+import { formatDhaka, formatNumber, dhakaNowParts, dhakaToISO } from "@/lib/locale";
 import { RANGE_HIGH, RANGE_LOW, countToday, glucoseState, statusSentence } from "@/lib/glucose";
 
 export const Route = createFileRoute("/_authenticated/patient")({
@@ -164,7 +164,7 @@ function AddReading() {
       if (error) throw error;
     },
     onSuccess: () => {
-      setValue(""); setNote("");
+      setValue(""); setNote(""); setDay(dhakaNowParts().date); setTime(dhakaNowParts().time);
       qc.invalidateQueries({ queryKey: ["readings"] });
     },
     onError: () => setErr(t("সেভ হলো না। আবার চেষ্টা করুন।", "Couldn't save. Please try again.")),
