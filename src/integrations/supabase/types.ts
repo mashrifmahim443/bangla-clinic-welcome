@@ -222,7 +222,8 @@ export type Database = {
           reading_type: Database["public"]["Enums"]["reading_type"]
           taken_at: string
           user_id: string
-          value_mgdl: number
+          value_mgdl: number | null
+          value_mmol: number | null
         }
         Insert: {
           created_at?: string
@@ -232,7 +233,8 @@ export type Database = {
           reading_type?: Database["public"]["Enums"]["reading_type"]
           taken_at?: string
           user_id?: string
-          value_mgdl: number
+          value_mgdl?: number | null
+          value_mmol?: number | null
         }
         Update: {
           created_at?: string
@@ -242,7 +244,8 @@ export type Database = {
           reading_type?: Database["public"]["Enums"]["reading_type"]
           taken_at?: string
           user_id?: string
-          value_mgdl?: number
+          value_mgdl?: number | null
+          value_mmol?: number | null
         }
         Relationships: []
       }
@@ -391,26 +394,16 @@ export type Database = {
         Args: { _approve: boolean; _id: string; _note?: string }
         Returns: undefined
       }
-      submit_checkin:
-        | {
-            Args: {
-              _ate: boolean
-              _token: string
-              _took_medicine: boolean
-              _value: number
-            }
-            Returns: boolean
-          }
-        | {
-            Args: {
-              _ate: boolean
-              _food?: string
-              _token: string
-              _took_medicine: boolean
-              _value: number
-            }
-            Returns: boolean
-          }
+      submit_checkin: {
+        Args: {
+          _ate: boolean
+          _food?: string
+          _token: string
+          _took_medicine: boolean
+          _value: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"

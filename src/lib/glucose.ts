@@ -1,7 +1,12 @@
-import { TIMEZONE } from "./locale";
+import { TIMEZONE, type Lang } from "./locale";
 
-export const RANGE_LOW = 70;
-export const RANGE_HIGH = 180;
+/** Sugar is shown in mmol/L everywhere (mmol/L = mg/dL ÷ 18.016). */
+export const UNIT = "mmol/L";
+export const RANGE_LOW = 3.9;
+export const RANGE_HIGH = 10;
+/** What the form and the database accept. */
+export const MIN_VALUE = 1.1;
+export const MAX_VALUE = 33.3;
 export const DAILY_CHECKS = 3;
 
 export type GlucoseState = "low" | "ok" | "high";
@@ -9,6 +14,26 @@ export function glucoseState(v: number): GlucoseState {
   if (v < RANGE_LOW) return "low";
   if (v > RANGE_HIGH) return "high";
   return "ok";
+}
+
+/** mg/dL -> mmol/L with one decimal. Only for converting older numbers. */
+export function mgDlToMmol(v: number) {
+  return Math.round((v / 18.016) * 10) / 10;
+}
+
+/** mmol/L with one decimal, in the reader's own digits. */
+export function formatGlucose(v: number, lang: Lang = "bn") {
+  return new Intl.NumberFormat(lang === "bn" ? "bn-BD" : "en-BD", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(v);
+}
+
+/** Accepts Bangla or English digits and a dot or comma: "৬,২" -> 6.2. */
+export function parseGlucose(s: string): number {
+  const ascii = s.trim().replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d))).replace(",", ".");
+  const n = Number(ascii);
+  return Number.isFinite(n) ? Math.round(n * 10) / 10 : NaN;
 }
 
 /** YYYY-MM-DD of a moment in Dhaka. */

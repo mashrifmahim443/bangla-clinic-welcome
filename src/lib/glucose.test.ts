@@ -1,12 +1,31 @@
 import { describe, it, expect } from "vitest";
-import { glucoseState, statusSentence, countToday } from "./glucose";
+import { glucoseState, statusSentence, countToday, mgDlToMmol, formatGlucose, parseGlucose, UNIT, RANGE_LOW, RANGE_HIGH } from "./glucose";
 
 describe("glucose rules", () => {
-  it("below 70 is low, above 180 is high", () => {
-    expect(glucoseState(69)).toBe("low");
-    expect(glucoseState(70)).toBe("ok");
-    expect(glucoseState(180)).toBe("ok");
-    expect(glucoseState(181)).toBe("high");
+  it("unit is mmol/L", () => {
+    expect(UNIT).toBe("mmol/L");
+  });
+  it("below 3.9 is low, above 10 is high", () => {
+    expect(glucoseState(3.8)).toBe("low");
+    expect(glucoseState(RANGE_LOW)).toBe("ok");
+    expect(glucoseState(RANGE_HIGH)).toBe("ok");
+    expect(glucoseState(10.1)).toBe("high");
+  });
+  it("converts mg/dL to mmol/L", () => {
+    expect(mgDlToMmol(112)).toBe(6.2);
+    expect(mgDlToMmol(70)).toBe(3.9);
+    expect(mgDlToMmol(180)).toBe(10);
+  });
+  it("shows one decimal in the reader's digits", () => {
+    expect(formatGlucose(6.2, "en")).toBe("6.2");
+    expect(formatGlucose(6.2, "bn")).toBe("৬.২");
+    expect(formatGlucose(10, "bn")).toBe("১০.০");
+  });
+  it("reads Bangla digits with a dot or a comma", () => {
+    expect(parseGlucose("৬.২")).toBe(6.2);
+    expect(parseGlucose("6,2")).toBe(6.2);
+    expect(parseGlucose(" ১২০ ")).toBe(120);
+    expect(Number.isNaN(parseGlucose("abc"))).toBe(true);
   });
   it("status says two readings missing after one check", () => {
     expect(statusSentence(1, "bn")).toBe("আজ এখনো দুবার সুগার লেখা হয়নি।");

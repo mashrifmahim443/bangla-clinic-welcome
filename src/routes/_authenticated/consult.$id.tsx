@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
-import { glucoseState } from "@/lib/glucose";
+import { UNIT, formatGlucose, glucoseState } from "@/lib/glucose";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
 import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
 
@@ -137,9 +137,9 @@ function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patien
   const { data: readings = [] } = useQuery({
     queryKey: ["patient-readings", patientId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("glucose_readings").select("id, value_mgdl, reading_type, taken_at, note").eq("user_id", patientId).order("taken_at", { ascending: false }).limit(10);
+      const { data, error } = await supabase.from("glucose_readings").select("id, value_mmol, reading_type, taken_at, note").eq("user_id", patientId).order("taken_at", { ascending: false }).limit(10);
       if (error) throw error;
-      return data;
+      return data.map((r) => ({ ...r, value_mmol: r.value_mmol ?? 0 }));
     },
   });
   const { data: rx } = usePrescription(appointmentId);
@@ -151,7 +151,7 @@ function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patien
         {age ? <> · {formatNumber(age, lang)} {t("বছর", "yrs")}</> : null}
         {phone && <> · {phone}</>}
       </p>
-      <h3 className="mt-5 text-sm font-medium text-muted-foreground">{t("সাম্প্রতিক সুগার (mg/dL)", "Recent sugar (mg/dL)")}</h3>
+      <h3 className="mt-5 text-sm font-medium text-muted-foreground">{t(`সাম্প্রতিক সুগার (${UNIT})`, `Recent sugar (${UNIT})`)}</h3>
       {readings.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("এখনো কোনো রিডিং লেখা হয়নি।", "No readings logged yet.")}</p> : (
         <table className="mt-2 w-full text-sm">
           <tbody>
@@ -159,7 +159,7 @@ function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patien
               <tr key={r.id} className="border-b border-border">
                 <td className="py-1.5">{formatDhaka(new Date(r.taken_at), lang, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}</td>
                 <td className="py-1.5 pl-2 text-xs text-muted-foreground">{r.note}</td>
-                <td className={`py-1.5 text-right font-medium ${stateClass[glucoseState(r.value_mgdl)]}`}>{formatNumber(r.value_mgdl, lang)}</td>
+                <td className={`py-1.5 text-right font-medium ${stateClass[glucoseState(r.value_mmol)]}`}>{formatGlucose(r.value_mmol, lang)}</td>
               </tr>
             ))}
           </tbody>

@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
 import { formatBDT, formatNumber } from "@/lib/locale";
+import { UNIT, formatGlucose } from "@/lib/glucose";
 import {
   Accordion,
   AccordionContent,
@@ -64,7 +65,7 @@ function Landing() {
     [t("ডাক্তাররা কি সত্যিই BMDC নিবন্ধিত?", "Are the doctors really BMDC registered?"), t("হ্যাঁ। আমরা প্রত্যেকের নিবন্ধন নম্বর যাচাই করি এবং তাদের পাতায় দেখাই।", "Yes. We check each registration number and show it on their page.")],
     [t("বিকাশ বা নগদে ফি দেওয়া যাবে?", "Can I pay with bKash or Nagad?"), t("হ্যাঁ, বিকাশ, নগদ আর কার্ড — তিনটাই চলবে।", "Yes — bKash, Nagad and card all work.")],
     [t("আমার বাবা-মায়ের হিসাব কি আমি রাখতে পারব?", "Can I keep a log for my parents?"), t("পারবেন। পরিবার প্ল্যানে একটা অ্যাকাউন্টে চারজন পর্যন্ত রাখা যায়।", "Yes. The family plan holds up to four people on one account.")],
-    [t("সুগার খুব কমে গেলে কী করব?", "What if my sugar drops very low?"), t("৭০ mg/dL-এর নিচে হলে সঙ্গে সঙ্গে চিনি বা গ্লুকোজ খান। জ্ঞান হারালে নিকটস্থ হাসপাতালে যান।", "Below 70 mg/dL, take sugar or glucose right away. If someone faints, go to the nearest hospital.")],
+    [t("সুগার খুব কমে গেলে কী করব?", "What if my sugar drops very low?"), t(`৩.৯ ${UNIT}-এর নিচে হলে সঙ্গে সঙ্গে চিনি বা গ্লুকোজ খান। জ্ঞান হারালে নিকটস্থ হাসপাতালে যান।`, `Below 3.9 ${UNIT}, take sugar or glucose right away. If someone faints, go to the nearest hospital.`)],
   ];
 
   const plans: { name: string; price: number | null; rows: (string | boolean | number)[] }[] = [
@@ -119,7 +120,7 @@ function Landing() {
           <div className="absolute -bottom-6 -left-6 w-52 -rotate-2 rounded-md border border-border bg-card px-4 py-3">
             <p className="font-hand text-xl leading-tight text-muted-foreground">{t("আজকের রিডিং", "today's reading")}</p>
             <p className="font-display text-3xl font-semibold text-glucose-ok">
-              {formatNumber(112, lang)} <span className="font-sans text-sm font-normal text-muted-foreground">mg/dL</span>
+              {formatGlucose(6.2, lang)} <span className="font-sans text-sm font-normal text-muted-foreground">{UNIT}</span>
             </p>
             <p className="text-xs text-muted-foreground">{t("খালি পেটে, সকাল ৭:৩০", "fasting, 7:30 am")}</p>
           </div>
