@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAppointment } from "@/lib/consult";
 import { bmi, normalizeCells, standardCells, type PlanCells } from "@/lib/diet-plan";
 import { UNIT, formatGlucose } from "@/lib/glucose";
+import { useDietTemplates } from "@/lib/diet-templates";
 import { useLang } from "@/lib/i18n";
 import { formatNumber } from "@/lib/locale";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
@@ -41,6 +42,7 @@ function Page() {
   const [calories, setCalories] = useState<string | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
   const [msg, setMsg] = useState("");
+  const { data: templates } = useDietTemplates();
   if (!appt || !info) return <RoleShell role="doctor"><p className="text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p></RoleShell>;
   if (!appt.isDoctor) return <RoleShell role="doctor"><p>{t("শুধু এই রোগীর ডাক্তার খাদ্য তালিকা লিখতে পারবেন।", "Only this patient's doctor can write the diet plan.")}</p></RoleShell>;
   const c = cells ?? (info.plan ? normalizeCells(info.plan.cells) : standardCells());
@@ -88,6 +90,12 @@ function Page() {
           <div className="flex flex-wrap items-end gap-4">
             <div><label htmlFor="kc" className="text-sm font-medium">{t("দিনে ক্যালরি", "Calories / day")}</label><input id="kc" inputMode="numeric" value={cal} onChange={(e) => setCalories(e.target.value.replace(/\D/g, ""))} placeholder="1600" className="mt-1 block w-32 rounded-md border border-input bg-card px-3 py-2" /></div>
             <button onClick={() => { if (confirm(t("সাধারণ তালিকা দিয়ে সব ঘর ভরে দেবেন? আগের লেখা মুছে যাবে।", "Fill every cell with the standard plan? Current text will be replaced."))) setCells(standardCells()); }} className="rounded-md border border-border px-3 py-2 text-sm text-primary hover:bg-secondary">{t("সাধারণ তালিকা থেকে শুরু করুন", "Start from standard plan")}</button>
+            {(templates ?? []).length > 0 && (
+              <select aria-label={t("সংরক্ষিত তালিকা থেকে নিন", "Load a saved chart")} value="" onChange={(e) => { const tp = templates!.find((x) => x.id === e.target.value); if (tp && confirm(t("এই তালিকা দিয়ে সব ঘর ভরে দেবেন?", "Fill every cell from this chart?"))) { setCells(normalizeCells(tp.cells)); if (tp.calories) setCalories(String(tp.calories)); if (tp.notes) setNotes(tp.notes); } }} className="rounded-md border border-border bg-card px-3 py-2 text-sm">
+                <option value="">{t("সংরক্ষিত তালিকা থেকে নিন…", "Load a saved chart…")}</option>
+                {templates!.map((tp) => <option key={tp.id} value={tp.id}>{tp.title}{tp.is_public ? "" : ` (${t("গোপন", "private")})`}</option>)}
+              </select>
+            )}
           </div>
           <label htmlFor="nt" className="mt-4 block text-sm font-medium">{t("রোগীর জন্য বিশেষ নির্দেশনা", "Special instructions for the patient")}</label>
           <textarea id="nt" rows={3} value={nt} onChange={(e) => setNotes(e.target.value)} maxLength={1500} placeholder={t("যেমন: ভাত দিনে এক বেলা, মিষ্টি ফল এড়িয়ে চলুন, রাতে হাঁটবেন", "e.g. rice once a day, avoid sweet fruit, walk after dinner")} className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2" />
