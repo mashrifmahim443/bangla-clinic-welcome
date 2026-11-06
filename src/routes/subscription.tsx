@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
 import { formatBDT } from "@/lib/locale";
 
 export const Route = createFileRoute("/subscription")({
@@ -17,26 +18,19 @@ export const Route = createFileRoute("/subscription")({
 
 function Page() {
   const { lang, t } = useLang();
-  const plans = [
-    { name: t("বিনামূল্যে", "Free"), price: 0 },
-    { name: t("মাসিক", "Monthly"), price: 499 },
-    { name: t("পরিবার", "Family"), price: 1199 },
-  ];
-  const yes = t("আছে", "Yes"), no = "—";
-  const rows: [string, string[]][] = [
-    [t("সুগারের খাতা ও চার্ট", "Sugar diary and chart"), [yes, yes, yes]],
-    [t("এসএমএস/হোয়াটসঅ্যাপ চেক-ইন", "SMS / WhatsApp check-ins"), [no, t("দিনে ৩ বার", "3 a day"), t("দিনে ৩ বার", "3 a day")]],
-    [t("ডাক্তারের পরামর্শ", "Doctor consults"), [no, t("মাসে ১ বার", "1 a month"), t("মাসে ৩ বার", "3 a month")]],
-    [t("সাপ্তাহিক খাদ্য তালিকা", "Weekly diet chart"), [t("সাধারণ", "General"), t("ব্যক্তিগত", "Personal"), t("ব্যক্তিগত", "Personal")]],
-    [t("প্রিন্টযোগ্য প্রেসক্রিপশন", "Printable prescription"), [no, yes, yes]],
-    [t("কতজন", "People"), ["১ জন", "১ জন", t("৪ জন পর্যন্ত", "Up to 4")].map((v, i) => (lang === "en" ? ["1", "1", "Up to 4"][i]! : v))],
-  ];
+  const { c } = useCms();
+  const { lines } = useCms();
+  const names = lines("pricing.plan_names").map((l) => l[0] ?? "");
+  const prices = c("pricing.prices").split(",").map((x) => Number(x.trim().replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)))) || 0);
+  const plans = [0, 1, 2].map((i) => ({ name: names[i] ?? "", price: prices[i] ?? 0 }));
+  const no = "—";
+  const rows: [string, string[]][] = lines("sub.rows").map((r) => [r[0] ?? "", [1, 2, 3].map((i) => r[i] ?? no)]);
   return (
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-6 py-12">
-        <h1 className="font-display text-4xl font-semibold">{t("প্ল্যান ও ফি", "Plans and fees")}</h1>
-        <p className="mt-2 text-muted-foreground">{t("যেকোনো সময় বাদ দিতে পারবেন। বিকাশ ও নগদে ফি দেওয়া যাবে।", "Cancel any time. Pay by bKash or Nagad.")}</p>
+        <h1 className="font-display text-4xl font-semibold">{c("sub.title")}</h1>
+        <p className="mt-2 text-muted-foreground">{c("sub.sub")}</p>
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[36rem] border-collapse border border-border bg-card text-left">
             <thead>

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
 import { formatBDT } from "@/lib/locale";
 import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors";
 
@@ -41,6 +42,7 @@ const feeBands = [
 
 function DoctorsPage() {
   const { lang, t } = useLang();
+  const { c } = useCms();
   const { data: doctors = [], isLoading } = useDoctors();
   const [spec, setSpec] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
@@ -74,8 +76,8 @@ function DoctorsPage() {
     <div className="min-h-screen">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-6 py-12">
-        <h1 className="font-display text-4xl font-semibold">{t("ডাক্তার খুঁজুন", "Find a doctor")}</h1>
-        <p className="mt-1 text-muted-foreground">{t("সবাই BMDC নিবন্ধিত। নিবন্ধন নম্বর পাশে দেওয়া আছে।", "All are BMDC registered. The number is shown beside each name.")}</p>
+        <h1 className="font-display text-4xl font-semibold">{c("pages.doctors_title")}</h1>
+        <p className="mt-1 text-muted-foreground">{c("pages.doctors_sub")}</p>
 
         <div className="mt-8 grid gap-10 md:grid-cols-[13rem_1fr]">
           <aside aria-label={t("ছাঁকনি", "Filters")}>

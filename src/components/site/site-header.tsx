@@ -1,15 +1,12 @@
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
 
 export function SiteHeader() {
   const { lang, setLang, t } = useLang();
-  const links = [
-    { href: "/articles", bn: "লেখা", en: "Articles" },
-    { href: "/doctors", bn: "ডাক্তার", en: "Doctors" },
-    { href: "/diet", bn: "খাদ্য তালিকা", en: "Diet chart" },
-    { href: "/exercise", bn: "ব্যায়াম", en: "Exercise" },
-  ];
+  const { c, lines } = useCms();
+  const links = lines("header.links").map(([name, href]) => ({ name: name ?? "", href: href || "/" }));
   return (
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-4">
@@ -20,7 +17,7 @@ export function SiteHeader() {
         <nav className="hidden flex-1 gap-6 text-[0.95rem] md:flex">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="text-foreground/80 hover:text-primary">
-              {t(l.bn, l.en)}
+              {l.name}
             </a>
           ))}
         </nav>
@@ -34,7 +31,7 @@ export function SiteHeader() {
             {lang === "bn" ? "English" : "বাংলা"}
           </button>
           <Link to="/auth" className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-            {t("সুগার লিখুন", "Log your sugar")}
+            {c("header.cta")}
           </Link>
         </div>
       </div>

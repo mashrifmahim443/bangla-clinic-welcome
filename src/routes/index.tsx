@@ -50,17 +50,10 @@ function Landing() {
 
   const faqs = lines("faq.items");
 
-  const plans: { name: string; price: number | null; rows: (string | boolean | number)[] }[] = [
-    { name: t("বিনামূল্যে", "Free"), price: prices[0] ?? 0, rows: [true, false, t("সাধারণ", "Basic"), 1] },
-    { name: t("মাসিক", "Monthly"), price: prices[1] ?? 499, rows: [true, t("মাসে ১ বার", "1 per month"), t("ব্যক্তিগত", "Personal"), 1] },
-    { name: t("পরিবার", "Family"), price: prices[2] ?? 1199, rows: [true, t("মাসে ৩ বার", "3 per month"), t("ব্যক্তিগত", "Personal"), 4] },
-  ];
-  const planLabels = [
-    t("সুগারের হিসাব", "Sugar log"),
-    t("ডাক্তারের পরামর্শ", "Doctor consults"),
-    t("খাদ্য তালিকা", "Food list"),
-    t("কতজন", "People"),
-  ];
+  const planNames = lines("pricing.plan_names").map((l) => l[0] ?? "");
+  const priceRows = lines("pricing.rows");
+  const plans = [0, 1, 2].map((i) => ({ name: planNames[i] ?? "", price: prices[i] ?? 0, rows: priceRows.map((r) => r[i + 1] ?? "—") }));
+  const planLabels = priceRows.map((r) => r[0] ?? "");
 
   return (
     <div className="min-h-screen overflow-x-hidden">
@@ -137,14 +130,14 @@ function Landing() {
         <div className="mx-auto max-w-6xl px-6 py-20">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="font-display text-4xl font-semibold">{c("doctors.title")}</h2>
-            <Link to="/doctors" className="font-medium text-primary underline underline-offset-4">{t("সব ডাক্তার দেখুন", "See all doctors")}</Link>
+            <Link to="/doctors" className="font-medium text-primary underline underline-offset-4">{c("doctors.see_all")}</Link>
           </div>
           <div className="mt-6">
             <Link
               to="/doctor-apply"
               className="inline-block rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground"
             >
-              {t("ডাক্তার হিসেবে যোগ দিন", "Join as a doctor")}
+              {c("doctors.join_btn")}
             </Link>
             <p className="mt-2 text-sm text-muted-foreground">
               {c("doctors.join_note")}
@@ -183,8 +176,8 @@ function Landing() {
         <p className="mt-2 max-w-lg text-muted-foreground">{c("food.sub")}</p>
         <div className="mt-10 grid gap-12 md:grid-cols-2">
           {[
-            { title: t("খাবেন", "Eat"), list: eat, color: "text-glucose-ok" },
-            { title: t("এড়াবেন", "Avoid"), list: avoid, color: "text-glucose-low" },
+            { title: c("food.eat_title"), list: eat, color: "text-glucose-ok" },
+            { title: c("food.avoid_title"), list: avoid, color: "text-glucose-low" },
           ].map((col) => (
             <div key={col.title}>
               <h3 className={`border-b-2 border-current pb-2 text-2xl font-semibold ${col.color}`}>{col.title}</h3>
@@ -201,7 +194,7 @@ function Landing() {
       {/* Pricing */}
       <section id="pricing" className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="font-display text-4xl font-semibold">{t("ফি", "Pricing")}</h2>
+          <h2 className="font-display text-4xl font-semibold">{c("pricing.title")}</h2>
           <p className="mt-2 text-muted-foreground">{c("pricing.sub")}</p>
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[540px] border border-border bg-card text-left">
@@ -223,7 +216,7 @@ function Landing() {
                     <td className="p-4 text-muted-foreground">{label}</td>
                     {plans.map((p) => {
                       const v = p.rows[r];
-                      const text = v === true ? t("আছে", "Yes") : v === false || v === undefined ? "—" : typeof v === "number" ? formatNumber(v, lang) : v;
+                      const text = v ?? "—";
                       return <td key={p.name} className="p-4">{text}</td>;
                     })}
                   </tr>
@@ -236,7 +229,7 @@ function Landing() {
 
       {/* FAQ */}
       <section id="faq" className="mx-auto grid max-w-6xl gap-10 px-6 pb-24 md:grid-cols-[1fr_2fr]">
-        <h2 className="font-display text-4xl font-semibold">{t("সাধারণ প্রশ্ন", "Questions")}</h2>
+        <h2 className="font-display text-4xl font-semibold">{c("faq.title")}</h2>
         <Accordion type="single" collapsible className="border-t border-border">
           {faqs.map(([q, a], i) => (
             <AccordionItem key={i} value={`q${i}`} className="border-border">
