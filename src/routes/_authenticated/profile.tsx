@@ -26,8 +26,8 @@ function Page() {
       return { id: u.user!.id, ...data };
     },
   });
-  const [form, setForm] = useState<Record<string, string>>({});
-  const [errs, setErrs] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Partial<Record<"full_name" | "phone" | "diabetes_type" | "birth_year" | "gender" | "address" | "diagnosed_year" | "medicines" | "weight_kg" | "height_cm" | "other_conditions" | "emergency_contact", string>>>({});
+  const [errs, setErrs] = useState<Partial<Record<"full_name" | "phone" | "diabetes_type" | "birth_year" | "gender" | "address" | "diagnosed_year" | "medicines" | "weight_kg" | "height_cm" | "other_conditions" | "emergency_contact", string>>>({});
   const [saved, setSaved] = useState(false);
   if (isLoading || !data) return <p className="p-10 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p>;
   const v = {
