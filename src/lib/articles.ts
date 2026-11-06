@@ -1,6 +1,6 @@
 export type Block = { kind: "p" | "h" | "quote"; bn: string; en: string };
 export type Author = { slug: string; bn: string; en: string; roleBn: string; roleEn: string };
-export type Article = { slug: string; catBn: string; catEn: string; titleBn: string; titleEn: string; deckBn: string; deckEn: string; minutes: number; date: string; author: Author; body: Block[] };
+export type Article = { slug: string; catBn: string; catEn: string; titleBn: string; titleEn: string; deckBn: string; deckEn: string; minutes: number; date: string; author: Author; body: Block[]; image?: string };
 
 const A = {
   nasrin: { slug: "nasrin-islam", bn: "ডা. নাসরিন ইসলাম", en: "Dr. Nasrin Islam", roleBn: "এন্ডোক্রাইনোলজিস্ট, ঢাকা", roleEn: "Endocrinologist, Dhaka" },

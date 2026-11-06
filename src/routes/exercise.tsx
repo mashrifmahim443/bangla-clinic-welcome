@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
 import walk from "@/assets/exercise/walk.jpg";
 import chair from "@/assets/exercise/chair.jpg";
 import legs from "@/assets/exercise/legs.jpg";
@@ -17,8 +18,8 @@ export const Route = createFileRoute("/exercise")({
   component: Page,
 });
 
-type Ex = { img: string; titleBn: string; titleEn: string; whenBn: string; whenEn: string; steps: [string, string][] };
-const exercises: Ex[] = [
+export type Ex = { img: string; titleBn: string; titleEn: string; whenBn: string; whenEn: string; steps: [string, string][] };
+export const defaultExercises: Ex[] = [
   { img: walk, titleBn: "জোরে হাঁটা", titleEn: "Brisk walking", whenBn: "প্রতিদিন ৩০ মিনিট, খাওয়ার পরে", whenEn: "30 minutes daily, after a meal", steps: [
     ["আরামদায়ক স্যান্ডেল বা জুতা পরুন।", "Wear comfortable sandals or shoes."],
     ["প্রথম ৫ মিনিট ধীরে হাঁটুন।", "Walk slowly for the first 5 minutes."],
@@ -41,6 +42,8 @@ const exercises: Ex[] = [
 
 function Page() {
   const { t } = useLang();
+  const saved = useCms().json<Ex[] | null>("exercise", null);
+  const exercises = Array.isArray(saved) ? saved.map((e, i) => ({ ...e, img: e.img || defaultExercises[i]?.img || walk })) : defaultExercises;
   return (
     <div className="min-h-screen">
       <SiteHeader />
