@@ -54,7 +54,7 @@ function BookingPage() {
     queryKey: ["booked", doctor?.id, range?.[0]?.toISOString()],
     enabled: !!doctor && !!range,
     queryFn: async () => {
-      const to = new Date(range![1].getTime() + 864e5).toISOString();
+      const to = new Date(range![1]!.getTime() + 864e5).toISOString();
       const { data, error } = await supabase.rpc("booked_slots", { _doctor: doctor!.id, _from: new Date(0).toISOString(), _to: to });
       if (error) throw error;
       return (data as string[]).map((s) => new Date(s).getTime());
