@@ -117,6 +117,57 @@ export type Database = {
           },
         ]
       }
+      diet_plans: {
+        Row: {
+          appointment_id: string | null
+          calories: number | null
+          cells: Json
+          created_at: string
+          doctor_id: string
+          id: string
+          notes: string | null
+          patient_id: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          calories?: number | null
+          cells?: Json
+          created_at?: string
+          doctor_id: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_id?: string | null
+          calories?: number | null
+          cells?: Json
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diet_plans_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diet_plans_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctor_applications: {
         Row: {
           admin_note: string | null
