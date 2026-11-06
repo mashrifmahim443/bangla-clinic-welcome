@@ -46,7 +46,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
           )}
           {roles.includes("patient") && (
             <Link to="/old-prescriptions" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
-              {t("পুরনো প্রেসক্রিপশন", "Old prescriptions")}
+              {t("প্রেসক্রিপশন ও রিপোর্ট", "Prescriptions & reports")}
             </Link>
           )}
         </nav>

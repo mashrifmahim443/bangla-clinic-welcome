@@ -57,6 +57,10 @@ function Page() {
             <h3 className="mb-2 text-sm font-medium text-muted-foreground">{t("রোগীর পুরনো প্রেসক্রিপশন", "Patient's old prescriptions")}</h3>
             <OldPrescriptions patientId={appt.patient_id} />
           </div>
+          <div>
+            <h3 className="mb-2 text-sm font-medium text-muted-foreground">{t("রোগীর টেস্ট রিপোর্ট", "Patient's test reports")}</h3>
+            <OldPrescriptions patientId={appt.patient_id} kind="test_report" />
+          </div>
           {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
         </aside>
