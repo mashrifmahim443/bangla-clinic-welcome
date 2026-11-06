@@ -305,31 +305,52 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           birth_year: number | null
           created_at: string
           diabetes_type: Database["public"]["Enums"]["diabetes_type"] | null
+          diagnosed_year: number | null
+          emergency_contact: string | null
           full_name: string | null
           gender: string | null
+          height_cm: number | null
           id: string
+          medicines: string | null
+          other_conditions: string | null
           phone: string | null
+          weight_kg: number | null
         }
         Insert: {
+          address?: string | null
           birth_year?: number | null
           created_at?: string
           diabetes_type?: Database["public"]["Enums"]["diabetes_type"] | null
+          diagnosed_year?: number | null
+          emergency_contact?: string | null
           full_name?: string | null
           gender?: string | null
+          height_cm?: number | null
           id: string
+          medicines?: string | null
+          other_conditions?: string | null
           phone?: string | null
+          weight_kg?: number | null
         }
         Update: {
+          address?: string | null
           birth_year?: number | null
           created_at?: string
           diabetes_type?: Database["public"]["Enums"]["diabetes_type"] | null
+          diagnosed_year?: number | null
+          emergency_contact?: string | null
           full_name?: string | null
           gender?: string | null
+          height_cm?: number | null
           id?: string
+          medicines?: string | null
+          other_conditions?: string | null
           phone?: string | null
+          weight_kg?: number | null
         }
         Relationships: []
       }
@@ -390,6 +411,7 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
+      profile_completion: { Args: { _user: string }; Returns: number }
       review_doctor_application: {
         Args: { _approve: boolean; _id: string; _note?: string }
         Returns: undefined
