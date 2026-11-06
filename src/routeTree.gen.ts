@@ -14,12 +14,14 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DietRouteImport } from './routes/diet'
 import { Route as ExerciseRouteImport } from './routes/exercise'
+import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedPatientRouteImport } from './routes/_authenticated/patient'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
+import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
 import { Route as DoctorsIndexRouteImport } from './routes/doctors.index'
 import { Route as DoctorsSlugRouteImport } from './routes/doctors.$slug'
 import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authenticated/consult.$id'
@@ -47,6 +49,11 @@ const DietRoute = DietRouteImport.update({
 const ExerciseRoute = ExerciseRouteImport.update({
   id: '/exercise',
   path: '/exercise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionRoute = SubscriptionRouteImport.update({
+  id: '/subscription',
+  path: '/subscription',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -79,6 +86,11 @@ const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   path: '/articles/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckinTokenRoute = CheckinTokenRouteImport.update({
+  id: '/checkin/$token',
+  path: '/checkin/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorsIndexRoute = DoctorsIndexRouteImport.update({
   id: '/doctors/',
   path: '/doctors/',
@@ -106,11 +118,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/subscription': typeof SubscriptionRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/patient': typeof AuthenticatedPatientRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
@@ -122,11 +136,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/subscription': typeof SubscriptionRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/patient': typeof AuthenticatedPatientRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles': typeof ArticlesIndexRoute
   '/doctors': typeof DoctorsIndexRoute
@@ -140,11 +156,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/subscription': typeof SubscriptionRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/patient': typeof AuthenticatedPatientRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
@@ -158,11 +176,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/subscription'
     | '/admin'
     | '/dashboard'
     | '/doctor'
     | '/patient'
     | '/articles/$slug'
+    | '/checkin/$token'
     | '/doctors/$slug'
     | '/articles/'
     | '/doctors/'
@@ -174,11 +194,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/subscription'
     | '/admin'
     | '/dashboard'
     | '/doctor'
     | '/patient'
     | '/articles/$slug'
+    | '/checkin/$token'
     | '/doctors/$slug'
     | '/articles'
     | '/doctors'
@@ -191,11 +213,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/subscription'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/doctor'
     | '/_authenticated/patient'
     | '/articles/$slug'
+    | '/checkin/$token'
     | '/doctors/$slug'
     | '/articles/'
     | '/doctors/'
@@ -209,7 +233,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DietRoute: typeof DietRoute
   ExerciseRoute: typeof ExerciseRoute
+  SubscriptionRoute: typeof SubscriptionRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
+  CheckinTokenRoute: typeof CheckinTokenRoute
   DoctorsSlugRoute: typeof DoctorsSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   DoctorsIndexRoute: typeof DoctorsIndexRoute
@@ -252,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExerciseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscription': {
+      id: '/subscription'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof SubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -292,6 +325,13 @@ declare module '@tanstack/react-router' {
       path: '/articles/$slug'
       fullPath: '/articles/$slug'
       preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkin/$token': {
+      id: '/checkin/$token'
+      path: '/checkin/$token'
+      fullPath: '/checkin/$token'
+      preLoaderRoute: typeof CheckinTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/doctors/': {
@@ -352,7 +392,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DietRoute: DietRoute,
   ExerciseRoute: ExerciseRoute,
+  SubscriptionRoute: SubscriptionRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
+  CheckinTokenRoute: CheckinTokenRoute,
   DoctorsSlugRoute: DoctorsSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   DoctorsIndexRoute: DoctorsIndexRoute,
