@@ -40,18 +40,27 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
             </Link>
           ))}
         </nav>
-        <div className="mt-8 space-y-2 text-sm">
-          <p className="truncate text-muted-foreground">{data?.email}</p>
-          <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className="block text-primary underline underline-offset-4">
-            {lang === "bn" ? "English" : "বাংলা"}
-          </button>
-          <TextSizeToggle className="block text-primary underline underline-offset-4" />
-          <Link to="/profile" className="block text-primary underline underline-offset-4">{t("আমার তথ্য", "My details")}</Link>
-          {!roles.includes("doctor") && <Link to="/doctor-apply" className="block text-primary underline underline-offset-4">{t("ডাক্তার হিসেবে যোগ দিন", "Join as a doctor")}</Link>}
-          <button onClick={signOut} className="block text-primary underline underline-offset-4">{t("বের হন", "Sign out")}</button>
+        <div className="mt-8 rounded-[10px] border border-border bg-card text-sm">
+          <p className="truncate border-b border-border px-3 py-2 text-muted-foreground">{data?.email}</p>
+          <div className="grid grid-cols-2 gap-2 border-b border-border p-3">
+            <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className={chip}>
+              {lang === "bn" ? "English" : "বাংলা"}
+            </button>
+            <TextSizeToggle className={chip} />
+          </div>
+          <div className="p-1">
+            <Link to="/profile" className={row} activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("আমার তথ্য", "My details")}<span aria-hidden className="text-muted-foreground">→</span></Link>
+            {!roles.includes("doctor") && <Link to="/doctor-apply" className={row} activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("ডাক্তার হিসেবে যোগ দিন", "Join as a doctor")}<span aria-hidden className="text-muted-foreground">→</span></Link>}
+          </div>
+          <div className="border-t border-border p-3">
+            <button onClick={signOut} className="w-full rounded-md border border-accent/40 px-3 py-2 font-medium text-accent transition-colors duration-150 hover:bg-accent hover:text-accent-foreground">{t("বের হন", "Sign out")}</button>
+          </div>
         </div>
       </aside>
       <main className="p-6 md:p-10">{children}</main>
     </div>
   );
 }
+
+const chip = "rounded-md border border-border bg-background px-2 py-2 text-center font-medium text-primary transition-colors duration-150 hover:border-primary hover:bg-secondary aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground";
+const row = "flex items-center justify-between rounded-md px-3 py-2 text-foreground transition-colors duration-150 hover:bg-secondary hover:text-primary";
