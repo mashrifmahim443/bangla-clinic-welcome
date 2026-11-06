@@ -55,7 +55,7 @@ function Page() {
               {meals.map(([bn, en, time], r) => (
                 <tr key={en}>
                   <th className="border border-border p-2 text-left align-top font-medium">{t(bn, en)}<span className="block text-xs font-normal text-muted-foreground">{time}</span></th>
-                  {plan[r].map((cell, i) => (
+                  {(plan[r] ?? []).map((cell, i) => (
                     <td key={i} className="border border-border p-2 align-top">
                       <p className="font-bn leading-snug">{cell.bn}</p>
                       <p className="mt-0.5 text-xs text-muted-foreground">{t(cell.portionBn, cell.portionEn)}</p>
