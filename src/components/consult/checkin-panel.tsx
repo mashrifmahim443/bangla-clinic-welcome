@@ -14,7 +14,7 @@ export function CheckinPanel() {
     const { data, error } = await supabase.from("checkin_links").insert({ slot }).select("token").single();
     setBusy(false);
     if (error) return alert(t("লিংক বানানো যায়নি।", "Couldn't create the link."));
-    const name = String(u.user?.user_metadata?.full_name ?? "").split(" ")[0] ?? "";
+    const name = String(u.user?.user_metadata?.["full_name"] ?? "").split(" ")[0] ?? "";
     setSms(checkinSms(name, slot, `${window.location.origin}/checkin/${data.token}`));
   }
   return (
