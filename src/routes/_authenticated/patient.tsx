@@ -46,7 +46,7 @@ function useReadings() {
   return useQuery({
     queryKey: ["readings"],
     queryFn: async () => {
-      const since = new Date(Date.now() - 14 * 864e5).toISOString();
+      const since = new Date(Date.now() - 30 * 864e5).toISOString();
       const { data, error } = await supabase
         .from("glucose_readings")
         .select("id, value_mmol, reading_type, meal_slot, note, taken_at")
@@ -74,7 +74,7 @@ function Page() {
         <h1 className="font-display text-3xl font-semibold">{formatDhaka(now, lang, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</h1>
         <p className={`mt-1 text-lg ${today >= 3 ? "text-glucose-ok" : "text-accent"}`}>{statusSentence(today, lang)}</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          {t("গত ১৪ দিন", "Last 14 days")}: {formatNumber(readings.length, lang)} {t("টি রিডিং", "readings")}
+          {t("গত ৩০ দিন", "Last 30 days")}: {formatNumber(readings.length, lang)} {t("টি রিডিং", "readings")}
           {avg !== null && <> · {t("গড়", "average")} {formatGlucose(avg, lang)} {UNIT} · {t("সীমার মধ্যে", "in range")} {formatNumber(Math.round((inRange / readings.length) * 100), lang)}%</>}
         </p>
       </header>
@@ -82,7 +82,7 @@ function Page() {
       <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_20rem]">
         <section className="rounded-[10px] border border-border bg-card p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 className="text-xl font-semibold">{t("গত ১৪ দিনের সুগার", "Sugar, last 14 days")}</h2>
+            <h2 className="text-xl font-semibold">{t("গত ৩০ দিনের সুগার", "Sugar, last 30 days")}</h2>
             <p className="text-sm text-muted-foreground">
               <span className="mr-1.5 inline-block h-3 w-5 border border-glucose-ok/40 bg-glucose-ok/10 align-middle" />
               {t(`স্বাভাবিক সীমা ${formatGlucose(RANGE_LOW, "bn")}–${formatGlucose(RANGE_HIGH, "bn")} ${UNIT}`, `Target range ${RANGE_LOW}–${RANGE_HIGH} ${UNIT}`)}
