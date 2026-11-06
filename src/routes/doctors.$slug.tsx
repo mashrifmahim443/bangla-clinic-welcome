@@ -95,6 +95,7 @@ function BookingPage() {
         <div className="flex-1">
           <h1 className="font-display text-3xl font-semibold">{lang === "bn" ? doctor.name_bn : doctor.name_en}</h1>
           <p className="text-muted-foreground">{doctor.degrees}</p>
+          {doctor.designation && <p className="text-sm">{doctor.designation}{doctor.workplace ? `, ${doctor.workplace}` : ""}{doctor.experience_years ? ` · ${t(`${doctor.experience_years} বছরের অভিজ্ঞতা`, `${doctor.experience_years} yrs experience`)}` : ""}</p>}
           <p className="mt-1 text-sm">
             {t(...(specialties[doctor.specialty] ?? [doctor.specialty, doctor.specialty]))} · BMDC <span className="font-mono">{doctor.bmdc_no}</span> · {formatBDT(doctor.fee_bdt, lang)}
           </p>

@@ -116,6 +116,7 @@ function DoctorsPage() {
                       <td className="py-3 pr-3">
                         <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
                         <p className="text-sm text-muted-foreground">{d.degrees}</p>
+                        {d.designation && <p className="text-sm">{d.designation}</p>}
                       </td>
                       <td className="py-3 pr-3">{t(...(specialties[d.specialty] ?? [d.specialty, d.specialty]))}</td>
                       <td className="py-3 pr-3 font-mono text-sm">{d.bmdc_no}</td>

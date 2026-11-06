@@ -44,6 +44,11 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
             </Link>
           )}
+          {roles.includes("doctor") && (
+            <Link to="/doctor-profile" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
+              {t("ডাক্তার প্রোফাইল", "Doctor profile")}
+            </Link>
+          )}
           {roles.includes("patient") && (
             <Link to="/my-diet" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
               {t("আমার খাদ্য তালিকা", "My diet")}
