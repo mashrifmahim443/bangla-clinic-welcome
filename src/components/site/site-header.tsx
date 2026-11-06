@@ -6,8 +6,8 @@ export function SiteHeader() {
   const links = [
     { href: "/#how", bn: "কীভাবে কাজ করে", en: "How it works" },
     { href: "/doctors", bn: "ডাক্তার", en: "Doctors" },
-    { href: "/#food", bn: "খাবার", en: "Food" },
-    { href: "/#pricing", bn: "ফি", en: "Pricing" },
+    { href: "/diet", bn: "খাদ্য তালিকা", en: "Diet chart" },
+    { href: "/exercise", bn: "ব্যায়াম", en: "Exercise" },
   ];
   return (
     <header className="border-b border-border bg-background">
