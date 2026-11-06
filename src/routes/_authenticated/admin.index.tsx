@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { dhakaDay } from "@/lib/glucose";
+import { TARGETS, checkinRate, completionRate } from "@/lib/targets";
 
 export const Route = createFileRoute("/_authenticated/admin/")({ component: Page });
 
@@ -16,15 +17,16 @@ function Page() {
     queryKey: ["admin-overview"],
     queryFn: async () => {
       const since = new Date(Date.now() - 30 * 864e5).toISOString();
-      const [users, appts, reads, docs] = await Promise.all([
+      const [users, appts, reads, docs, links] = await Promise.all([
         supabase.rpc("admin_users"),
         supabase.from("appointments").select("id, doctor_id, slot_start, status"),
         supabase.from("glucose_readings").select("taken_at").gte("taken_at", since),
-        supabase.from("doctors").select("id, name_en, name_bn"),
+        supabase.from("doctors").select("id, name_en, name_bn, user_id"),
+        supabase.from("checkin_links").select("used_at, expires_at"),
       ]);
       const err = users.error || appts.error || reads.error || docs.error;
       if (err) throw err;
-      return { users: users.data ?? [], appts: appts.data ?? [], reads: reads.data ?? [], docs: docs.data ?? [] };
+      return { users: users.data ?? [], appts: appts.data ?? [], reads: reads.data ?? [], docs: docs.data ?? [], links: links.data ?? [] };
     },
   });
   const now = Date.now();
@@ -39,10 +41,39 @@ function Page() {
     [t("রিডিং (৩০ দিন)", "Readings (30 days)"), data?.reads.length ?? 0],
   ];
   const dayLabel = (d: string) => formatDhaka(new Date(d + "T12:00:00+06:00"), lang, { day: "numeric", month: "short" });
+  const patients = data?.users.filter((u) => u.roles.includes("patient")).length ?? 0;
+  const show = (v: number | null, suffix = "") => (v === null ? "—" : formatNumber(v, lang) + suffix);
+  const targets: { label: string; target: string; now: string; ok: boolean | null; note?: string }[] = [
+    { label: t("যাচাইকৃত ডাক্তার (লগইন যুক্ত)", "Verified doctors (login linked)"), target: formatNumber(TARGETS.doctors, lang) + "+", now: show(data?.docs.filter((d) => d.user_id).length ?? 0), ok: (data?.docs.filter((d) => d.user_id).length ?? 0) >= TARGETS.doctors },
+    { label: t("নিবন্ধিত রোগী", "Registered patients"), target: formatNumber(TARGETS.patients, lang) + "+", now: show(patients), ok: patients >= TARGETS.patients },
+    { label: t("সাবস্ক্রাইবার রূপান্তর", "Subscriber conversion"), target: formatNumber(TARGETS.conversion, lang) + "%", now: "—", ok: null, note: t("পেমেন্ট চালু হলে গোনা হবে", "Counted once payments are live") },
+    { label: t("চেক-ইন রেসপন্স রেট", "Check-in response rate"), target: formatNumber(TARGETS.checkinRate, lang) + "%+", now: show(checkinRate(data?.links ?? []), "%"), ok: (checkinRate(data?.links ?? []) ?? -1) >= TARGETS.checkinRate, note: t("এখন সব রোগী; পেমেন্টের পর শুধু সাবস্ক্রাইবার", "All patients for now; subscribers only after payments") },
+    { label: t("কনসালটেশন সম্পন্ন হওয়ার হার", "Consultation completion rate"), target: formatNumber(TARGETS.completionRate, lang) + "%+", now: show(completionRate(data?.appts ?? []), "%"), ok: (completionRate(data?.appts ?? []) ?? -1) >= TARGETS.completionRate },
+  ];
   return (
     <div>
       <h1 className="text-lg font-semibold">{t("সারসংক্ষেপ", "Overview")}</h1>
-      <table className="mt-3 border-collapse border border-border bg-card text-[13px]">
+      <h2 className="mt-4 text-[13px] font-medium">{t("৬ মাসের লক্ষ্য", "Six-month targets")}</h2>
+      <table className="mt-2 w-full max-w-3xl border-collapse border border-border bg-card text-[13px]">
+        <thead><tr className="bg-secondary">
+          <th className="border border-border px-2 py-1.5 text-left font-medium">{t("মাপকাঠি", "Metric")}</th>
+          <th className="border border-border px-2 py-1.5 text-right font-medium">{t("লক্ষ্য", "Target")}</th>
+          <th className="border border-border px-2 py-1.5 text-right font-medium">{t("এখন", "Now")}</th>
+          <th className="border border-border px-2 py-1.5 text-left font-medium">{t("মন্তব্য", "Note")}</th>
+        </tr></thead>
+        <tbody>
+          {targets.map((r) => (
+            <tr key={r.label}>
+              <td className="border border-border px-2 py-1.5">{r.label}</td>
+              <td className="border border-border px-2 py-1.5 text-right tabular-nums">{r.target}</td>
+              <td className={`border border-border px-2 py-1.5 text-right font-medium tabular-nums ${r.ok === null ? "" : r.ok ? "text-glucose-ok" : "text-glucose-high"}`}>{r.now}</td>
+              <td className="border border-border px-2 py-1.5 text-muted-foreground">{r.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2 className="mt-6 text-[13px] font-medium">{t("মোট সংখ্যা", "Totals")}</h2>
+      <table className="mt-2 border-collapse border border-border bg-card text-[13px]">
         <tbody>
           <tr>{stats.map(([l]) => <th key={l} className="border border-border bg-secondary px-3 py-1.5 text-left font-medium">{l}</th>)}</tr>
           <tr>{stats.map(([l, v]) => <td key={l} className="border border-border px-3 py-1.5 text-right tabular-nums">{formatNumber(v, lang)}</td>)}</tr>
