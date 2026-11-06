@@ -1,3 +1,4 @@
+import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -52,6 +53,10 @@ function Page() {
         </div>
         <aside className="overflow-y-auto border-t border-border bg-card p-6 md:border-t-0 md:border-l">
           <Summary patientId={appt.patient_id} appointmentId={id} phone={appt.patient?.phone ?? null} dtype={appt.patient?.diabetes_type ?? null} birthYear={appt.patient?.birth_year ?? null} />
+          <div>
+            <h3 className="mb-2 text-sm font-medium text-muted-foreground">{t("রোগীর পুরনো প্রেসক্রিপশন", "Patient's old prescriptions")}</h3>
+            <OldPrescriptions patientId={appt.patient_id} />
+          </div>
           {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
         </aside>
