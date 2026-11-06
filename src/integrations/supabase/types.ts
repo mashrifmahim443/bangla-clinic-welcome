@@ -290,6 +290,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_users: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          readings: number
+          roles: Database["public"]["Enums"]["app_role"][]
+        }[]
+      }
       booked_slots: {
         Args: { _doctor: string; _from: string; _to: string }
         Returns: string[]
