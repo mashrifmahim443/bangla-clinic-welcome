@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/accordion";
 import heroImg from "@/assets/hero-sugar-check.jpg";
 import { useCms } from "@/lib/cms";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { doctorPhotos, specialties } from "@/lib/doctors";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,17 +30,18 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const doctors = [
-  { initials: "নই", bn: "ডা. নাসরিন ইসলাম", en: "Dr. Nasrin Islam", specBn: "এন্ডোক্রাইনোলজিস্ট", specEn: "Endocrinologist", fee: 800, online: true },
-  { initials: "রহ", bn: "ডা. রফিকুল হাসান", en: "Dr. Rafiqul Hasan", specBn: "ডায়াবেটোলজিস্ট", specEn: "Diabetologist", fee: 600, online: true },
-  { initials: "ফচ", bn: "ডা. ফারহানা চৌধুরী", en: "Dr. Farhana Chowdhury", specBn: "পুষ্টিবিদ", specEn: "Nutritionist", fee: 500, online: false },
-  { initials: "মক", bn: "ডা. মাহমুদ করিম", en: "Dr. Mahmud Karim", specBn: "মেডিসিন বিশেষজ্ঞ", specEn: "Internal medicine", fee: 700, online: false },
-];
 
 
 function Landing() {
   const { lang, t } = useLang();
   const { c, lines, img } = useCms();
+  const { data: doctors = [] } = useQuery({
+    queryKey: ["home-doctors"],
+    queryFn: async () => {
+      const { data } = await supabase.from("doctors").select("id, slug, name_bn, name_en, specialty, fee_bdt, status, photo_url").eq("active", true).order("status").limit(4);
+      return data ?? [];
+    },
+  });
   const eat = lines("food.eat").map((l) => l[0]!);
   const avoid = lines("food.avoid").map((l) => l[0]!);
   const prices = c("pricing.prices").split(",").map((x) => Number(x.trim().replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)))) || 0);
@@ -154,20 +158,21 @@ function Landing() {
               <span>{t("ফি", "Fee")}</span>
               <span>{t("অবস্থা", "Status")}</span>
             </div>
-            {doctors.map((d) => (
-              <div key={d.en} className="grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-1 border-b border-border px-5 py-4 last:border-0 md:grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr]">
-                <div className="row-span-3 flex h-12 w-12 items-center justify-center rounded-md bg-secondary font-bn font-semibold text-primary md:row-span-1">
-                  {d.initials}
-                </div>
-                <p className="font-semibold">{t(d.bn, d.en)}</p>
-                <p className="text-muted-foreground">{t(d.specBn, d.specEn)}</p>
-                <p>{formatBDT(d.fee, lang)}</p>
+            {doctors.map((d) => {
+              const photo = d.photo_url || doctorPhotos[d.slug];
+              const spec = specialties[d.specialty];
+              return (
+              <Link key={d.id} to="/doctors/$slug" params={{ slug: d.slug }} className="grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-1 border-b border-border px-5 py-4 transition-colors duration-150 last:border-0 hover:bg-secondary md:grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr]">
+                {photo ? <img src={photo} alt="" className="row-span-3 h-12 w-12 rounded-md border border-border object-cover md:row-span-1" /> : <div className="row-span-3 flex h-12 w-12 items-center justify-center rounded-md bg-secondary font-semibold text-primary md:row-span-1">{d.name_bn.replace("ডা. ", "").slice(0, 2)}</div>}
+                <p className="font-semibold">{t(d.name_bn, d.name_en)}</p>
+                <p className="text-muted-foreground">{spec ? t(spec[0], spec[1]) : d.specialty}</p>
+                <p>{formatBDT(d.fee_bdt, lang)}</p>
                 <p className="flex items-center gap-2 text-sm">
-                  <span className={`h-2.5 w-2.5 rounded-full ${d.online ? "bg-glucose-ok" : "bg-border"}`} />
-                  {d.online ? t("এখন অনলাইনে", "Online now") : t("অফলাইন", "Offline")}
+                  <span className={`h-2.5 w-2.5 rounded-full ${d.status === "online" ? "bg-glucose-ok" : d.status === "busy" ? "bg-glucose-high" : "bg-border"}`} />
+                  {d.status === "online" ? t("এখন অনলাইনে", "Online now") : d.status === "busy" ? t("ব্যস্ত", "Busy") : t("অফলাইন", "Offline")}
                 </p>
-              </div>
-            ))}
+              </Link>
+            );})}
           </div>
         </div>
       </section>
