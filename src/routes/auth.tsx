@@ -89,7 +89,7 @@ function AuthPage() {
     setMsg(null);
   }
 
-  const fields: { key: Field; label: string; type: string; hint?: string; auto: string }[] = [
+  const fields: { key: Field; label: string; type: string; hint?: string | undefined; auto: string }[] = [
     ...(mode === "up"
       ? [
           { key: "name" as Field, label: t("আপনার নাম", "Your name"), type: "text", auto: "name" },
