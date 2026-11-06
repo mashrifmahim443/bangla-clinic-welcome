@@ -1,3 +1,4 @@
+import { MIN_COMPLETION, profileCompletion } from "@/lib/profile";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
@@ -5,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
-import { formatBDT, formatDhaka } from "@/lib/locale";
+import { formatBDT, formatDhaka, formatNumber } from "@/lib/locale";
 import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors";
 import { upcomingDays } from "@/lib/slots";
 
@@ -47,6 +48,14 @@ function BookingPage() {
   const { data: session } = useQuery({
     queryKey: ["session-user"],
     queryFn: async () => (await supabase.auth.getUser()).data.user,
+  });
+  const { data: completion } = useQuery({
+    queryKey: ["my-profile-completion", session?.id],
+    enabled: !!session,
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles").select("*").eq("id", session!.id).maybeSingle();
+      return profileCompletion(data);
+    },
   });
 
   const range = days.length ? [days[0]!.slots[0] ?? days[0]!.date, days[days.length - 1]!.date] : null;
@@ -124,6 +133,12 @@ function BookingPage() {
         {msg && <p className={`mb-4 rounded-md border px-3 py-2 ${msg.kind === "ok" ? "border-glucose-ok text-glucose-ok" : "border-destructive text-destructive"}`}>{msg.text}</p>}
         {!session ? (
           <p>{t("সময় বুক করতে আগে", "To book, first")} <Link to="/auth" className="font-medium text-primary underline underline-offset-4">{t("ঢুকুন", "sign in")}</Link>{t("।", ".")}</p>
+        ) : completion !== undefined && completion < MIN_COMPLETION ? (
+          <div className="rounded-[10px] border border-border bg-card p-5">
+            <p className="font-medium">{t(`আপনার প্রোফাইল ${formatNumber(completion, "bn")}% পূরণ হয়েছে। ডাক্তার দেখাতে অন্তত ${formatNumber(MIN_COMPLETION, "bn")}% লাগবে।`, `Your profile is ${completion}% complete. You need at least ${MIN_COMPLETION}% to book a doctor.`)}</p>
+            <p className="mt-1 text-muted-foreground">{t("ঠিকানা, কত বছর ধরে ডায়াবেটিস, এখন কী ওষুধ খাচ্ছেন — এসব জানলে ডাক্তার ঠিক পরামর্শ দিতে পারবেন।", "Your address, how long you've had diabetes and your current medicines help the doctor advise you properly.")}</p>
+            <Link to="/profile" className="mt-4 inline-block rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground hover:bg-primary/90">{t("প্রোফাইল পূরণ করুন", "Complete my profile")}</Link>
+          </div>
         ) : (
           <button disabled={!picked || book.isPending} onClick={() => picked && book.mutate(picked)}
             className="rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
