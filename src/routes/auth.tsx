@@ -31,6 +31,7 @@ type Errors = Partial<Record<Field, string>>;
 function AuthPage() {
   const { t } = useLang();
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [form, setForm] = useState({ name: "", phone: "", email: "", password: "" });
   const [errors, setErrors] = useState<Errors>({});
