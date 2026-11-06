@@ -98,12 +98,12 @@ function Page() {
           <h2 className="font-display text-xl font-semibold">{t("আপনার আবেদন", "Your applications")}</h2>
           <div className="mt-3 rounded-[10px] border border-border bg-card">
             {apps.map((a, i) => {
-              const color = a.status === "approved" ? "glucose-ok" : a.status === "rejected" ? "glucose-low" : "glucose-high";
+              const c = a.status === "approved" ? ["border-glucose-ok text-glucose-ok", "bg-glucose-ok"] : a.status === "rejected" ? ["border-glucose-low text-glucose-low", "bg-glucose-low"] : ["border-glucose-high text-glucose-high", "bg-glucose-high"];
               return (
                 <div key={a.id} className={`flex flex-wrap items-center gap-x-6 gap-y-1 px-5 py-4 ${i > 0 ? "border-t border-border" : ""}`}>
                   <div className="min-w-40"><p className="text-xs uppercase tracking-wide text-muted-foreground">BMDC</p><p className="font-display text-lg">{a.bmdc_no}</p></div>
                   <div className="min-w-32"><p className="text-xs uppercase tracking-wide text-muted-foreground">{t("জমার তারিখ", "Sent on")}</p><p>{new Date(a.created_at).toLocaleDateString(t("bn-BD", "en-GB"), { timeZone: "Asia/Dhaka", day: "numeric", month: "short", year: "numeric" })}</p></div>
-                  <span className={`ml-auto inline-flex items-center gap-2 rounded-md border border-${color} px-3 py-1 text-sm font-medium text-${color}`}><span className={`h-2 w-2 rounded-full bg-${color}`} />{t(statusText[a.status][0], statusText[a.status][1])}</span>
+                  <span className={`ml-auto inline-flex items-center gap-2 rounded-md border ${c[0]} px-3 py-1 text-sm font-medium`}><span className={`h-2 w-2 rounded-full ${c[1]}`} />{t(statusText[a.status][0], statusText[a.status][1])}</span>
                   {a.admin_note && <p className="w-full border-l-2 border-accent pl-3 text-sm text-muted-foreground">{a.admin_note}</p>}
                 </div>
               );
