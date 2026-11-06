@@ -14,6 +14,8 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DietRouteImport } from './routes/diet'
 import { Route as ExerciseRouteImport } from './routes/exercise'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -56,6 +58,16 @@ const DietRoute = DietRouteImport.update({
 const ExerciseRoute = ExerciseRouteImport.update({
   id: '/exercise',
   path: '/exercise',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubscriptionRoute = SubscriptionRouteImport.update({
@@ -164,6 +176,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -189,6 +203,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
@@ -215,6 +231,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/diet': typeof DietRoute
   '/exercise': typeof ExerciseRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -242,6 +260,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/forgot-password'
+    | '/reset-password'
     | '/subscription'
     | '/admin'
     | '/dashboard'
@@ -267,6 +287,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/forgot-password'
+    | '/reset-password'
     | '/subscription'
     | '/dashboard'
     | '/doctor'
@@ -292,6 +314,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/diet'
     | '/exercise'
+    | '/forgot-password'
+    | '/reset-password'
     | '/subscription'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
@@ -319,6 +343,8 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DietRoute: typeof DietRoute
   ExerciseRoute: typeof ExerciseRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SubscriptionRoute: typeof SubscriptionRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   CheckinTokenRoute: typeof CheckinTokenRoute
@@ -362,6 +388,20 @@ declare module '@tanstack/react-router' {
       path: '/exercise'
       fullPath: '/exercise'
       preLoaderRoute: typeof ExerciseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subscription': {
@@ -550,6 +590,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DietRoute: DietRoute,
   ExerciseRoute: ExerciseRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SubscriptionRoute: SubscriptionRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
   CheckinTokenRoute: CheckinTokenRoute,
