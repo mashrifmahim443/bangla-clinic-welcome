@@ -1,5 +1,5 @@
-import { createFileRoute, Link, Navigate, Outlet, useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, Link, Navigate, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { homeForRoles, useMyRoles } from "@/lib/roles";
@@ -32,6 +32,24 @@ function AdminLayout() {
   const { lang, setLang, t } = useLang();
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const path = useLocation({ select: (l) => l.pathname });
+  const isAdmin = (data?.roles ?? []).includes("admin");
+  const { data: counts } = useQuery({
+    queryKey: ["admin-badges"], enabled: isAdmin, refetchInterval: 60000,
+    queryFn: async () => {
+      const [u, a] = await Promise.all([
+        supabase.rpc("admin_users"),
+        supabase.from("doctor_applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      ]);
+      const users = (u.data ?? []) as { account_status: string; deletion_requested: boolean }[];
+      return {
+        "/admin/users": users.filter((x) => x.account_status === "pending" || x.deletion_requested).length,
+        "/admin/applications": a.count ?? 0,
+      } as Record<string, number>;
+    },
+  });
+  const all = groups.flatMap((g) => g.links.map((l) => ({ ...l, group: g })));
+  const current = [...all].sort((a, b) => b.to.length - a.to.length).find((l) => l.to === "/admin" ? path === "/admin" || path === "/admin/" : path.startsWith(l.to));
   if (isLoading) return <p className="p-6 text-sm text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p>;
   const roles = data?.roles ?? [];
   if (!roles.includes("admin")) return <Navigate to={homeForRoles(roles)} replace />;
@@ -42,15 +60,18 @@ function AdminLayout() {
           <Link to="/" className="font-display text-lg font-semibold text-primary">DiabeCare</Link>
           <p className="mt-0.5 text-xs font-medium tracking-wide text-accent uppercase">{t("অ্যাডমিন প্যানেল", "Admin panel")}</p>
         </div>
-        <nav className="flex-1 overflow-y-auto px-2 py-3">
+        <nav className="flex flex-1 gap-4 overflow-x-auto px-2 py-3 md:block md:overflow-y-auto">
           {groups.map((g) => (
-            <div key={g.en} className="mb-4">
+            <div key={g.en} className="shrink-0 md:mb-4">
               <p className="px-2 pb-1 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">{t(g.bn, g.en)}</p>
               {g.links.map((l) => (
                 <Link key={l.to} to={l.to} activeOptions={{ exact: l.to === "/admin" }}
                   className="block rounded-md border-l-2 border-transparent px-2 py-1.5 text-foreground transition-colors duration-150 hover:bg-secondary hover:text-primary"
                   activeProps={{ className: "border-primary bg-secondary font-semibold text-primary" }}>
-                  {t(l.bn, l.en)}
+                  <span className="flex items-center justify-between gap-2">
+                    {t(l.bn, l.en)}
+                    {(counts?.[l.to] ?? 0) > 0 && <span className="min-w-5 rounded-sm bg-accent px-1.5 text-center text-[11px] font-semibold text-accent-foreground tabular-nums">{counts![l.to]}</span>}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -64,7 +85,16 @@ function AdminLayout() {
           </div>
         </div>
       </aside>
-      <main className="min-w-0 p-4 md:p-6"><Outlet /></main>
+      <div className="min-w-0">
+        <header className="flex items-center justify-between gap-3 border-b border-border bg-card px-4 py-3 md:px-6">
+          <div className="min-w-0">
+            {current && <p className="text-[11px] tracking-wide text-muted-foreground uppercase">{t(current.group.bn, current.group.en)}</p>}
+            <p className="truncate font-display text-lg font-semibold text-primary">{current ? t(current.bn, current.en) : t("অ্যাডমিন", "Admin")}</p>
+          </div>
+          <Link to="/" target="_blank" className="shrink-0 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-primary transition-colors duration-150 hover:border-primary hover:bg-secondary">{t("সাইট দেখুন ↗", "View site ↗")}</Link>
+        </header>
+        <main className="p-4 md:p-6"><Outlet /></main>
+      </div>
     </div>
   );
 }

@@ -17,16 +17,16 @@ export function SortableTable<T>({ rows, cols, rowKey, empty }: { rows: T[]; col
     });
   }, [rows, cols, sort]);
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse border border-border bg-card text-[13px]">
+    <div className="overflow-x-auto rounded-[10px] border border-border bg-card">
+      <table className="w-full border-collapse text-[13px]">
         <thead>
-          <tr className="bg-secondary">
+          <tr className="border-b border-border bg-secondary">
             {cols.map((c) => {
               const active = sort?.key === c.key;
               return (
-                <th key={c.key} aria-sort={active ? (sort!.dir === 1 ? "ascending" : "descending") : "none"} className={`border border-border p-0 font-medium ${c.align === "right" ? "text-right" : "text-left"}`}>
+                <th key={c.key} aria-sort={active ? (sort!.dir === 1 ? "ascending" : "descending") : "none"} className={`p-0 text-xs font-semibold tracking-wide text-muted-foreground uppercase ${c.align === "right" ? "text-right" : "text-left"}`}>
                   <button onClick={() => setSort(active && sort!.dir === 1 ? { key: c.key, dir: -1 } : { key: c.key, dir: 1 })}
-                    className={`w-full px-2 py-1.5 transition-colors duration-150 hover:bg-muted ${c.align === "right" ? "text-right" : "text-left"}`}>
+                    className={`w-full px-3 py-2 transition-colors duration-150 hover:bg-muted ${c.align === "right" ? "text-right" : "text-left"}`}>
                     {c.label} <span className="text-muted-foreground">{active ? (sort!.dir === 1 ? "▲" : "▼") : "↕"}</span>
                   </button>
                 </th>
@@ -36,10 +36,10 @@ export function SortableTable<T>({ rows, cols, rowKey, empty }: { rows: T[]; col
         </thead>
         <tbody>
           {sorted.length === 0 ? (
-            <tr><td colSpan={cols.length} className="border border-border px-2 py-4 text-muted-foreground">{empty}</td></tr>
+            <tr><td colSpan={cols.length} className="px-3 py-6 text-muted-foreground">{empty}</td></tr>
           ) : sorted.map((r) => (
-            <tr key={rowKey(r)} className="hover:bg-secondary/50">
-              {cols.map((c) => <td key={c.key} className={`border border-border px-2 py-1.5 ${c.align === "right" ? "text-right tabular-nums" : ""}`}>{c.render ? c.render(r) : c.value(r)}</td>)}
+            <tr key={rowKey(r)} className="border-b border-border last:border-b-0 even:bg-background/60 transition-colors duration-150 hover:bg-secondary/60">
+              {cols.map((c) => <td key={c.key} className={`px-3 py-2 align-top ${c.align === "right" ? "text-right tabular-nums" : ""}`}>{c.render ? c.render(r) : c.value(r)}</td>)}
             </tr>
           ))}
         </tbody>
