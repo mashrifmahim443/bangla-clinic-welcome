@@ -249,6 +249,39 @@ export type Database = {
         }
         Relationships: []
       }
+      old_prescriptions: {
+        Row: {
+          created_at: string
+          doctor_name: string | null
+          file_name: string
+          file_path: string
+          id: string
+          note: string | null
+          rx_date: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_name?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          note?: string | null
+          rx_date?: string | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_name?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          note?: string | null
+          rx_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       prescriptions: {
         Row: {
           advice: string | null
