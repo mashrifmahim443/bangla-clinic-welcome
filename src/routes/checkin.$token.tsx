@@ -51,9 +51,9 @@ function Page() {
   const meal = mealLabel[data.slot as Slot];
 
   async function submit() {
-    const n = Number(bnDigits(value.trim()));
-    if (!value.trim() || !Number.isInteger(n)) return setErr("শুধু সংখ্যা লিখুন, যেমন ১২০।");
-    if (n < 20 || n > 600) return setErr("সংখ্যাটা ২০ থেকে ৬০০-এর মধ্যে হতে হবে।");
+    const n = parseGlucose(value);
+    if (Number.isNaN(n)) return setErr("শুধু সংখ্যা লিখুন, যেমন ৬.২।");
+    if (n < MIN_VALUE || n > MAX_VALUE) return setErr("সংখ্যাটা ১.১ থেকে ৩৩.৩-এর মধ্যে হতে হব।");
     setErr(""); setSaving(true);
     const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n, _food: [...food, foodText.trim()].filter(Boolean).join(", ") || undefined });
     setSaving(false);
