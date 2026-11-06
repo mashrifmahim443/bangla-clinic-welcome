@@ -14,6 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          created_at: string
+          doctor_id: string
+          id: string
+          patient_id: string
+          slot_start: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_id: string
+          id?: string
+          patient_id?: string
+          slot_start: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          patient_id?: string
+          slot_start?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctors: {
+        Row: {
+          bmdc_no: string
+          created_at: string
+          degrees: string
+          fee_bdt: number
+          gender: string
+          id: string
+          languages: string[]
+          name_bn: string
+          name_en: string
+          slug: string
+          specialty: string
+          status: Database["public"]["Enums"]["doctor_status"]
+        }
+        Insert: {
+          bmdc_no: string
+          created_at?: string
+          degrees: string
+          fee_bdt: number
+          gender?: string
+          id?: string
+          languages?: string[]
+          name_bn: string
+          name_en: string
+          slug: string
+          specialty: string
+          status?: Database["public"]["Enums"]["doctor_status"]
+        }
+        Update: {
+          bmdc_no?: string
+          created_at?: string
+          degrees?: string
+          fee_bdt?: number
+          gender?: string
+          id?: string
+          languages?: string[]
+          name_bn?: string
+          name_en?: string
+          slug?: string
+          specialty?: string
+          status?: Database["public"]["Enums"]["doctor_status"]
+        }
+        Relationships: []
+      }
       glucose_readings: {
         Row: {
           created_at: string
@@ -67,6 +147,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      booked_slots: {
+        Args: { _doctor: string; _from: string; _to: string }
+        Returns: string[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -77,6 +161,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "doctor" | "patient"
+      doctor_status: "online" | "busy" | "offline"
       reading_type:
         | "fasting"
         | "before_meal"
@@ -211,6 +296,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "doctor", "patient"],
+      doctor_status: ["online", "busy", "offline"],
       reading_type: [
         "fasting",
         "before_meal",
