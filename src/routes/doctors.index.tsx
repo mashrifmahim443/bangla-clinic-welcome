@@ -111,7 +111,7 @@ function DoctorsPage() {
                   {shown.map((d) => (
                     <tr key={d.id} className="border-b border-border align-middle">
                       <td className="py-3 pr-3">
-                        <img src={doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 rounded-md border border-border object-cover" />
+                        <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 rounded-md border border-border object-cover" />
                       </td>
                       <td className="py-3 pr-3">
                         <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
