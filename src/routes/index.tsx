@@ -191,41 +191,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <h2 className="font-display text-4xl font-semibold">{c("pricing.title")}</h2>
-          <p className="mt-2 text-muted-foreground">{c("pricing.sub")}</p>
-          <div className="mt-8 overflow-x-auto">
-            <table className="w-full min-w-[540px] border border-border bg-card text-left">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="p-4 font-normal text-muted-foreground" />
-                  {plans.map((p) => (
-                    <th key={p.name} className="p-4 align-bottom">
-                      <span className="block text-lg font-semibold">{p.name}</span>
-                      <span className="font-display text-2xl font-semibold text-primary">{formatBDT(p.price ?? 0, lang)}</span>
-                      <span className="text-sm font-normal text-muted-foreground"> / {t("মাস", "month")}</span>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {planLabels.map((label, r) => (
-                  <tr key={label} className="border-b border-border last:border-0">
-                    <td className="p-4 text-muted-foreground">{label}</td>
-                    {plans.map((p) => {
-                      const v = p.rows[r];
-                      const text = v ?? "—";
-                      return <td key={p.name} className="p-4">{text}</td>;
-                    })}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
 
       {/* FAQ */}
       <section id="faq" className="mx-auto grid max-w-6xl gap-10 px-6 pb-24 md:grid-cols-[1fr_2fr]">
