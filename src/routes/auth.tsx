@@ -6,6 +6,12 @@ import { SiteHeader } from "@/components/site/site-header";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>): { next?: string | undefined } => ({
+    next:
+      typeof search.next === "string" && search.next.startsWith("/") && !search.next.startsWith("//")
+        ? search.next
+        : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign in — DiabeCare" },
