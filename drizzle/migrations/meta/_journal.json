@@ -29,6 +29,13 @@
       "when": 1793975449400,
       "tag": "0003_consultation_room",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793975813977,
+      "tag": "0004_checkin_links",
+      "breakpoints": true
     }
   ]
 }
