@@ -8,7 +8,7 @@ import { CheckinPanel } from "@/components/consult/checkin-panel";
 import { RoleShell } from "@/components/site/role-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
-import { formatDhaka, formatNumber } from "@/lib/locale";
+import { formatDhaka, formatNumber, dhakaNowParts, dhakaToISO } from "@/lib/locale";
 import { RANGE_HIGH, RANGE_LOW, countToday, glucoseState, statusSentence } from "@/lib/glucose";
 
 export const Route = createFileRoute("/_authenticated/patient")({
@@ -153,16 +153,18 @@ function AddReading() {
   const [value, setValue] = useState("");
   const [type, setType] = useState<ReadingType>("fasting");
   const [note, setNote] = useState("");
+  const [day, setDay] = useState(() => dhakaNowParts().date);
+  const [time, setTime] = useState(() => dhakaNowParts().time);
   const [err, setErr] = useState<string | null>(null);
 
   const save = useMutation({
-    mutationFn: async (input: { value_mgdl: number; reading_type: ReadingType; note: string | null }) => {
+    mutationFn: async (input: { value_mgdl: number; reading_type: ReadingType; note: string | null; taken_at: string }) => {
       const { data: u } = await supabase.auth.getUser();
       const { error } = await supabase.from("glucose_readings").insert({ ...input, user_id: u.user!.id });
       if (error) throw error;
     },
     onSuccess: () => {
-      setValue(""); setNote("");
+      setValue(""); setNote(""); setDay(dhakaNowParts().date); setTime(dhakaNowParts().time);
       qc.invalidateQueries({ queryKey: ["readings"] });
     },
     onError: () => setErr(t("সেভ হলো না। আবার চেষ্টা করুন।", "Couldn't save. Please try again.")),
@@ -176,8 +178,11 @@ function AddReading() {
       note: z.string().trim().max(200, t("নোট ২০০ অক্ষরের মধ্যে রাখুন।", "Keep the note under 200 characters.")),
     }).safeParse({ value_mgdl: value === "" ? NaN : num, note });
     if (!parsed.success) { setErr(value === "" ? t("সুগারের মান লিখুন।", "Enter your sugar value.") : parsed.error.issues[0]!.message); return; }
+    if (!day || !time) { setErr(t("তারিখ আর সময় দিন।", "Pick a date and time.")); return; }
+    const takenAt = dhakaToISO(day, time);
+    if (new Date(takenAt).getTime() > Date.now() + 5 * 60_000) { setErr(t("ভবিষ্যতের সময় দেওয়া যাবে না।", "The time can't be in the future.")); return; }
     setErr(null);
-    save.mutate({ value_mgdl: parsed.data.value_mgdl, reading_type: type, note: parsed.data.note || null });
+    save.mutate({ value_mgdl: parsed.data.value_mgdl, reading_type: type, note: parsed.data.note || null, taken_at: takenAt });
   }
 
   const input = "w-full rounded-md border border-border bg-card px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring/30";
@@ -189,8 +194,18 @@ function AddReading() {
         <input className={`${input} ${err ? "border-destructive" : ""}`} inputMode="numeric" value={value} onChange={(e) => setValue(e.target.value)} placeholder="112" />
       </label>
       {err && <p className="mt-1 text-sm text-destructive">{err}</p>}
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium">{t("তারিখ", "Date")}</span>
+          <input type="date" className={input} value={day} max={dhakaNowParts().date} onChange={(e) => setDay(e.target.value)} />
+        </label>
+        <label className="block">
+          <span className="mb-1 block text-sm font-medium">{t("সময়", "Time")}</span>
+          <input type="time" className={input} value={time} onChange={(e) => setTime(e.target.value)} />
+        </label>
+      </div>
       <label className="mt-3 block">
-        <span className="mb-1 block text-sm font-medium">{t("কখন মাপলেন", "When")}</span>
+        <span className="mb-1 block text-sm font-medium">{t("খাবারের আগে না পরে", "Before or after food")}</span>
         <select className={input} value={type} onChange={(e) => setType(e.target.value as ReadingType)}>
           {(Object.keys(typeLabels) as ReadingType[]).map((k) => <option key={k} value={k}>{t(...typeLabels[k])}</option>)}
         </select>
