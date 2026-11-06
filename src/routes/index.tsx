@@ -168,6 +168,17 @@ function Landing() {
             <h2 className="font-display text-4xl font-semibold">{t("আমাদের ডাক্তার", "Our doctors")}</h2>
             <Link to="/doctors" className="font-medium text-primary underline underline-offset-4">{t("সব ডাক্তার দেখুন", "See all doctors")}</Link>
           </div>
+          <div className="mt-6">
+            <Link
+              to="/doctor-apply"
+              className="inline-block rounded-md border border-primary px-4 py-2 text-sm font-medium text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground"
+            >
+              {t("ডাক্তার হিসেবে যোগ দিন", "Join as a doctor")}
+            </Link>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("BMDC নিবন্ধন নম্বর আর ডিগ্রি দিয়ে আবেদন করুন। আমরা যাচাই করি।", "Apply with your BMDC registration number and degrees. We verify each one.")}
+            </p>
+          </div>
           <div className="mt-8 overflow-hidden rounded-[10px] border border-border bg-card">
             <div className="hidden grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr] gap-4 border-b border-border px-5 py-3 text-sm text-muted-foreground md:grid">
               <span />

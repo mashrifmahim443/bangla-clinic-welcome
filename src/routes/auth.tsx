@@ -6,6 +6,12 @@ import { SiteHeader } from "@/components/site/site-header";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>): { next?: string | undefined } => ({
+    next:
+      typeof search["next"] === "string" && search["next"].startsWith("/") && !search["next"].startsWith("//")
+        ? search["next"]
+        : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign in — DiabeCare" },
@@ -25,6 +31,7 @@ type Errors = Partial<Record<Field, string>>;
 function AuthPage() {
   const { t } = useLang();
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [form, setForm] = useState({ name: "", phone: "", email: "", password: "" });
   const [errors, setErrors] = useState<Errors>({});
@@ -70,7 +77,7 @@ function AuthPage() {
     if (mode === "in") {
       const { error } = await supabase.auth.signInWithPassword({ email: form.email.trim(), password: form.password });
       if (error) setMsg({ kind: "err", text: `${error.message}` + " — " + (/confirm/i.test(error.message) ? t("ইমেইলটা এখনো নিশ্চিত হয়নি। ইমেইলে পাঠানো লিংকে চাপ দিন, তারপর লগইন করুন।", "Your email isn't confirmed yet. Click the link we emailed you, then sign in.") : t("ইমেইল বা পাসওয়ার্ড মিলছে না। আবার চেষ্টা করুন।", "Email or password doesn't match. Please try again.")) });
-      else navigate({ to: "/dashboard" });
+      else navigate({ to: (next ?? "/dashboard") as "/dashboard" });
     } else {
       const { error } = await supabase.auth.signUp({
         email: form.email.trim(),
