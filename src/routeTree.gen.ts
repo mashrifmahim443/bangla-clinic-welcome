@@ -22,6 +22,7 @@ import { Route as AuthenticatedAdviceRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedDoctorApplyRouteImport } from './routes/_authenticated/doctor-apply'
+import { Route as AuthenticatedOldPrescriptionsRouteImport } from './routes/_authenticated/old-prescriptions'
 import { Route as AuthenticatedPatientRouteImport } from './routes/_authenticated/patient'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
@@ -100,6 +101,12 @@ const AuthenticatedDoctorApplyRoute =
   AuthenticatedDoctorApplyRouteImport.update({
     id: '/doctor-apply',
     path: '/doctor-apply',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedOldPrescriptionsRoute =
+  AuthenticatedOldPrescriptionsRouteImport.update({
+    id: '/old-prescriptions',
+    path: '/old-prescriptions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedPatientRoute = AuthenticatedPatientRouteImport.update({
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/old-prescriptions': typeof AuthenticatedOldPrescriptionsRoute
   '/patient': typeof AuthenticatedPatientRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -217,6 +225,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/old-prescriptions': typeof AuthenticatedOldPrescriptionsRoute
   '/patient': typeof AuthenticatedPatientRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -247,6 +256,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/_authenticated/old-prescriptions': typeof AuthenticatedOldPrescriptionsRoute
   '/_authenticated/patient': typeof AuthenticatedPatientRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/doctor'
     | '/doctor-apply'
+    | '/old-prescriptions'
     | '/patient'
     | '/profile'
     | '/articles/$slug'
@@ -304,6 +315,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/doctor'
     | '/doctor-apply'
+    | '/old-prescriptions'
     | '/patient'
     | '/profile'
     | '/articles/$slug'
@@ -333,6 +345,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/doctor'
     | '/_authenticated/doctor-apply'
+    | '/_authenticated/old-prescriptions'
     | '/_authenticated/patient'
     | '/_authenticated/profile'
     | '/articles/$slug'
@@ -456,6 +469,13 @@ declare module '@tanstack/react-router' {
       path: '/doctor-apply'
       fullPath: '/doctor-apply'
       preLoaderRoute: typeof AuthenticatedDoctorApplyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/old-prescriptions': {
+      id: '/_authenticated/old-prescriptions'
+      path: '/old-prescriptions'
+      fullPath: '/old-prescriptions'
+      preLoaderRoute: typeof AuthenticatedOldPrescriptionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/patient': {
@@ -584,6 +604,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDoctorRoute: typeof AuthenticatedDoctorRoute
   AuthenticatedDoctorApplyRoute: typeof AuthenticatedDoctorApplyRoute
+  AuthenticatedOldPrescriptionsRoute: typeof AuthenticatedOldPrescriptionsRoute
   AuthenticatedPatientRoute: typeof AuthenticatedPatientRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedConsultIdRoute: typeof AuthenticatedConsultIdRoute
@@ -596,6 +617,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDoctorRoute: AuthenticatedDoctorRoute,
   AuthenticatedDoctorApplyRoute: AuthenticatedDoctorApplyRoute,
+  AuthenticatedOldPrescriptionsRoute: AuthenticatedOldPrescriptionsRoute,
   AuthenticatedPatientRoute: AuthenticatedPatientRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedConsultIdRoute: AuthenticatedConsultIdRoute,
