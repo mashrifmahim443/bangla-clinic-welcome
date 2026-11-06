@@ -12,6 +12,11 @@ export const Route = createFileRoute("/checkin/$token")({
 });
 
 const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
+const foodChoices: Record<Slot, string[]> = {
+  morning: ["রুটি", "পরোটা", "ডিম", "সবজি", "ডাল", "চিড়া/মুড়ি", "চা", "ফল"],
+  lunch: ["ভাত", "মাছ", "মুরগি", "ডাল", "সবজি", "শাক", "সালাদ", "মাংস"],
+  dinner: ["রুটি", "ভাত", "মাছ", "মুরগি", "ডাল", "সবজি", "খিচুড়ি", "দুধ"],
+};
 const big = "w-full rounded-md py-6 text-3xl font-semibold transition-colors duration-150";
 
 function Page() {
@@ -26,6 +31,8 @@ function Page() {
   });
   const [step, setStep] = useState(0);
   const [ate, setAte] = useState<boolean | null>(null);
+  const [food, setFood] = useState<string[]>([]);
+  const [foodText, setFoodText] = useState("");
   const [meds, setMeds] = useState<boolean | null>(null);
   const [value, setValue] = useState("");
   const [err, setErr] = useState("");
@@ -34,10 +41,10 @@ function Page() {
   const shell = (children: React.ReactNode) => (
     <main lang="bn" className="font-bn mx-auto flex min-h-screen max-w-md flex-col px-5 pt-16 pb-10 text-[22px]">{children}</main>
   );
-  if (isLoading) return shell(<p className="text-center">একটু অপেক্ষা করুন…</p>);
-  if (!data) return shell(<p className="text-center">এই লিংকের সময় শেষ হয়ে গেছে। পরের মেসেজের লিংকে লিখুন।</p>);
-  if (data.used || step === 3) return shell(
-    <div className="text-center">
+  if (isLoading) return shell(<p>একটু অপেক্ষা করুন…</p>);
+  if (!data) return shell(<p>এই লিংকের সময় শেষ হয়ে গেছে। পরের মেসেজের লিংকে লিখুন।</p>);
+  if (data.used || step === 4) return shell(
+    <div>
       <p className="font-display text-4xl font-semibold text-primary">ধন্যবাদ{data.first_name ? `, ${data.first_name}` : ""}!</p>
       <p className="mt-4">আপনার সুগার লেখা হয়েছে। ডাক্তার দেখতে পাবেন।</p>
     </div>,
@@ -49,13 +56,13 @@ function Page() {
     if (!value.trim() || !Number.isInteger(n)) return setErr("শুধু সংখ্যা লিখুন, যেমন ১২০।");
     if (n < 20 || n > 600) return setErr("সংখ্যাটা ২০ থেকে ৬০০-এর মধ্যে হতে হবে।");
     setErr(""); setSaving(true);
-    const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n });
+    const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n, _food: [...food, foodText.trim()].filter(Boolean).join(", ") || undefined });
     setSaving(false);
     if (error || !ok) return setErr("লেখা যায়নি। আবার চাপুন।");
-    setStep(3);
+    setStep(4);
   }
 
-  const progress = <p className="mb-6 text-lg text-muted-foreground">প্রশ্ন {["১", "২", "৩"][step]} / ৩</p>;
+  const progress = <p className="mb-6 text-lg text-muted-foreground">প্রশ্ন {["১", "২", "৩", "৪"][step]} / ৪</p>;
   const YesNo = ({ onPick }: { onPick: (v: boolean) => void }) => (
     <div className="mt-10 grid gap-4">
       <button onClick={() => onPick(true)} className={`${big} bg-primary text-primary-foreground hover:bg-primary/90`}>হ্যাঁ</button>
@@ -63,8 +70,28 @@ function Page() {
     </div>
   );
 
-  if (step === 0) return shell(<>{progress}<h1 className="text-center font-display text-4xl leading-tight font-semibold">{meal} খেয়েছেন?</h1><YesNo onPick={(v) => { setAte(v); setStep(1); }} /></>);
-  if (step === 1) return shell(<>{progress}<h1 className="text-center font-display text-4xl leading-tight font-semibold">ওষুধ খেয়েছেন?</h1><YesNo onPick={(v) => { setMeds(v); setStep(2); }} /></>);
+  if (step === 0) return shell(<>{progress}<h1 className="font-display text-4xl leading-tight font-semibold">{meal} খেয়েছেন?</h1><YesNo onPick={(v) => { setAte(v); setStep(v ? 1 : 2); }} /></>);
+  if (step === 1) return shell(
+    <>
+      {progress}
+      <h1 className="font-display text-4xl leading-tight font-semibold">কী খেয়েছেন?</h1>
+      <p className="mt-2 text-lg text-muted-foreground">যা যা খেয়েছেন, চাপ দিন।</p>
+      <div className="mt-8 grid grid-cols-2 gap-3">
+        {(foodChoices[data.slot as Slot] ?? []).map((f) => {
+          const on = food.includes(f);
+          return (
+            <button key={f} aria-pressed={on} onClick={() => setFood(on ? food.filter((x) => x !== f) : [...food, f])}
+              className={`rounded-md border-2 px-3 py-4 text-xl transition-colors duration-150 ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>{f}</button>
+          );
+        })}
+      </div>
+      <label htmlFor="ft" className="mt-6 block text-lg">অন্য কিছু খেলে লিখুন</label>
+      <input id="ft" value={foodText} maxLength={150} onChange={(e) => setFoodText(e.target.value)} placeholder="যেমন: দুটো রুটি"
+        className="mt-2 w-full rounded-md border-2 border-border bg-card px-4 py-4 text-xl outline-none focus:border-primary" />
+      <button onClick={() => setStep(2)} className={`${big} mt-8 bg-primary text-primary-foreground hover:bg-primary/90`}>পরের প্রশ্ন</button>
+    </>,
+  );
+  if (step === 2) return shell(<>{progress}<h1 className="font-display text-4xl leading-tight font-semibold">ওষুধ খেয়েছেন?</h1><YesNo onPick={(v) => { setMeds(v); setStep(3); }} /></>);
   const st = Number(bnDigits(value)) ? glucoseState(Number(bnDigits(value))) : null;
   return shell(
     <>
@@ -78,7 +105,7 @@ function Page() {
       {st === "low" && <p className="mt-3 text-glucose-low">সুগার কম। এখনই একটু চিনি-পানি খান।</p>}
       {err && <p role="alert" className="mt-3 text-destructive">{err}</p>}
       <button onClick={submit} disabled={saving} className={`${big} mt-8 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60`}>{saving ? "লেখা হচ্ছে…" : "সুগার পাঠান"}</button>
-      <button onClick={() => setStep(1)} className="mt-6 text-lg text-primary underline underline-offset-4">আগের প্রশ্নে যান</button>
+      <button onClick={() => setStep(2)} className="mt-6 text-lg text-primary underline underline-offset-4">আগের প্রশ্নে যান</button>
     </>,
   );
 }
