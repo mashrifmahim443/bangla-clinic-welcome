@@ -18,6 +18,8 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedPatientRouteImport } from './routes/_authenticated/patient'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
+import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as DoctorsIndexRouteImport } from './routes/doctors.index'
 import { Route as DoctorsSlugRouteImport } from './routes/doctors.$slug'
 import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authenticated/consult.$id'
@@ -67,6 +69,16 @@ const AuthenticatedPatientRoute = AuthenticatedPatientRouteImport.update({
   path: '/patient',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/articles/',
+  path: '/articles/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
+  id: '/articles/$slug',
+  path: '/articles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DoctorsIndexRoute = DoctorsIndexRouteImport.update({
   id: '/doctors/',
   path: '/doctors/',
@@ -98,7 +110,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/patient': typeof AuthenticatedPatientRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
@@ -112,7 +126,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/patient': typeof AuthenticatedPatientRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
+  '/articles': typeof ArticlesIndexRoute
   '/doctors': typeof DoctorsIndexRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
@@ -128,7 +144,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/patient': typeof AuthenticatedPatientRoute
+  '/articles/$slug': typeof ArticlesSlugRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
   '/_authenticated/consult/$id': typeof AuthenticatedConsultIdRoute
   '/_authenticated/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
@@ -144,7 +162,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/doctor'
     | '/patient'
+    | '/articles/$slug'
     | '/doctors/$slug'
+    | '/articles/'
     | '/doctors/'
     | '/consult/$id'
     | '/prescription/$id'
@@ -158,7 +178,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/doctor'
     | '/patient'
+    | '/articles/$slug'
     | '/doctors/$slug'
+    | '/articles'
     | '/doctors'
     | '/consult/$id'
     | '/prescription/$id'
@@ -173,7 +195,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/doctor'
     | '/_authenticated/patient'
+    | '/articles/$slug'
     | '/doctors/$slug'
+    | '/articles/'
     | '/doctors/'
     | '/_authenticated/consult/$id'
     | '/_authenticated/prescription/$id'
@@ -185,7 +209,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DietRoute: typeof DietRoute
   ExerciseRoute: typeof ExerciseRoute
+  ArticlesSlugRoute: typeof ArticlesSlugRoute
   DoctorsSlugRoute: typeof DoctorsSlugRoute
+  ArticlesIndexRoute: typeof ArticlesIndexRoute
   DoctorsIndexRoute: typeof DoctorsIndexRoute
 }
 
@@ -254,6 +280,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPatientRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/articles/': {
+      id: '/articles/'
+      path: '/articles'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/$slug': {
+      id: '/articles/$slug'
+      path: '/articles/$slug'
+      fullPath: '/articles/$slug'
+      preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/doctors/': {
       id: '/doctors/'
       path: '/doctors'
@@ -312,7 +352,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DietRoute: DietRoute,
   ExerciseRoute: ExerciseRoute,
+  ArticlesSlugRoute: ArticlesSlugRoute,
   DoctorsSlugRoute: DoctorsSlugRoute,
+  ArticlesIndexRoute: ArticlesIndexRoute,
   DoctorsIndexRoute: DoctorsIndexRoute,
 }
 export const routeTree = rootRouteImport

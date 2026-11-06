@@ -4,7 +4,7 @@ import { useLang } from "@/lib/i18n";
 export function SiteHeader() {
   const { lang, setLang, t } = useLang();
   const links = [
-    { href: "/#how", bn: "কীভাবে কাজ করে", en: "How it works" },
+    { href: "/articles", bn: "লেখা", en: "Articles" },
     { href: "/doctors", bn: "ডাক্তার", en: "Doctors" },
     { href: "/diet", bn: "খাদ্য তালিকা", en: "Diet chart" },
     { href: "/exercise", bn: "ব্যায়াম", en: "Exercise" },
