@@ -256,6 +256,7 @@ export type Database = {
           file_name: string
           file_path: string
           id: string
+          kind: string
           note: string | null
           rx_date: string | null
           user_id: string
@@ -266,6 +267,7 @@ export type Database = {
           file_name: string
           file_path: string
           id?: string
+          kind?: string
           note?: string | null
           rx_date?: string | null
           user_id?: string
@@ -276,6 +278,7 @@ export type Database = {
           file_name?: string
           file_path?: string
           id?: string
+          kind?: string
           note?: string | null
           rx_date?: string | null
           user_id?: string
