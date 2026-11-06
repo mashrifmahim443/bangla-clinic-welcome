@@ -24,7 +24,7 @@ function toBlocks(bn: string, en: string): Block[] {
     return { kind, bn: strip(x) || strip(y), en: strip(y) || strip(x) };
   });
 }
-type Draft = Omit<Article, "body" | "author"> & { bodyBn: string; bodyEn: string; author: Article["author"]; original?: string };
+type Draft = Omit<Article, "body" | "author"> & { bodyBn: string; bodyEn: string; author: Article["author"]; original?: string | undefined };
 
 function Page() {
   const { t } = useLang();
