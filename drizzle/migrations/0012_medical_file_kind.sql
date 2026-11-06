@@ -1,0 +1,2 @@
+ALTER TABLE public.old_prescriptions ADD COLUMN IF NOT EXISTS kind text NOT NULL DEFAULT 'prescription';
+ALTER TABLE public.old_prescriptions ADD CONSTRAINT old_prescriptions_kind_check CHECK (kind IN ('prescription','test_report'));
