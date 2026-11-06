@@ -18,7 +18,9 @@ import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
+import { Route as AuthenticatedDoctorApplyRouteImport } from './routes/_authenticated/doctor-apply'
 import { Route as AuthenticatedPatientRouteImport } from './routes/_authenticated/patient'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
@@ -75,9 +77,20 @@ const AuthenticatedDoctorRoute = AuthenticatedDoctorRouteImport.update({
   path: '/doctor',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDoctorApplyRoute =
+  AuthenticatedDoctorApplyRouteImport.update({
+    id: '/doctor-apply',
+    path: '/doctor-apply',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPatientRoute = AuthenticatedPatientRouteImport.update({
   id: '/patient',
   path: '/patient',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
@@ -148,7 +161,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
+  '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
   '/patient': typeof AuthenticatedPatientRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
@@ -169,7 +184,9 @@ export interface FileRoutesByTo {
   '/subscription': typeof SubscriptionRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
+  '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
   '/patient': typeof AuthenticatedPatientRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
@@ -193,7 +210,9 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
+  '/_authenticated/doctor-apply': typeof AuthenticatedDoctorApplyRoute
   '/_authenticated/patient': typeof AuthenticatedPatientRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/checkin/$token': typeof CheckinTokenRoute
   '/doctors/$slug': typeof DoctorsSlugRoute
@@ -217,7 +236,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/doctor'
+    | '/doctor-apply'
     | '/patient'
+    | '/profile'
     | '/articles/$slug'
     | '/checkin/$token'
     | '/doctors/$slug'
@@ -238,7 +259,9 @@ export interface FileRouteTypes {
     | '/subscription'
     | '/dashboard'
     | '/doctor'
+    | '/doctor-apply'
     | '/patient'
+    | '/profile'
     | '/articles/$slug'
     | '/checkin/$token'
     | '/doctors/$slug'
@@ -261,7 +284,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/doctor'
+    | '/_authenticated/doctor-apply'
     | '/_authenticated/patient'
+    | '/_authenticated/profile'
     | '/articles/$slug'
     | '/checkin/$token'
     | '/doctors/$slug'
@@ -354,11 +379,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDoctorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/doctor-apply': {
+      id: '/_authenticated/doctor-apply'
+      path: '/doctor-apply'
+      fullPath: '/doctor-apply'
+      preLoaderRoute: typeof AuthenticatedDoctorApplyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/patient': {
       id: '/_authenticated/patient'
       path: '/patient'
       fullPath: '/patient'
       preLoaderRoute: typeof AuthenticatedPatientRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/articles/': {
@@ -462,7 +501,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDoctorRoute: typeof AuthenticatedDoctorRoute
+  AuthenticatedDoctorApplyRoute: typeof AuthenticatedDoctorApplyRoute
   AuthenticatedPatientRoute: typeof AuthenticatedPatientRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedConsultIdRoute: typeof AuthenticatedConsultIdRoute
   AuthenticatedPrescriptionIdRoute: typeof AuthenticatedPrescriptionIdRoute
 }
@@ -471,7 +512,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDoctorRoute: AuthenticatedDoctorRoute,
+  AuthenticatedDoctorApplyRoute: AuthenticatedDoctorApplyRoute,
   AuthenticatedPatientRoute: AuthenticatedPatientRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedConsultIdRoute: AuthenticatedConsultIdRoute,
   AuthenticatedPrescriptionIdRoute: AuthenticatedPrescriptionIdRoute,
 }
