@@ -18,6 +18,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdviceRouteImport } from './routes/_authenticated/advice'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedDoctorApplyRouteImport } from './routes/_authenticated/doctor-apply'
@@ -78,6 +79,11 @@ const SubscriptionRoute = SubscriptionRouteImport.update({
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdviceRoute = AuthenticatedAdviceRouteImport.update({
+  id: '/advice',
+  path: '/advice',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/advice': typeof AuthenticatedAdviceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
+  '/advice': typeof AuthenticatedAdviceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
@@ -235,6 +243,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/subscription': typeof SubscriptionRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/advice': typeof AuthenticatedAdviceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/doctor-apply': typeof AuthenticatedDoctorApplyRoute
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/subscription'
     | '/admin'
+    | '/advice'
     | '/dashboard'
     | '/doctor'
     | '/doctor-apply'
@@ -290,6 +300,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/subscription'
+    | '/advice'
     | '/dashboard'
     | '/doctor'
     | '/doctor-apply'
@@ -318,6 +329,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/subscription'
     | '/_authenticated/admin'
+    | '/_authenticated/advice'
     | '/_authenticated/dashboard'
     | '/_authenticated/doctor'
     | '/_authenticated/doctor-apply'
@@ -416,6 +428,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/advice': {
+      id: '/_authenticated/advice'
+      path: '/advice'
+      fullPath: '/advice'
+      preLoaderRoute: typeof AuthenticatedAdviceRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -561,6 +580,7 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedAdviceRoute: typeof AuthenticatedAdviceRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDoctorRoute: typeof AuthenticatedDoctorRoute
   AuthenticatedDoctorApplyRoute: typeof AuthenticatedDoctorApplyRoute
@@ -572,6 +592,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedAdviceRoute: AuthenticatedAdviceRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDoctorRoute: AuthenticatedDoctorRoute,
   AuthenticatedDoctorApplyRoute: AuthenticatedDoctorApplyRoute,
