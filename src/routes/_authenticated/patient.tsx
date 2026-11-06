@@ -24,6 +24,22 @@ const typeLabels: Record<ReadingType, [string, string]> = {
   bedtime: ["ঘুমানোর আগে", "Bedtime"],
   random: ["যেকোনো সময়", "Any time"],
 };
+type Slot = "breakfast_before" | "breakfast_after" | "lunch_before" | "lunch_after" | "dinner_before" | "dinner_after" | "random";
+const slotLabels: Record<Slot, [string, string]> = {
+  breakfast_before: ["সকালে খাবার আগে", "Before breakfast"],
+  breakfast_after: ["সকালে খাবার পরে", "After breakfast"],
+  lunch_before: ["দুপুরে খাবার আগে", "Before lunch"],
+  lunch_after: ["দুপুরে খাবার পরে", "After lunch"],
+  dinner_before: ["রাতে খাবার আগে", "Before dinner"],
+  dinner_after: ["রাতে খাবার পরে", "After dinner"],
+  random: ["যেকোনো সময়", "Random"],
+};
+const mealLabels: Record<string, [string, string]> = { breakfast: ["সকাল", "Breakfast"], lunch: ["দুপুর", "Lunch"], dinner: ["রাত", "Dinner"] };
+function slotToRow(s: Slot): { reading_type: ReadingType; meal_slot: string | null } {
+  if (s === "random") return { reading_type: "random", meal_slot: null };
+  const [meal, when] = s.split("_");
+  return { reading_type: when === "before" ? "before_meal" : "after_meal", meal_slot: meal! };
+}
 const stateClass = { low: "text-glucose-low", ok: "text-glucose-ok", high: "text-glucose-high" };
 
 function useReadings() {
@@ -33,7 +49,7 @@ function useReadings() {
       const since = new Date(Date.now() - 14 * 864e5).toISOString();
       const { data, error } = await supabase
         .from("glucose_readings")
-        .select("id, value_mgdl, reading_type, note, taken_at")
+        .select("id, value_mgdl, reading_type, meal_slot, note, taken_at")
         .gte("taken_at", since)
         .order("taken_at", { ascending: false });
       if (error) throw error;
@@ -132,7 +148,7 @@ function Page() {
                       {formatNumber(r.value_mgdl, lang)} <span className="text-sm font-normal text-muted-foreground">mg/dL</span>
                       {s !== "ok" && <span className="ml-2 text-sm font-normal">{s === "low" ? t("কম", "low") : t("বেশি", "high")}</span>}
                     </td>
-                    <td className="px-4 py-2.5">{t(...typeLabels[r.reading_type as ReadingType])}</td>
+                    <td className="px-4 py-2.5">{r.meal_slot && mealLabels[r.meal_slot] ? `${t(...(mealLabels[r.meal_slot] as [string, string]))} · ` : ""}{t(...typeLabels[r.reading_type as ReadingType])}</td>
                     <td className="px-4 py-2.5 text-muted-foreground">{r.note || "—"}</td>
                   </tr>
                 );
@@ -151,14 +167,14 @@ function AddReading() {
   const { t } = useLang();
   const qc = useQueryClient();
   const [value, setValue] = useState("");
-  const [type, setType] = useState<ReadingType>("fasting");
+  const [slot, setSlot] = useState<Slot>("breakfast_before");
   const [note, setNote] = useState("");
   const [day, setDay] = useState(() => dhakaNowParts().date);
   const [time, setTime] = useState(() => dhakaNowParts().time);
   const [err, setErr] = useState<string | null>(null);
 
   const save = useMutation({
-    mutationFn: async (input: { value_mgdl: number; reading_type: ReadingType; note: string | null; taken_at: string }) => {
+    mutationFn: async (input: { value_mgdl: number; reading_type: ReadingType; meal_slot: string | null; note: string | null; taken_at: string }) => {
       const { data: u } = await supabase.auth.getUser();
       const { error } = await supabase.from("glucose_readings").insert({ ...input, user_id: u.user!.id });
       if (error) throw error;
@@ -182,7 +198,7 @@ function AddReading() {
     const takenAt = dhakaToISO(day, time);
     if (new Date(takenAt).getTime() > Date.now() + 5 * 60_000) { setErr(t("ভবিষ্যতের সময় দেওয়া যাবে না।", "The time can't be in the future.")); return; }
     setErr(null);
-    save.mutate({ value_mgdl: parsed.data.value_mgdl, reading_type: type, note: parsed.data.note || null, taken_at: takenAt });
+    save.mutate({ value_mgdl: parsed.data.value_mgdl, ...slotToRow(slot), note: parsed.data.note || null, taken_at: takenAt });
   }
 
   const input = "w-full rounded-md border border-border bg-card px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring/30";
@@ -205,9 +221,9 @@ function AddReading() {
         </label>
       </div>
       <label className="mt-3 block">
-        <span className="mb-1 block text-sm font-medium">{t("খাবারের আগে না পরে", "Before or after food")}</span>
-        <select className={input} value={type} onChange={(e) => setType(e.target.value as ReadingType)}>
-          {(Object.keys(typeLabels) as ReadingType[]).map((k) => <option key={k} value={k}>{t(...typeLabels[k])}</option>)}
+        <span className="mb-1 block text-sm font-medium">{t("কোন বেলা, খাবারের আগে না পরে", "Which meal, before or after")}</span>
+        <select className={input} value={slot} onChange={(e) => setSlot(e.target.value as Slot)}>
+          {(Object.keys(slotLabels) as Slot[]).map((k, i) => <option key={k} value={k}>{`${i + 1}. ${t(...slotLabels[k])}`}</option>)}
         </select>
       </label>
       <label className="mt-3 block">
