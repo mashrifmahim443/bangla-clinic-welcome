@@ -39,6 +39,11 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t(navByRole[r].bn, navByRole[r].en)}
             </Link>
           ))}
+          {roles.includes("patient") && (
+            <Link to="/advice" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
+              {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
+            </Link>
+          )}
         </nav>
         <div className="mt-8 rounded-[10px] border border-border bg-card text-sm">
           <p className="truncate border-b border-border px-3 py-2 text-muted-foreground">{data?.email}</p>

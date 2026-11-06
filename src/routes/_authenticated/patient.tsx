@@ -4,7 +4,6 @@ import { useState } from "react";
 import { z } from "zod";
 import { CartesianGrid, Line, LineChart, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { AppointmentList } from "@/components/consult/appointment-list";
-import { DoctorAdvice } from "@/components/consult/doctor-advice";
 import { CheckinPanel } from "@/components/consult/checkin-panel";
 import { RoleShell } from "@/components/site/role-shell";
 import { supabase } from "@/integrations/supabase/client";
@@ -123,8 +122,6 @@ function Page() {
 
         <AddReading />
       </div>
-
-      <DoctorAdvice />
 
       <section className="mt-8">
         <h2 className="text-xl font-semibold">{t("সাম্প্রতিক রিডিং", "Recent readings")}</h2>
