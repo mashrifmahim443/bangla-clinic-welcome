@@ -25,7 +25,7 @@ function Page() {
   async function review(a: A, approve: boolean) {
     const note = approve ? null : prompt(t("কেন অনুমোদন হলো না? (আবেদনকারী দেখবেন)", "Why not approved? (the applicant will see this)")) ?? null;
     if (!approve && note === null) return;
-    const { error } = await supabase.rpc("review_doctor_application", { _id: a.id, _approve: approve, _note: note ?? undefined });
+    const { error } = await supabase.rpc("review_doctor_application", { _id: a.id, _approve: approve, ...(note ? { _note: note } : {}) });
     if (error) alert(t("সম্পন্ন হয়নি: ", "Failed: ") + error.message);
     qc.invalidateQueries({ queryKey: ["admin-applications"] });
     qc.invalidateQueries({ queryKey: ["admin-doctors"] });

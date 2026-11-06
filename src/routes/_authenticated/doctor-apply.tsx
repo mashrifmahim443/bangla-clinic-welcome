@@ -32,7 +32,7 @@ function Page() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const er: Record<string, string> = {};
+    const er: Partial<Record<string, string>> & Record<"name_bn" | "name_en" | "degrees" | "bmdc_no" | "fee" | "gender", string | undefined> = {} as never;
     const bmdc = bnDigits(f.bmdc_no.trim()).toUpperCase();
     const fee = Number(bnDigits(f.fee));
     if (!f.name_bn.trim()) er.name_bn = t("বাংলায় নাম লিখুন।", "Enter your name in Bangla.");
@@ -41,7 +41,7 @@ function Page() {
     if (!/^[A-Z]?-?\d{3,7}$/.test(bmdc)) er.bmdc_no = t("BMDC নম্বর ঠিক নেই। যেমন A-12345 বা 12345।", "BMDC number looks wrong. E.g. A-12345 or 12345.");
     if (!fee || fee < 100 || fee > 10000) er.fee = t("ফি ১০০ থেকে ১০,০০০ টাকার মধ্যে লিখুন।", "Enter a fee between 100 and 10,000 taka.");
     if (!f.gender) er.gender = t("লিঙ্গ বেছে নিন।", "Choose a gender.");
-    setErrs(er);
+    setErrs(er as Record<string, string>);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("doctor_applications").insert({
       name_bn: f.name_bn.trim(), name_en: f.name_en.trim(), degrees: f.degrees.trim(), specialty: f.specialty,
