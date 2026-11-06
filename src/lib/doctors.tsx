@@ -18,7 +18,7 @@ export const specialties: Record<string, [string, string]> = {
 };
 
 export const statusInfo: Record<"online" | "busy" | "offline", { dot: string; bn: string; en: string }> = {
-  online: { dot: "bg-glucose-ok", bn: "অনলাইনে", en: "Online" },
+  online: { dot: "bg-glucose-ok", bn: "অনলাইন", en: "Online" },
   busy: { dot: "bg-glucose-high", bn: "ব্যস্ত", en: "Busy" },
   offline: { dot: "bg-muted-foreground/40", bn: "অফলাইন", en: "Offline" },
 };

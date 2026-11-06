@@ -33,7 +33,7 @@ function Page() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <article className="mx-auto max-w-[680px] px-4 py-14">
+      <article className="mx-auto max-w-[680px] px-4 py-12">
         <Link to="/articles" className="text-sm text-primary underline underline-offset-4">{t("← সব লেখা", "← All articles")}</Link>
         <p className="mt-8 text-sm font-medium tracking-wide text-accent uppercase">{t(a.catBn, a.catEn)}</p>
         <h1 className="mt-2 font-display text-5xl leading-[1.1] font-semibold">{t(a.titleBn, a.titleEn)}</h1>

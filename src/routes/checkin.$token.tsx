@@ -32,7 +32,7 @@ function Page() {
   const [saving, setSaving] = useState(false);
 
   const shell = (children: React.ReactNode) => (
-    <main lang="bn" className="font-bn mx-auto flex min-h-screen max-w-md flex-col justify-center px-5 py-10 text-[22px]">{children}</main>
+    <main lang="bn" className="font-bn mx-auto flex min-h-screen max-w-md flex-col px-5 pt-16 pb-10 text-[22px]">{children}</main>
   );
   if (isLoading) return shell(<p className="text-center">একটু অপেক্ষা করুন…</p>);
   if (!data) return shell(<p className="text-center">এই লিংকের সময় শেষ হয়ে গেছে। পরের মেসেজের লিংকে লিখুন।</p>);
@@ -55,7 +55,7 @@ function Page() {
     setStep(3);
   }
 
-  const progress = <p className="mb-6 text-center text-lg text-muted-foreground">প্রশ্ন {["১", "২", "৩"][step]} / ৩</p>;
+  const progress = <p className="mb-6 text-lg text-muted-foreground">প্রশ্ন {["১", "২", "৩"][step]} / ৩</p>;
   const YesNo = ({ onPick }: { onPick: (v: boolean) => void }) => (
     <div className="mt-10 grid gap-4">
       <button onClick={() => onPick(true)} className={`${big} bg-primary text-primary-foreground hover:bg-primary/90`}>হ্যাঁ</button>
@@ -69,16 +69,16 @@ function Page() {
   return shell(
     <>
       {progress}
-      <label htmlFor="v" className="block text-center font-display text-4xl leading-tight font-semibold">সুগার কত?</label>
+      <label htmlFor="v" className="block font-display text-4xl leading-tight font-semibold">সুগার কত?</label>
       <div className="mt-10 flex items-center gap-3 rounded-md border-2 border-border bg-card px-4 focus-within:border-primary">
         <input id="v" inputMode="numeric" autoFocus value={value} onChange={(e) => setValue(e.target.value)} placeholder="১২০"
-          className="w-full bg-transparent py-5 text-center text-5xl font-semibold outline-none" />
+          className="w-full bg-transparent py-5 text-5xl font-semibold outline-none" />
         <span className="text-2xl text-muted-foreground">mg/dL</span>
       </div>
       {st === "low" && <p className="mt-3 text-glucose-low">সুগার কম। এখনই একটু চিনি-পানি খান।</p>}
       {err && <p role="alert" className="mt-3 text-destructive">{err}</p>}
       <button onClick={submit} disabled={saving} className={`${big} mt-8 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60`}>{saving ? "লেখা হচ্ছে…" : "সুগার পাঠান"}</button>
-      <button onClick={() => setStep(1)} className="mt-6 text-center text-lg text-primary underline underline-offset-4">আগের প্রশ্নে যান</button>
+      <button onClick={() => setStep(1)} className="mt-6 text-lg text-primary underline underline-offset-4">আগের প্রশ্নে যান</button>
     </>,
   );
 }

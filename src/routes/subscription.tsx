@@ -34,7 +34,7 @@ function Page() {
   return (
     <div className="min-h-screen">
       <SiteHeader />
-      <main className="mx-auto max-w-4xl px-4 py-14">
+      <main className="mx-auto max-w-4xl px-4 py-12">
         <h1 className="font-display text-4xl font-semibold">{t("প্ল্যান ও ফি", "Plans and fees")}</h1>
         <p className="mt-2 text-muted-foreground">{t("যেকোনো সময় বাদ দিতে পারবেন। বিকাশ ও নগদে দেওয়া যাবে।", "Cancel any time. Pay by bKash or Nagad.")}</p>
         <div className="mt-8 overflow-x-auto">

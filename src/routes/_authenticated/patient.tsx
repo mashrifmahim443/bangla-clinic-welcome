@@ -74,7 +74,7 @@ function Page() {
           </div>
           <div className="mt-4 h-72">
             {chartData.length === 0 ? (
-              <p className="flex h-full items-center justify-center text-muted-foreground">{isLoading ? t("লোড হচ্ছে…", "Loading…") : t("এখনো কোনো রিডিং নেই। ডান পাশে প্রথমটা লিখুন।", "No readings yet. Write your first one on the right.")}</p>
+              <p className="pt-6 text-muted-foreground">{isLoading ? t("লোড হচ্ছে…", "Loading…") : t("এখনো কোনো রিডিং নেই। ডান পাশে প্রথমটা লিখুন।", "No readings yet. Write your first one on the right.")}</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 8, right: 12, bottom: 24, left: 8 }}>
