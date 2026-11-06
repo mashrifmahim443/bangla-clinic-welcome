@@ -32,16 +32,16 @@ function Page() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const er: Partial<Record<string, string>> & Record<"name_bn" | "name_en" | "degrees" | "bmdc_no" | "fee" | "gender", string | undefined> = {} as never;
+    const er: Record<string, string> = {};
     const bmdc = bnDigits(f.bmdc_no.trim()).toUpperCase();
     const fee = Number(bnDigits(f.fee));
-    if (!f.name_bn.trim()) er.name_bn = t("বাংলায় নাম লিখুন।", "Enter your name in Bangla.");
-    if (!f.name_en.trim()) er.name_en = t("ইংরেজিতে নাম লিখুন।", "Enter your name in English.");
-    if (!f.degrees.trim()) er.degrees = t("ডিগ্রি লিখুন, যেমন MBBS, FCPS (Medicine)।", "Enter degrees, e.g. MBBS, FCPS (Medicine).");
-    if (!/^[A-Z]?-?\d{3,7}$/.test(bmdc)) er.bmdc_no = t("BMDC নম্বর ঠিক নেই। যেমন A-12345 বা 12345।", "BMDC number looks wrong. E.g. A-12345 or 12345.");
-    if (!fee || fee < 100 || fee > 10000) er.fee = t("ফি ১০০ থেকে ১০,০০০ টাকার মধ্যে লিখুন।", "Enter a fee between 100 and 10,000 taka.");
-    if (!f.gender) er.gender = t("লিঙ্গ বেছে নিন।", "Choose a gender.");
-    setErrs(er as Record<string, string>);
+    if (!f.name_bn.trim()) er["name_bn"] = t("বাংলায় নাম লিখুন।", "Enter your name in Bangla.");
+    if (!f.name_en.trim()) er["name_en"] = t("ইংরেজিতে নাম লিখুন।", "Enter your name in English.");
+    if (!f.degrees.trim()) er["degrees"] = t("ডিগ্রি লিখুন, যেমন MBBS, FCPS (Medicine)।", "Enter degrees, e.g. MBBS, FCPS (Medicine).");
+    if (!/^[A-Z]?-?\d{3,7}$/.test(bmdc)) er["bmdc_no"] = t("BMDC নম্বর ঠিক নেই। যেমন A-12345 বা 12345।", "BMDC number looks wrong. E.g. A-12345 or 12345.");
+    if (!fee || fee < 100 || fee > 10000) er["fee"] = t("ফি ১০০ থেকে ১০,০০০ টাকার মধ্যে লিখুন।", "Enter a fee between 100 and 10,000 taka.");
+    if (!f.gender) er["gender"] = t("লিঙ্গ বেছে নিন।", "Choose a gender.");
+    setErrs(er);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("doctor_applications").insert({
       name_bn: f.name_bn.trim(), name_en: f.name_en.trim(), degrees: f.degrees.trim(), specialty: f.specialty,
@@ -66,7 +66,7 @@ function Page() {
             {apps.map((a) => (
               <tr key={a.id} className="border-b border-border">
                 <td className="p-3">BMDC {a.bmdc_no}</td>
-                <td className={`p-3 ${a.status === "approved" ? "text-glucose-ok" : a.status === "rejected" ? "text-glucose-low" : "text-glucose-high"}`}>{t(...statusText[a.status])}</td>
+                <td className={`p-3 ${a.status === "approved" ? "text-glucose-ok" : a.status === "rejected" ? "text-glucose-low" : "text-glucose-high"}`}>{t(statusText[a.status][0], statusText[a.status][1])}</td>
                 <td className="p-3 text-muted-foreground">{a.admin_note}</td>
               </tr>
             ))}

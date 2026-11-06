@@ -44,9 +44,9 @@ function Page() {
     const er: Record<string, string> = {};
     const phone = bnDigits(v.phone).replace(/\D/g, "");
     const by = Number(bnDigits(v.birth_year));
-    if (!v.full_name.trim()) er.full_name = t("আপনার নাম লিখুন।", "Enter your name.");
-    if (phone && phone.length !== 11) er.phone = t("ফোন নম্বর ১১ ডিজিটের হতে হবে।", "Phone number must be 11 digits.");
-    if (v.birth_year && (!by || by < 1920 || by > 2015)) er.birth_year = t("জন্মসাল ১৯২০ থেকে ২০১৫-এর মধ্যে লিখুন, যেমন ১৯৬৫।", "Enter a birth year between 1920 and 2015, e.g. 1965.");
+    if (!v.full_name.trim()) er["full_name"] = t("আপনার নাম লিখুন।", "Enter your name.");
+    if (phone && phone.length !== 11) er["phone"] = t("ফোন নম্বর ১১ ডিজিটের হতে হবে।", "Phone number must be 11 digits.");
+    if (v.birth_year && (!by || by < 1920 || by > 2015)) er["birth_year"] = t("জন্মসাল ১৯২০ থেকে ২০১৫-এর মধ্যে লিখুন, যেমন ১৯৬৫।", "Enter a birth year between 1920 and 2015, e.g. 1965.");
     setErrs(er);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("profiles").update({
