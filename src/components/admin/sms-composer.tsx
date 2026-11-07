@@ -39,7 +39,7 @@ export function SmsComposer() {
     } catch { setNotice(t("অনুরোধের ফল জানা যায়নি। ইতিহাস দেখুন; একই বার্তা আবার পাঠানো হবে না।", "The request result is unavailable. Check history; the same submission will not be sent twice.")); }
     finally { setSending(false); }
   }
-  return <section className="mt-8 border-t border-border pt-4">
+  return <section id="custom-sms" className="mt-8 scroll-mt-4 border-t border-border pt-4">
     <h2 className="text-base font-semibold">{t("নিজের লেখা SMS পাঠান", "Send a custom SMS")}</h2>
     <div className="mt-3 grid gap-4">
       <label>{t("প্রাপকের মোবাইল নম্বর", "Recipient mobile number")}<input type="tel" value={recipient} disabled={sending} onChange={e => { setRecipient(e.target.value); setRequestId(null); setNotice(""); }} placeholder="017XXXXXXXX" className={input} /></label>
