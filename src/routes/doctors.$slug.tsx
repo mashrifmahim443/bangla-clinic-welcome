@@ -1,164 +1,58 @@
 import { MIN_COMPLETION, profileCompletion } from "@/lib/profile";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { Button } from "@/components/ui/button";
+import { DoctorReviews } from "@/components/consult/doctor-reviews";
 import { useLang } from "@/lib/i18n";
-import { formatBDT, formatDhaka, formatNumber } from "@/lib/locale";
+import { dhakaNowParts, formatBDT, formatDhaka, formatNumber } from "@/lib/locale";
 import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors";
-import { upcomingDays } from "@/lib/slots";
+import { consultationLabels, fieldClass, flatButton, useAppointmentRealtime, useDoctorRealtime } from "@/lib/appointments";
 
 export const Route = createFileRoute("/doctors/$slug")({
-  head: () => ({
-    meta: [
-      { title: "Book a consultation — DiabeCare" },
-      { name: "description", content: "Pick a time and book an online diabetes consultation with a BMDC-registered doctor." },
-      { property: "og:title", content: "Book a consultation — DiabeCare" },
-      { property: "og:description", content: "Pick a time with a BMDC-registered doctor." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: BookingPage,
+  head: () => ({ meta: [{ title: "Doctor profile and booking — DiabeCare" }, { name: "description", content: "Doctor qualifications, patient reviews and available consultation times in Bangladesh." }, { property: "og:title", content: "Doctor profile and booking — DiabeCare" }, { property: "og:description", content: "Choose a doctor and request a video, audio or chat consultation." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: BookingPage,
 });
-
 function BookingPage() {
-  const { slug } = Route.useParams();
-  const { lang, t } = useLang();
-  const qc = useQueryClient();
-  const [now, setNow] = useState<Date | null>(null);
-  useEffect(() => setNow(new Date()), []);
-  const days = useMemo(() => (now ? upcomingDays(now) : []), [now]);
-  const [dayKey, setDayKey] = useState<string | null>(null);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [msg, setMsg] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
-  const day = days.find((d) => d.key === dayKey) ?? days[0];
-
-  const { data: doctor, isLoading } = useQuery({
-    queryKey: ["doctor", slug],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("doctors").select("*").eq("slug", slug).maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-  });
-
-  const { data: session } = useQuery({
-    queryKey: ["session-user"],
-    queryFn: async () => (await supabase.auth.getUser()).data.user,
-  });
-  const { data: completion } = useQuery({
-    queryKey: ["my-profile-completion", session?.id],
-    enabled: !!session,
-    queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("*").eq("id", session!.id).maybeSingle();
-      return profileCompletion(data);
-    },
-  });
-
-  const range = days.length ? [days[0]!.slots[0] ?? days[0]!.date, days[days.length - 1]!.date] : null;
-  const { data: booked = [] } = useQuery({
-    queryKey: ["booked", doctor?.id, range?.[0]?.toISOString()],
-    enabled: !!doctor && !!range,
-    queryFn: async () => {
-      const to = new Date(range![1]!.getTime() + 864e5).toISOString();
-      const { data, error } = await supabase.rpc("booked_slots", { _doctor: doctor!.id, _from: new Date(0).toISOString(), _to: to });
-      if (error) throw error;
-      return (data as string[]).map((s) => new Date(s).getTime());
-    },
-  });
-
-  const book = useMutation({
-    mutationFn: async (slotIso: string) => {
-      const { error } = await supabase.from("appointments").insert({ doctor_id: doctor!.id, slot_start: slotIso, patient_id: session!.id });
-      if (error) throw error;
-    },
-    onSuccess: (_d, slotIso) => {
-      setMsg({ kind: "ok", text: t(`বুক হয়েছে: ${formatDhaka(new Date(slotIso), "bn", { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" })}। ডাক্তার সেই সময় ফোন বা ভিডিওতে যোগ দেবেন।`, `Booked for ${formatDhaka(new Date(slotIso), "en", { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" })}. The doctor will join by phone or video then.`) });
-      setPicked(null);
-      qc.invalidateQueries({ queryKey: ["booked"] });
-    },
-    onError: (e: { code?: string }) =>
-      setMsg({ kind: "err", text: e.code === "23505" ? t("এই সময়টা এইমাত্র অন্য কেউ নিয়েছেন। আরেকটা বেছে নিন।", "Someone just took this time. Please pick another.") : t("বুক করা গেল না। আবার চেষ্টা করুন।", "Couldn't book. Please try again.") }),
-  });
-
-  if (isLoading) return <Shell><p className="text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p></Shell>;
-  if (!doctor) return <Shell><p>{t("এই ডাক্তারকে পাওয়া গেল না।", "Doctor not found.")} <Link to="/doctors" className="text-primary underline">{t("তালিকায় ফিরুন", "Back to list")}</Link></p></Shell>;
-
-  return (
-    <Shell>
-      <Link to="/doctors" className="text-sm text-primary underline underline-offset-4">← {t("সব ডাক্তার", "All doctors")}</Link>
-      <div className="mt-5 flex flex-wrap items-start gap-5 border-b border-border pb-6">
-        <img src={doctor.photo_url || doctorPhotos[doctor.slug]} alt="" width={96} height={96} className="h-24 w-24 rounded-md border border-border object-cover" />
-        <div className="flex-1">
-          <h1 className="font-display text-3xl font-semibold">{lang === "bn" ? doctor.name_bn : doctor.name_en}</h1>
-          <p className="text-muted-foreground">{doctor.degrees}</p>
-          {doctor.designation && <p className="text-sm">{doctor.designation}{doctor.workplace ? `, ${doctor.workplace}` : ""}{doctor.experience_years ? ` · ${t(`${doctor.experience_years} বছরের অভিজ্ঞতা`, `${doctor.experience_years} yrs experience`)}` : ""}</p>}
-          <p className="mt-1 text-sm">
-            {t(...(specialties[doctor.specialty] ?? [doctor.specialty, doctor.specialty]))} · BMDC <span className="font-mono">{doctor.bmdc_no}</span> · {formatBDT(doctor.fee_bdt, lang)}
-          </p>
-        </div>
-        <StatusDot status={doctor.status} label={t(statusInfo[doctor.status].bn, statusInfo[doctor.status].en)} />
-      </div>
-
-      <h2 className="mt-8 text-xl font-semibold">{t("দিন বেছে নিন", "Pick a day")}</h2>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {days.map((d) => (
-          <button key={d.key} onClick={() => { setDayKey(d.key); setPicked(null); setMsg(null); }}
-            className={`rounded-md border px-3 py-2 text-sm ${d.key === day?.key ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary"}`}>
-            {formatDhaka(d.date, lang, { weekday: "short", day: "numeric", month: "short" })}
-          </button>
-        ))}
-      </div>
-
-      <h2 className="mt-8 text-xl font-semibold">{t("সময় বেছে নিন", "Pick a time")} <span className="text-sm font-normal text-muted-foreground">({t("ঢাকার সময়", "Dhaka time")})</span></h2>
-      {day && day.slots.length === 0 && <p className="mt-3 text-muted-foreground">{t("এই দিনে আর কোনো সময় খালি নেই।", "No times left on this day.")}</p>}
-      <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-        {day?.slots.map((s) => {
-          const iso = s.toISOString();
-          const taken = booked.includes(s.getTime());
-          const sel = picked === iso;
-          return (
-            <button key={iso} disabled={taken} onClick={() => { setPicked(iso); setMsg(null); }}
-              className={`rounded-md border py-2.5 text-center ${taken ? "cursor-not-allowed border-border bg-secondary text-muted-foreground line-through" : sel ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary"}`}
-              aria-pressed={sel}>
-              {formatDhaka(s, lang, { hour: "numeric", minute: "2-digit" })}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 border-t border-border pt-6">
-        {msg && <p className={`mb-4 rounded-md border px-3 py-2 ${msg.kind === "ok" ? "border-glucose-ok text-glucose-ok" : "border-destructive text-destructive"}`}>{msg.text}</p>}
-        {!session ? (
-          <p>{t("সময় বুক করতে আগে", "To book, first")} <Link to="/auth" className="font-medium text-primary underline underline-offset-4">{t("ঢুকুন", "sign in")}</Link>{t("।", ".")}</p>
-        ) : completion !== undefined && completion < MIN_COMPLETION ? (
-          <div className="rounded-[10px] border border-border bg-card p-5">
-            <p className="font-medium">{t(`আপনার প্রোফাইল ${formatNumber(completion, "bn")}% পূরণ হয়েছে। ডাক্তার দেখাতে অন্তত ${formatNumber(MIN_COMPLETION, "bn")}% লাগবে।`, `Your profile is ${completion}% complete. You need at least ${MIN_COMPLETION}% to book a doctor.`)}</p>
-            <p className="mt-1 text-muted-foreground">{t("ঠিকানা, কত বছর ধরে ডায়াবেটিস, এখন কী ওষুধ খাচ্ছেন — এসব জানলে ডাক্তার ঠিক পরামর্শ দিতে পারবেন।", "Your address, how long you've had diabetes and your current medicines help the doctor advise you properly.")}</p>
-            <Link to="/profile" className="mt-4 inline-block rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground hover:bg-primary/90">{t("প্রোফাইল পূরণ করুন", "Complete my profile")}</Link>
-          </div>
-        ) : (
-          <button disabled={!picked || book.isPending} onClick={() => picked && book.mutate(picked)}
-            className="rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
-            {picked
-              ? t(`${formatDhaka(new Date(picked), "bn", { hour: "numeric", minute: "2-digit" })}-এ বুক করুন · ${formatBDT(doctor.fee_bdt, "bn")}`, `Book ${formatDhaka(new Date(picked), "en", { hour: "numeric", minute: "2-digit" })} · ${formatBDT(doctor.fee_bdt, "en")}`)
-              : t("আগে একটা সময় বেছে নিন", "Pick a time first")}
-          </button>
-        )}
-      </div>
-    </Shell>
-  );
-}
-
-function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen">
-      <SiteHeader />
-      <main className="mx-auto max-w-4xl px-6 py-12">{children}</main>
-      <SiteFooter />
-    </div>
-  );
+  const { slug } = Route.useParams(); const { lang, t } = useLang(); const qc = useQueryClient();
+  useAppointmentRealtime(); useDoctorRealtime();
+  const [date, setDate] = useState(dhakaNowParts().date); const [picked, setPicked] = useState(""); const [type, setType] = useState("video"); const [reason, setReason] = useState(""); const [reports, setReports] = useState<string[]>([]); const [file, setFile] = useState<File | null>(null); const [msg, setMsg] = useState("");
+  const { data: doctor, isLoading } = useQuery({ queryKey: ["doctor", slug], queryFn: async () => { const { data, error } = await supabase.from("doctors").select("*").eq("slug", slug).eq("active", true).maybeSingle(); if (error) throw error; return data; } });
+  const { data: user } = useQuery({ queryKey: ["session-user"], queryFn: async () => (await supabase.auth.getUser()).data.user });
+  const { data: completion } = useQuery({ queryKey: ["my-profile-completion", user?.id], enabled: !!user, queryFn: async () => { if (!user) return 0; const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(); if (error) throw error; return profileCompletion(data); } });
+  const { data: slots = [], error: slotError } = useQuery({ queryKey: ["available-slots", doctor?.id, date], enabled: !!doctor && !!date, queryFn: async () => { if (!doctor) return []; const { data, error } = await supabase.rpc("available_doctor_slots", { _doctor: doctor.id, _from: date, _to: date }); if (error) throw error; return data; } });
+  const { data: oldReports = [] } = useQuery({ queryKey: ["booking-reports", user?.id], enabled: !!user, queryFn: async () => { if (!user) return []; const { data, error } = await supabase.from("old_prescriptions").select("id,file_name,doctor_name").eq("user_id", user.id); if (error) throw error; return data; } });
+  const upload = useMutation({ mutationFn: async () => {
+    if (!user || !file) throw new Error(t("আগে ফাইল বেছে নিন।", "Choose a file first."));
+    if (!["image/jpeg", "image/png", "application/pdf"].includes(file.type) || file.size > 10 * 1024 * 1024) throw new Error(t("১০ MB পর্যন্ত JPG, PNG বা PDF দিন।", "Use JPG, PNG or PDF up to 10 MB."));
+    const path = `${user.id}/${crypto.randomUUID()}.${file.type === "application/pdf" ? "pdf" : file.type === "image/png" ? "png" : "jpg"}`;
+    const up = await supabase.storage.from("old-prescriptions").upload(path, file); if (up.error) throw up.error;
+    const { data, error } = await supabase.from("old_prescriptions").insert({ kind: "test_report", file_path: path, file_name: file.name }).select("id").single();
+    if (error) { await supabase.storage.from("old-prescriptions").remove([path]); throw error; } return data.id;
+  }, onSuccess: id => { setReports(r => [...r, id]); setFile(null); setMsg(t("রিপোর্ট যোগ হয়েছে।", "Report attached.")); void qc.invalidateQueries({ queryKey: ["booking-reports"] }); }, onError: e => setMsg(e.message) });
+  const book = useMutation({ mutationFn: async () => { if (!doctor || !picked || !user) throw new Error(t("একটি খালি সময় বেছে নিন।", "Choose an available time.")); const { error } = await supabase.rpc("book_appointment", { _doctor: doctor.id, _slot: picked, _type: type, _reason: reason, _reports: reports }); if (error) throw error; }, onSuccess: () => { setPicked(""); setMsg(t("অনুরোধ পাঠানো হয়েছে। ডাক্তার গ্রহণ করলে নোটিফিকেশন পাবেন।", "Request sent. You will be notified when the doctor accepts.")); void qc.invalidateQueries({ queryKey: ["available-slots"] }); void qc.invalidateQueries({ queryKey: ["appointments"] }); }, onError: e => setMsg(e.message) });
+  return <div className="min-h-screen"><SiteHeader /><main className="mx-auto max-w-4xl px-5 py-10">
+    <Link to="/doctors" className="text-primary underline">{t("সব ডাক্তার", "All doctors")}</Link>
+    {isLoading ? <p>{t("লোড হচ্ছে…", "Loading…")}</p> : !doctor ? <p>{t("ডাক্তারকে পাওয়া গেল না।", "Doctor not found.")}</p> : <>
+      <div className="mt-5 flex flex-wrap gap-5 border-b border-border pb-6"><img src={doctor.photo_url || doctorPhotos[doctor.slug]} alt={t(doctor.name_bn, doctor.name_en)} className="h-24 w-24 rounded-md border border-border object-cover" /><div className="min-w-0 flex-1"><h1 className="font-display text-3xl font-semibold">{t(doctor.name_bn, doctor.name_en)}</h1><p>{doctor.degrees}</p><p className="text-muted-foreground">{doctor.designation} {doctor.workplace}</p><p className="text-sm">{t(...(specialties[doctor.specialty] ?? [doctor.specialty, doctor.specialty]))} · BMDC {doctor.bmdc_no}</p><p>{formatNumber(doctor.experience_years ?? 0, lang)} {t("বছরের অভিজ্ঞতা", "years of experience")} · {formatBDT(doctor.fee_bdt, lang)}</p></div><StatusDot status={doctor.status} label={t(statusInfo[doctor.status].bn, statusInfo[doctor.status].en)} /></div>
+      {(doctor.bio_bn || doctor.bio_en) && <section className="mt-5"><h2 className="font-display text-xl font-semibold">{t("পরিচিতি", "About the doctor")}</h2><p className="whitespace-pre-wrap">{t(doctor.bio_bn ?? "", doctor.bio_en ?? "")}</p></section>}
+      <section className="mt-7"><h2 className="font-display text-xl font-semibold">{t("সময় বেছে নিন", "Choose a time")}</h2><label className="mt-3 block max-w-xs">{t("তারিখ (ঢাকার সময়)", "Date (Dhaka time)")}<input type="date" className={fieldClass} value={date} min={dhakaNowParts().date} onChange={e => { setDate(e.target.value); setPicked(""); }} /></label>
+        {slotError && <p role="alert" className="text-destructive">{slotError.message}</p>}
+        {!slots.length && <p className="mt-4 text-muted-foreground">{t("এই দিনে কোনো সময় খালি নেই। অন্য দিন দেখুন।", "No available slots on this date. Try another day.")}</p>}
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">{slots.map(s => <Button key={s.slot_start} variant={picked === s.slot_start ? "default" : "outline"} className={flatButton} aria-pressed={picked === s.slot_start} onClick={() => setPicked(s.slot_start)}>{formatDhaka(new Date(s.slot_start), lang, { timeStyle: "short" })}</Button>)}</div>
+      </section>
+      {!user ? <p className="mt-6"><Link to="/auth" search={{ next: `/doctors/${slug}` }} className="text-primary underline">{t("বুক করতে ঢুকুন", "Sign in to book")}</Link></p> : completion === undefined ? <p>{t("প্রোফাইল দেখা হচ্ছে…", "Checking profile…")}</p> : completion < MIN_COMPLETION ? <p className="mt-6">{t(`প্রোফাইল ${formatNumber(completion, "bn")}% পূরণ হয়েছে। অন্তত ৬০% লাগবে।`, `Profile ${completion}% complete. At least 60% is required.`)} <Link to="/profile" className="text-primary underline">{t("প্রোফাইল পূরণ করুন", "Complete profile")}</Link></p> : <form className="mt-7 space-y-4 border-t border-border pt-5" onSubmit={e => { e.preventDefault(); book.mutate(); }}>
+        <fieldset><legend className="font-medium">{t("পরামর্শের ধরন", "Consultation type")}</legend><div className="mt-2 flex flex-wrap gap-2">{Object.entries(consultationLabels).map(([key, label]) => <Button type="button" key={key} variant={type === key ? "default" : "outline"} className={flatButton} aria-pressed={type === key} onClick={() => setType(key)}>{t(...label)}</Button>)}</div></fieldset>
+        <label className="block">{t("কী সমস্যা নিয়ে দেখাবেন?", "Reason for consultation")}<textarea required minLength={3} maxLength={2000} rows={3} className={fieldClass} value={reason} onChange={e => setReason(e.target.value)} /></label>
+        <fieldset><legend className="font-medium">{t("আগের প্রেসক্রিপশন ও রিপোর্ট", "Previous prescriptions and reports")}</legend>{oldReports.map(r => <label key={r.id} className="mt-2 flex items-center gap-2"><input type="checkbox" checked={reports.includes(r.id)} onChange={e => setReports(list => e.target.checked ? [...list, r.id] : list.filter(id => id !== r.id))} />{r.doctor_name || r.file_name}</label>)}<label className="mt-3 block">{t("নতুন রিপোর্ট (JPG, PNG বা PDF; ১০ MB)", "New report (JPG, PNG or PDF; 10 MB)")}<input type="file" accept="image/jpeg,image/png,application/pdf" className={fieldClass} onChange={e => setFile(e.target.files?.[0] ?? null)} /></label><Button type="button" variant="outline" className={`mt-2 ${flatButton}`} disabled={!file || upload.isPending} onClick={() => upload.mutate()}>{t("রিপোর্ট যোগ করুন", "Attach report")}</Button></fieldset>
+        <p className="text-sm text-muted-foreground">{t("ফি", "Fee")}: {formatBDT(doctor.fee_bdt, lang)} · {t("অনলাইন পেমেন্ট এখন চালু নেই। এখানে টাকা কাটা হবে না।", "Online payment is not available. No money will be charged here.")}</p>
+        <p className="text-sm text-muted-foreground">{t("অন্তত ২৪ ঘণ্টা আগে বাতিল করলে ফেরতের যোগ্য। পরে বাতিল করলে অ্যাডমিন সিদ্ধান্ত নেবেন।", "Cancellation at least 24 hours before qualifies for a refund; later cancellations are reviewed by admin.")}</p>
+        <Button disabled={!picked || book.isPending || upload.isPending} className={flatButton}>{t("অ্যাপয়েন্টমেন্টের অনুরোধ পাঠান", "Request appointment")}</Button>
+      </form>}
+      {msg && <p role="status" className="mt-4 border-l-2 border-primary pl-3">{msg}</p>}
+      <DoctorReviews doctorId={doctor.id} />
+    </>}
+  </main><SiteFooter /></div>;
 }
