@@ -33,7 +33,7 @@ async def main():
         checkbox = row.locator("label").filter(has_text=role).get_by_role("checkbox")
         originally_checked = await checkbox.is_checked()
         if originally_checked:
-            await checkbox.uncheck()
+            await checkbox.click()
             await page.wait_for_timeout(700)
         if role == "patient":
             result = await page.evaluate("""async uid => {
@@ -43,7 +43,7 @@ async def main():
             }""",uid)
             assert result, 'Could not prepare pending account'
         try:
-            await checkbox.check()
+            await checkbox.click()
             await page.wait_for_timeout(900)
             approved = await page.evaluate("""async uid => {
                 const {supabase} = await import('/src/integrations/supabase/client.ts');
@@ -62,7 +62,7 @@ async def main():
                 await page.goto("http://localhost:8080/admin/users")
                 await page.get_by_placeholder("নাম, ইমেইল বা ফোন খুঁজুন").fill("forhadhossenmrktr")
                 row = page.get_by_role("row").filter(has=page.locator("label",has_text="doctor"))
-                await row.locator("label").filter(has_text=role).get_by_role("checkbox").uncheck()
+                await row.locator("label").filter(has_text=role).get_by_role("checkbox").click()
                 await page.wait_for_timeout(700)
             await browser.close()
 
