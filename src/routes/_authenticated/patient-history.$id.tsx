@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { RoleShell } from "@/components/site/role-shell";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
+import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka } from "@/lib/locale";
@@ -16,12 +17,13 @@ function Page() {
     const { data: a, error } = await supabase.from("appointments").select("patient_id").eq("id", id).eq("doctor_id", doctor.id).maybeSingle(); if (error) throw error; if (!a) throw new Error("Appointment not found");
     const [p,r,rx] = await Promise.all([supabase.from("profiles").select("*").eq("id",a.patient_id).maybeSingle(),supabase.from("glucose_readings").select("id,value_mmol,taken_at,note,reading_type,meal_slot").eq("user_id",a.patient_id).order("taken_at",{ascending:false}).limit(100),supabase.from("prescriptions").select("id,appointment_id,advice,created_at").eq("patient_id",a.patient_id).order("created_at",{ascending:false})]);
     if(p.error) throw p.error; if(r.error) throw r.error; if(rx.error) throw rx.error;
-    return { patientId:a.patient_id,profile:p.data,readings:r.data,prescriptions:rx.data };
+    return { patientId:a.patient_id,doctorId:doctor.id,profile:p.data,readings:r.data,prescriptions:rx.data };
   } });
   return <RoleShell role="doctor"><Link to="/doctor" className="text-primary underline">{t("অ্যাপয়েন্টমেন্টে ফিরুন", "Back to appointments")}</Link><h1 className="mt-4 font-display text-3xl font-semibold">{t("রোগীর ইতিহাস", "Patient history")}</h1>{error && <p role="alert" className="text-destructive">{error.message}</p>}{data && <>
     <h2 className="mt-5 text-xl font-semibold">{data.profile?.full_name}</h2><dl className="mt-3 grid gap-x-5 border-t border-border sm:grid-cols-2">{[
       [t("ফোন", "Phone"),data.profile?.phone],[t("ঠিকানা", "Address"),data.profile?.address],[t("ডায়াবেটিসের ধরন", "Diabetes type"),data.profile?.diabetes_type],[t("জন্মসাল", "Birth year"),data.profile?.birth_year],[t("ডায়াবেটিস ধরা পড়ার সাল", "Diagnosed year"),data.profile?.diagnosed_year],[t("এখনকার ওষুধ", "Current medicines"),data.profile?.medicines],[t("অন্যান্য রোগ বা অ্যালার্জি", "Other conditions or allergies"),data.profile?.other_conditions],[t("জরুরি যোগাযোগ", "Emergency contact"),data.profile?.emergency_contact],[t("ওজন (kg)", "Weight (kg)"),data.profile?.weight_kg]
     ].map(([label,value]) => <div key={String(label)} className="border-b border-border py-3"><dt className="text-sm text-muted-foreground">{label}</dt><dd className="whitespace-pre-wrap">{value ?? "—"}</dd></div>)}</dl>
+    <MedicineSchedules patientId={data.patientId} doctorId={data.doctorId} />
     <h2 className="mt-7 font-display text-xl font-semibold">{t("সুগারের ইতিহাস", "Glucose history")}</h2>
     {(() => { const avg = averageGlucose(data.readings, 30); const count = data.readings.filter(r => r.value_mmol !== null && new Date(r.taken_at).getTime() >= Date.now() - 30 * 86400000).length; return (
       <dl className="mt-3 grid gap-x-5 rounded-[10px] border border-border bg-card px-5 py-2 sm:grid-cols-2">
