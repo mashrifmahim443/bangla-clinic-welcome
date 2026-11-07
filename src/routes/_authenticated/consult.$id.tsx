@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { pageHead } from "@/lib/appointments";
+import { useCms } from "@/lib/cms";
+import { INTEGRATIONS_KEY, joinUrl, withDefaults } from "@/lib/integrations";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -21,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/consult/$id")({
 const stateClass = { low: "text-glucose-low", ok: "text-glucose-ok", high: "text-glucose-high" };
 
 function Page() {
+  const cms = useCms();
   const { id } = Route.useParams();
   const { lang, setLang, t } = useLang();
   const { data: appt, isLoading } = useAppointment(id);
@@ -40,7 +43,7 @@ function Page() {
           <p className="text-sm text-muted-foreground">{formatDhaka(new Date(appt.slot_start), lang, { dateStyle: "full", timeStyle: "short" })}</p>
         </div>
         <div className="flex items-center gap-4 text-sm">
-          {appt.consultation_type !== "chat" && <a href={`https://meet.jit.si/DiabeCare-${id}`} target="_blank" rel="noreferrer"
+          {appt.consultation_type !== "chat" && <a href={joinUrl(withDefaults(cms.json(INTEGRATIONS_KEY, null)).jitsi_base, `DiabeCare-${id}`)} target="_blank" rel="noreferrer"
             className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">
             {appt.consultation_type === "audio" ? t("অডিও কলে যান", "Join audio call") : t("ভিডিও কলে যান", "Join video call")}
           </a>}

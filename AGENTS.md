@@ -14,3 +14,5 @@
 - Doctor availability is persisted as Dhaka-local weekly schedules and leave dates; public slots are derived from them, and Realtime subscriptions are scoped and cleaned up.
 - Prescription medicine instructions stay in the existing items JSON; shared medicine helpers resolve bilingual timing presets while preserving legacy/custom text and per-medicine comments.
 - Standalone medicine schedules are doctor-authored and patient-readable; patient-owned SMS consent and service-only atomic dose claims prevent unauthorized reminders and duplicate provider submissions. Managed authenticated HTTP scheduling checks Dhaka dose windows using each schedule’s persisted lead time; unknown provider results are not automatically retried.
+
+- Outside service addresses (video call, BMDC, WhatsApp, payment/email placeholders) are admin-editable non-secret values in site_content key "integrations" with code defaults; keys stay in the secret store.
