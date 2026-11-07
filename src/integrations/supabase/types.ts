@@ -797,6 +797,30 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_settings: {
+        Row: {
+          id: string
+          message_template: string
+          sender_id: string
+          test_number: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          message_template?: string
+          sender_id: string
+          test_number?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          message_template?: string
+          sender_id?: string
+          test_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
