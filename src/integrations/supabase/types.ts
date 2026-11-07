@@ -14,28 +14,117 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointment_notifications: {
+        Row: {
+          appointment_id: string | null
+          created_at: string
+          id: string
+          read_at: string | null
+          slot_start: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          slot_start: string
+          status: string
+          user_id: string
+        }
+        Update: {
+          appointment_id?: string | null
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          slot_start?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_notifications_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointment_reports: {
+        Row: {
+          appointment_id: string
+          report_id: string
+        }
+        Insert: {
+          appointment_id: string
+          report_id: string
+        }
+        Update: {
+          appointment_id?: string
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_reports_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_reports_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "old_prescriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          consultation_type: string
           created_at: string
           doctor_id: string
+          duration_minutes: number
           id: string
           patient_id: string
+          reason: string
+          refund_decision: string | null
+          refund_note: string | null
           slot_start: string
           status: string
         }
         Insert: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          consultation_type?: string
           created_at?: string
           doctor_id: string
+          duration_minutes?: number
           id?: string
           patient_id?: string
+          reason?: string
+          refund_decision?: string | null
+          refund_note?: string | null
           slot_start: string
           status?: string
         }
         Update: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          consultation_type?: string
           created_at?: string
           doctor_id?: string
+          duration_minutes?: number
           id?: string
           patient_id?: string
+          reason?: string
+          refund_decision?: string | null
+          refund_note?: string | null
           slot_start?: string
           status?: string
         }
@@ -329,9 +418,117 @@ export type Database = {
         }
         Relationships: []
       }
+      doctor_leave: {
+        Row: {
+          doctor_id: string
+          id: string
+          leave_date: string
+        }
+        Insert: {
+          doctor_id: string
+          id?: string
+          leave_date: string
+        }
+        Update: {
+          doctor_id?: string
+          id?: string
+          leave_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_leave_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_reviews: {
+        Row: {
+          appointment_id: string
+          body: string
+          created_at: string
+          doctor_id: string
+          id: string
+          patient_id: string
+          rating: number
+        }
+        Insert: {
+          appointment_id: string
+          body?: string
+          created_at?: string
+          doctor_id: string
+          id?: string
+          patient_id?: string
+          rating: number
+        }
+        Update: {
+          appointment_id?: string
+          body?: string
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          patient_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_reviews_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "doctor_reviews_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_schedule: {
+        Row: {
+          doctor_id: string
+          end_time: string
+          id: string
+          slot_minutes: number
+          start_time: string
+          weekday: number
+        }
+        Insert: {
+          doctor_id: string
+          end_time: string
+          id?: string
+          slot_minutes?: number
+          start_time: string
+          weekday: number
+        }
+        Update: {
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          slot_minutes?: number
+          start_time?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_schedule_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctors: {
         Row: {
           active: boolean
+          bio_bn: string | null
+          bio_en: string | null
           bmdc_no: string
           created_at: string
           degrees: string
@@ -352,6 +549,8 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          bio_bn?: string | null
+          bio_en?: string | null
           bmdc_no: string
           created_at?: string
           degrees: string
@@ -372,6 +571,8 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          bio_bn?: string | null
+          bio_en?: string | null
           bmdc_no?: string
           created_at?: string
           degrees?: string
@@ -631,9 +832,30 @@ export type Database = {
           roles: Database["public"]["Enums"]["app_role"][]
         }[]
       }
+      available_doctor_slots: {
+        Args: { _doctor: string; _from: string; _to: string }
+        Returns: {
+          duration_minutes: number
+          slot_start: string
+        }[]
+      }
+      book_appointment: {
+        Args: {
+          _doctor: string
+          _reason: string
+          _reports?: string[]
+          _slot: string
+          _type: string
+        }
+        Returns: string
+      }
       booked_slots: {
         Args: { _doctor: string; _from: string; _to: string }
         Returns: string[]
+      }
+      change_appointment: {
+        Args: { _id: string; _reason?: string; _slot?: string; _status: string }
+        Returns: undefined
       }
       checkin_info: {
         Args: { _token: string }
@@ -655,8 +877,20 @@ export type Database = {
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
       profile_completion: { Args: { _user: string }; Returns: number }
+      review_appointment_refund: {
+        Args: { _approve: boolean; _id: string; _note: string }
+        Returns: undefined
+      }
       review_doctor_application: {
         Args: { _approve: boolean; _id: string; _note?: string }
+        Returns: undefined
+      }
+      set_doctor_presence: {
+        Args: {
+          _bio_bn?: string
+          _bio_en?: string
+          _status: Database["public"]["Enums"]["doctor_status"]
+        }
         Returns: undefined
       }
       submit_checkin: {
