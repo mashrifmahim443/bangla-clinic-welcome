@@ -176,6 +176,13 @@
       "when": 1794050989783,
       "tag": "0024_sms_send_request_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794053124873,
+      "tag": "0025_medicine_schedules_and_reminder_claims",
+      "breakpoints": true
     }
   ]
 }
