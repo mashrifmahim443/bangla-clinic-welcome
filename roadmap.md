@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Admin role checkmarks approve accounts and activate existing or subsequently completed doctor profiles; verify Forhad in directory.
 - [x] Per-medicine timing dropdown, custom instructions and individual comments in doctor and patient prescription views (4 tests passed; signed-in save check unavailable without a matching account)
 - [x] Video consultation (free Jitsi link; move to paid video service before launch)
 - [x] Food logging in the check-in
