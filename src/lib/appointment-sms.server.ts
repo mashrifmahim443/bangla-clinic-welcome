@@ -6,7 +6,7 @@ import { smsDeliveryState } from "./sms-history";
 export async function sendDoctorBookingSms(appointmentId: string) {
   const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
   const { data: appointment, error: appointmentError } = await db.from("appointments")
-    .select("doctor_id,slot_start,patient_id").eq("id", appointmentId).single();
+    .select("doctor_id,slot_start,patient_id,reason").eq("id", appointmentId).single();
   if (appointmentError || !appointment) throw new Error("Booking SMS appointment read failed");
   const { data: doctor, error: doctorError } = await db.from("doctors").select("user_id").eq("id", appointment.doctor_id).single();
   if (doctorError) throw new Error("Booking SMS doctor read failed");
@@ -16,7 +16,9 @@ export async function sendDoctorBookingSms(appointmentId: string) {
   if (contact.error) throw new Error("Booking SMS contact read failed");
   const recipient = doctorSmsPhone(contact.data?.phone);
   if (!recipient) return "missing_phone";
-  const message = appointmentSmsMessage(appointment.slot_start);
+  const patient = await db.from("profiles").select("full_name").eq("id", appointment.patient_id).maybeSingle();
+  if (patient.error) throw new Error("Booking SMS patient read failed");
+  const message = appointmentSmsMessage({ slot: appointment.slot_start, patientName: patient.data?.full_name, reason: appointment.reason });
   const { data: history, error: claimError } = await db.from("sms_history").insert({
     request_id: appointmentId, sent_by: appointment.patient_id, recipient,
     message_text: message, delivery_status: "pending",
