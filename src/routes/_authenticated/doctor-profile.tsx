@@ -34,7 +34,7 @@ function Page() {
   const [saved, setSaved] = useState(false);
   if (isLoading || !data) return <RoleShell role="doctor"><p className="text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p></RoleShell>;
   const { d, c } = data;
-  if (!d) return <RoleShell role="doctor"><p>{t("আপনার ডাক্তার প্রোফাইল পাওয়া যায়নি।", "Doctor profile not found.")}</p></RoleShell>;
+  if (!d) return <CreateProfile uid={data.uid} />;
   const v: F = {
     degrees: f.degrees ?? d.degrees, designation: f.designation ?? d.designation ?? "", workplace: f.workplace ?? d.workplace ?? "",
     experience: f.experience ?? (d.experience_years != null ? String(d.experience_years) : ""),
