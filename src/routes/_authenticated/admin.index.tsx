@@ -1,5 +1,7 @@
 import { pageHead } from "@/lib/appointments";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
@@ -53,7 +55,10 @@ function Page() {
   ];
   return (
     <div>
-      <h1 className="text-lg font-semibold">{t("সারসংক্ষেপ", "Overview")}</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-lg font-semibold">{t("সারসংক্ষেপ", "Overview")}</h1>
+        <Button asChild className="shadow-none"><Link to="/admin/api-settings" hash="custom-sms"><Send />{t("নিজের লেখা SMS পাঠান", "Send a custom SMS")}</Link></Button>
+      </div>
       <h2 className="mt-4 text-[13px] font-medium">{t("৬ মাসের লক্ষ্য", "Six-month targets")}</h2>
       <table className="mt-2 w-full max-w-3xl border-collapse border border-border bg-card text-[13px]">
         <thead><tr className="bg-secondary">
