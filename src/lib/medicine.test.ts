@@ -26,8 +26,8 @@ describe("per-medicine instructions", () => {
   it("updates only the selected medicine", () => {
     const medicines = [item, { ...item, name: "Medicine B", comment: "Separate note" }];
     const updated = medicines.map((medicine, index) => index === 0 ? selectMedicineTiming(medicine, "bedtime") : medicine);
-    expect(updated[0].timingPreset).toBe("bedtime");
-    expect(updated[1].timing).toBe("");
-    expect(updated[1].comment).toBe("Separate note");
+    expect(updated[0]?.timingPreset).toBe("bedtime");
+    expect(updated[1]?.timing).toBe("");
+    expect(updated[1]?.comment).toBe("Separate note");
   });
 });
