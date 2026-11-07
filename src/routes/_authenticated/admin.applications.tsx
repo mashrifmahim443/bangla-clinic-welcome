@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { formatBDT, formatDhaka } from "@/lib/locale";
 import { specialties } from "@/lib/doctors";
 import { SortableTable, type Col } from "@/components/admin/sortable-table";
 
-export const Route = createFileRoute("/_authenticated/admin/applications")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/applications")({ head: () => pageHead('Doctor application review', 'Review BMDC registration and doctor applications for DiabeCare.'), component: Page });
 
 function Page() {
   const { lang, t } = useLang();

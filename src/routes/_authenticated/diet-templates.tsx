@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,7 +10,7 @@ import { useDietTemplates, useMyDoctorId, useMyPatients } from "@/lib/diet-templ
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/diet-templates")({
-  head: () => ({ meta: [{ title: "Diet charts — DiabeCare" }, { name: "description", content: "Doctors' reusable diet charts." }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Reusable diet charts', 'Manage private and shared DiabeCare doctor diet templates.'),
   component: Page,
 });
 

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -6,7 +7,7 @@ import { useLang } from "@/lib/i18n";
 import { specialties } from "@/lib/doctors";
 
 export const Route = createFileRoute("/_authenticated/doctor-apply")({
-  head: () => ({ meta: [{ title: "Join as a doctor — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Join as a doctor', 'Submit your BMDC registration and professional details to DiabeCare.'),
   component: Page,
 });
 

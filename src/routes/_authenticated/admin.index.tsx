@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -7,7 +8,7 @@ import { formatDhaka, formatNumber } from "@/lib/locale";
 import { dhakaDay } from "@/lib/glucose";
 import { TARGETS, checkinRate, completionRate } from "@/lib/targets";
 
-export const Route = createFileRoute("/_authenticated/admin/")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/")({ head: () => pageHead('Admin overview', 'Review DiabeCare patients, consultation totals and clinic targets.'), component: Page });
 
 const axis = { fontSize: 11, fill: "var(--muted-foreground)" };
 
