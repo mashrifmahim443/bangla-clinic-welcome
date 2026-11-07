@@ -23,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/consult/$id")({
 const stateClass = { low: "text-glucose-low", ok: "text-glucose-ok", high: "text-glucose-high" };
 
 function Page() {
+  const cms = useCms();
   const { id } = Route.useParams();
   const { lang, setLang, t } = useLang();
   const { data: appt, isLoading } = useAppointment(id);

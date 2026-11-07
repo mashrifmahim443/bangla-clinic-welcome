@@ -13,6 +13,7 @@ import { SortableTable, type Col } from "@/components/admin/sortable-table";
 export const Route = createFileRoute("/_authenticated/admin/applications")({ head: () => pageHead('Doctor application review', 'Review BMDC registration and doctor applications for DiabeCare.'), component: Page });
 
 function Page() {
+  const cms = useCms();
   const { lang, t } = useLang();
   const qc = useQueryClient();
   const [show, setShow] = useState<"pending" | "all">("pending");
