@@ -141,6 +141,13 @@
       "when": 1794034081281,
       "tag": "0019_create_my_doctor_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1794038169504,
+      "tag": "0020_admin_role_profile_approval",
+      "breakpoints": true
     }
   ]
 }
