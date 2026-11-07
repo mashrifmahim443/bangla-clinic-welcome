@@ -5,6 +5,7 @@ import { INTEGRATIONS_KEY, joinUrl, withDefaults } from "@/lib/integrations";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { Chat } from "@/components/consult/chat";
+import { CallButtons } from "@/components/consult/call-buttons";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,10 +44,7 @@ function Page() {
           <p className="text-sm text-muted-foreground">{formatDhaka(new Date(appt.slot_start), lang, { dateStyle: "full", timeStyle: "short" })}</p>
         </div>
         <div className="flex items-center gap-4 text-sm">
-          {appt.consultation_type !== "chat" && <a href={joinUrl(withDefaults(cms.json(INTEGRATIONS_KEY, null)).jitsi_base, `DiabeCare-${id}`)} target="_blank" rel="noreferrer"
-            className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">
-            {appt.consultation_type === "audio" ? t("অডিও কলে যান", "Join audio call") : t("ভিডিও কলে যান", "Join video call")}
-          </a>}
+          <CallButtons appointmentId={id} />
           <Link to="/prescription/$id" params={{ id }} className="text-primary underline underline-offset-4">{t("প্রেসক্রিপশন দেখুন", "View prescription")}</Link>
           <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className="text-primary underline underline-offset-4">{lang === "bn" ? "English" : "বাংলা"}</button>
         </div>
