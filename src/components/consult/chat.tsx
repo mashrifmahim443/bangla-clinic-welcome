@@ -25,7 +25,7 @@ export function Chat({ appointmentId, me }: { appointmentId: string; me: string 
     return () => { supabase.removeChannel(ch); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointmentId]);
-  useEffect(() => { endRef.current?.scrollIntoView(); }, [msgs.length]);
+  useEffect(() => { endRef.current?.scrollIntoView({ block: "nearest" }); }, [msgs.length]);
 
   const send = useMutation({
     mutationFn: async (body: string) => {
@@ -36,15 +36,15 @@ export function Chat({ appointmentId, me }: { appointmentId: string; me: string 
   });
 
   return (
-    <section className="flex min-h-0 flex-col">
+    <section className="flex min-h-0 flex-1 flex-col">
       <div className="flex-1 space-y-3 overflow-y-auto p-6">
         {msgs.length === 0 && <p className="text-muted-foreground">{t("এখনো কোনো কথা হয়নি। প্রথম বার্তাটা লিখুন।", "No messages yet. Write the first one.")}</p>}
         {msgs.map((m) => {
           const mine = m.sender_id === me;
           return (
-            <div key={m.id} className={`max-w-[75%] rounded-md border border-border px-4 py-2 ${mine ? "ml-auto bg-secondary" : "bg-card"}`}>
+            <div key={m.id} className={`w-fit max-w-[75%] rounded-[10px] px-4 py-2 ${mine ? "ml-auto bg-primary text-primary-foreground" : "border border-border bg-secondary"}`}>
               <p className="whitespace-pre-wrap">{m.body}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{formatDhaka(new Date(m.created_at), lang, { timeStyle: "short" })}</p>
+              <p className={`mt-1 text-xs ${mine ? "text-primary-foreground/75" : "text-muted-foreground"}`}>{formatDhaka(new Date(m.created_at), lang, { timeStyle: "short" })}</p>
             </div>
           );
         })}

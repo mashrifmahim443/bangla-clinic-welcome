@@ -23,6 +23,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDietTemplatesRouteImport } from './routes/_authenticated/diet-templates'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedDoctorApplyRouteImport } from './routes/_authenticated/doctor-apply'
+import { Route as AuthenticatedDoctorMessagesRouteImport } from './routes/_authenticated/doctor-messages'
 import { Route as AuthenticatedDoctorProfileRouteImport } from './routes/_authenticated/doctor-profile'
 import { Route as AuthenticatedDoctorScheduleRouteImport } from './routes/_authenticated/doctor-schedule'
 import { Route as AuthenticatedMyDietRouteImport } from './routes/_authenticated/my-diet'
@@ -120,6 +121,12 @@ const AuthenticatedDoctorApplyRoute =
   AuthenticatedDoctorApplyRouteImport.update({
     id: '/doctor-apply',
     path: '/doctor-apply',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDoctorMessagesRoute =
+  AuthenticatedDoctorMessagesRouteImport.update({
+    id: '/doctor-messages',
+    path: '/doctor-messages',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDoctorProfileRoute =
@@ -285,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/my-diet': typeof AuthenticatedMyDietRoute
@@ -326,6 +334,7 @@ export interface FileRoutesByTo {
   '/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/my-diet': typeof AuthenticatedMyDietRoute
@@ -370,6 +379,7 @@ export interface FileRoutesById {
   '/_authenticated/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/_authenticated/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/_authenticated/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/_authenticated/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/_authenticated/my-diet': typeof AuthenticatedMyDietRoute
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/diet-templates'
     | '/doctor'
     | '/doctor-apply'
+    | '/doctor-messages'
     | '/doctor-profile'
     | '/doctor-schedule'
     | '/my-diet'
@@ -455,6 +466,7 @@ export interface FileRouteTypes {
     | '/diet-templates'
     | '/doctor'
     | '/doctor-apply'
+    | '/doctor-messages'
     | '/doctor-profile'
     | '/doctor-schedule'
     | '/my-diet'
@@ -498,6 +510,7 @@ export interface FileRouteTypes {
     | '/_authenticated/diet-templates'
     | '/_authenticated/doctor'
     | '/_authenticated/doctor-apply'
+    | '/_authenticated/doctor-messages'
     | '/_authenticated/doctor-profile'
     | '/_authenticated/doctor-schedule'
     | '/_authenticated/my-diet'
@@ -642,6 +655,13 @@ declare module '@tanstack/react-router' {
       path: '/doctor-apply'
       fullPath: '/doctor-apply'
       preLoaderRoute: typeof AuthenticatedDoctorApplyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/doctor-messages': {
+      id: '/_authenticated/doctor-messages'
+      path: '/doctor-messages'
+      fullPath: '/doctor-messages'
+      preLoaderRoute: typeof AuthenticatedDoctorMessagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/doctor-profile': {
@@ -872,6 +892,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDietTemplatesRoute: typeof AuthenticatedDietTemplatesRoute
   AuthenticatedDoctorRoute: typeof AuthenticatedDoctorRoute
   AuthenticatedDoctorApplyRoute: typeof AuthenticatedDoctorApplyRoute
+  AuthenticatedDoctorMessagesRoute: typeof AuthenticatedDoctorMessagesRoute
   AuthenticatedDoctorProfileRoute: typeof AuthenticatedDoctorProfileRoute
   AuthenticatedDoctorScheduleRoute: typeof AuthenticatedDoctorScheduleRoute
   AuthenticatedMyDietRoute: typeof AuthenticatedMyDietRoute
@@ -892,6 +913,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDietTemplatesRoute: AuthenticatedDietTemplatesRoute,
   AuthenticatedDoctorRoute: AuthenticatedDoctorRoute,
   AuthenticatedDoctorApplyRoute: AuthenticatedDoctorApplyRoute,
+  AuthenticatedDoctorMessagesRoute: AuthenticatedDoctorMessagesRoute,
   AuthenticatedDoctorProfileRoute: AuthenticatedDoctorProfileRoute,
   AuthenticatedDoctorScheduleRoute: AuthenticatedDoctorScheduleRoute,
   AuthenticatedMyDietRoute: AuthenticatedMyDietRoute,
