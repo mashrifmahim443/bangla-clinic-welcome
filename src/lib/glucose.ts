@@ -46,6 +46,36 @@ export function countToday(dates: Date[], now = new Date()) {
   return dates.filter((d) => dhakaDay(d) === today).length;
 }
 
+/** Bilingual labels for how a reading relates to a meal. */
+export const readingTypeLabels: Record<string, [string, string]> = {
+  fasting: ["খালি পেটে", "Fasting"],
+  before_meal: ["খাওয়ার আগে", "Before meal"],
+  after_meal: ["খাওয়ার ২ ঘণ্টা পরে", "2h after meal"],
+  bedtime: ["ঘুমানোর আগে", "Bedtime"],
+  random: ["যেকোনো সময়", "Random"],
+};
+export const mealSlotLabels: Record<string, [string, string]> = {
+  breakfast: ["সকাল", "Breakfast"],
+  lunch: ["দুপুর", "Lunch"],
+  dinner: ["রাত", "Dinner"],
+};
+
+/** e.g. "সকাল · খাওয়ার আগে" — falls back to just the type when no meal is stored. */
+export function readingLabel(readingType: string | null, mealSlot: string | null, lang: Lang): string {
+  const type = readingType ? readingTypeLabels[readingType] : undefined;
+  const meal = mealSlot ? mealSlotLabels[mealSlot] : undefined;
+  const typeText = type ? type[lang === "bn" ? 0 : 1] : "—";
+  return meal ? `${meal[lang === "bn" ? 0 : 1]} · ${typeText}` : typeText;
+}
+
+/** Average mmol/L of readings taken in the last `days` days (Dhaka time), or null when empty. */
+export function averageGlucose(readings: { value_mmol: number | null; taken_at: string }[], days: number, now = new Date()): number | null {
+  const cutoff = now.getTime() - days * 24 * 60 * 60 * 1000;
+  const values = readings.filter((r) => r.value_mmol !== null && new Date(r.taken_at).getTime() >= cutoff).map((r) => r.value_mmol as number);
+  if (!values.length) return null;
+  return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10) / 10;
+}
+
 const bnTimes = ["", "একবার", "দুবার", "তিনবার"];
 export function statusSentence(countTodayN: number, lang: "bn" | "en") {
   const missing = Math.max(0, DAILY_CHECKS - countTodayN);
