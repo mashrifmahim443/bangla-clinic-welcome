@@ -25,7 +25,9 @@ it("uses the doctor profile phone and saved SMS service, never a patient-supplie
   vi.stubGlobal("fetch", fetchMock.mockResolvedValue({ status: 200, ok: true, json: async () => ({ response: [{ status: 0 }] }) }));
   const { sendDoctorBookingSms } = await import("./appointment-sms.server");
   expect(await sendDoctorBookingSms("appointment-id")).toBe("accepted");
-  const [url, request] = fetchMock.mock.calls[0];
+  const call = fetchMock.mock.calls[0];
+  if (!call) throw new Error("Expected a provider request");
+  const [url, request] = call;
   expect(url).toBe("https://api.automas.com.bd/smsapiv3");
   expect(request.body.get("msisdn")).toBe("01772258197");
   expect(request.body.get("sender")).toBe("saved-sender");
