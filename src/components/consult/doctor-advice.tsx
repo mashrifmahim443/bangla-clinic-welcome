@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka } from "@/lib/locale";
 import type { RxItem } from "@/lib/consult";
+import { medicineTimingText } from "@/lib/medicine";
 
 /** Patient-facing list of advice their doctors wrote in prescriptions. */
 export function DoctorAdvice() {
@@ -12,10 +13,11 @@ export function DoctorAdvice() {
     queryKey: ["my-advice"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return [];
       const { data, error } = await supabase
         .from("prescriptions")
         .select("id, appointment_id, advice, items, follow_up_date, created_at, doctors(name_bn, name_en, specialty)")
-        .eq("patient_id", u.user!.id)
+        .eq("patient_id", u.user.id)
         .order("created_at", { ascending: false })
         .limit(10);
       if (error) throw error;
@@ -47,7 +49,7 @@ export function DoctorAdvice() {
             {r.items.length > 0 && (
               <ul className="mt-3 space-y-1 text-sm">
                 {r.items.map((m, k) => (
-                  <li key={k}><span className="font-medium">{m.name}</span> <span className="text-muted-foreground">— {[m.dose, m.timing, m.duration].filter(Boolean).join(" · ")}</span></li>
+                  <li key={k} className="break-words"><span className="font-medium">{m.name}</span> <span className="text-muted-foreground">— {[m.dose, medicineTimingText(m, t), m.duration].filter(Boolean).join(" · ")}</span>{m.comment && <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{t("মন্তব্য", "Comment")}: {m.comment}</p>}</li>
                 ))}
               </ul>
             )}

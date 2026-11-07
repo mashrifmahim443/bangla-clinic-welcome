@@ -10,6 +10,7 @@ import { formatDhaka, formatNumber } from "@/lib/locale";
 import { UNIT, formatGlucose, glucoseState } from "@/lib/glucose";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
 import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
+import { medicineTimings, medicineTimingSelection, medicineTimingText, selectMedicineTiming } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
   head: () => pageHead("Consultation room", "Private chat and consultation with your DiabeCare doctor."),
@@ -180,14 +181,14 @@ function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patien
       <h3 className="mt-6 text-sm font-medium text-muted-foreground">{t("ওষুধ", "Medicines")}</h3>
       {!rx || rx.items.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("এখনো কোনো ওষুধ লেখা হয়নি।", "No medicines written yet.")}</p> : (
         <ul className="mt-2 divide-y divide-border text-sm">
-          {rx.items.map((m, i) => <li key={i} className="py-1.5"><span className="font-medium">{m.name}</span> — {m.dose} · {m.timing}</li>)}
+          {rx.items.map((m, i) => <li key={i} className="py-1.5 break-words"><span className="font-medium">{m.name}</span> — {m.dose} · {medicineTimingText(m, t)}{m.comment && <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{t("মন্তব্য", "Comment")}: {m.comment}</p>}</li>)}
         </ul>
       )}
     </div>
   );
 }
 
-const blank: RxItem = { name: "", dose: "", timing: "", duration: "" };
+const blank: RxItem = { name: "", dose: "", timing: "", duration: "", comment: "" };
 
 function RxForm({ appointmentId, patientId, doctorId }: { appointmentId: string; patientId: string; doctorId: string }) {
   const { t } = useLang();
@@ -197,9 +198,15 @@ function RxForm({ appointmentId, patientId, doctorId }: { appointmentId: string;
   const [cc, setCc] = useState<string | null>(null);
   const [advice, setAdvice] = useState<string | null>(null);
   const [follow, setFollow] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [saved, setSaved] = useState(false);
   if (isLoading) return null;
   const its = items ?? (rx?.items.length ? rx.items : [blank]);
   const save = async () => {
+    setSaving(true);
+    setSaved(false);
+    setSaveError("");
     const payload = {
       appointment_id: appointmentId, patient_id: patientId, doctor_id: doctorId,
       chief_complaints: cc ?? rx?.chief_complaints ?? null,
@@ -208,12 +215,20 @@ function RxForm({ appointmentId, patientId, doctorId }: { appointmentId: string;
       follow_up_date: (follow ?? rx?.follow_up_date) || null,
       updated_at: new Date().toISOString(),
     };
-    const { error } = await supabase.from("prescriptions").upsert(payload, { onConflict: "appointment_id" });
-    if (error) { alert(t("সংরক্ষণ হয়নি, আবার চেষ্টা করুন।", "Couldn't save. Try again.")); return; }
-    qc.invalidateQueries({ queryKey: ["prescription", appointmentId] });
+    try {
+      const { error } = await supabase.from("prescriptions").upsert(payload, { onConflict: "appointment_id" });
+      if (error) throw error;
+      await qc.invalidateQueries({ queryKey: ["prescription", appointmentId] });
+      await qc.invalidateQueries({ queryKey: ["my-advice"] });
+      setSaved(true);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : String((error as { message?: string })?.message ?? error));
+    } finally {
+      setSaving(false);
+    }
   };
   const inp = "w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm";
-  const upd = (i: number, k: keyof RxItem, v: string) => setItems(its.map((x, j) => (j === i ? { ...x, [k]: v } : x)));
+  const upd = (i: number, k: keyof RxItem, v: string) => { setSaved(false); setItems(its.map((x, j) => (j === i ? { ...x, [k]: v } : x))); };
   return (
     <div className="mt-8 border-t border-border pt-6">
       <h2 className="font-display text-lg font-semibold">{t("প্রেসক্রিপশন লিখুন", "Write prescription")}</h2>
@@ -221,20 +236,32 @@ function RxForm({ appointmentId, patientId, doctorId }: { appointmentId: string;
         <textarea rows={2} className={inp} value={cc ?? rx?.chief_complaints ?? ""} onChange={(e) => setCc(e.target.value)} /></label>
       <div className="mt-3 space-y-3">
         {its.map((m, i) => (
-          <div key={i} className="grid grid-cols-2 gap-2 border-b border-border pb-3">
-            <input className={`${inp} col-span-2`} placeholder={t("ওষুধের নাম (যেমন Tab. Metformin 500mg)", "Medicine (e.g. Tab. Metformin 500mg)")} value={m.name} onChange={(e) => upd(i, "name", e.target.value)} />
-            <input className={inp} placeholder="১+০+১" value={m.dose} onChange={(e) => upd(i, "dose", e.target.value)} />
-            <input className={inp} placeholder={t("খাওয়ার পরে", "After meal")} value={m.timing} onChange={(e) => upd(i, "timing", e.target.value)} />
-            <input className={`${inp} col-span-2`} placeholder={t("কতদিন (যেমন ১ মাস)", "Duration (e.g. 1 month)")} value={m.duration} onChange={(e) => upd(i, "duration", e.target.value)} />
+          <div key={i} className="grid min-w-0 grid-cols-2 gap-2 border-b border-border pb-3">
+            <label className="col-span-2 min-w-0 text-sm">{t("ওষুধের নাম", "Medicine name")}
+              <input className={inp} placeholder={t("যেমন Tab. Metformin 500mg", "e.g. Tab. Metformin 500mg")} value={m.name} onChange={(e) => upd(i, "name", e.target.value)} />
+            </label>
+            <label className="min-w-0 text-sm">{t("মাত্রা", "Dose")}<input className={inp} placeholder={t("১+০+১", "1+0+1")} value={m.dose} onChange={(e) => upd(i, "dose", e.target.value)} /></label>
+            <label className="min-w-0 text-sm">{t("কখন খাবেন", "When to take")}
+              <select className={inp} value={medicineTimingSelection(m)} onChange={(e) => { setSaved(false); setItems(its.map((x, j) => j === i ? selectMedicineTiming(x, e.target.value) : x)); }}>
+                <option value="">{t("সময় বাছুন", "Select timing")}</option>
+                {medicineTimings.map((option) => <option key={option.value} value={option.value}>{t(option.bn, option.en)}</option>)}
+                <option value="custom">{t("নিজের মতো লিখুন", "Custom")}</option>
+              </select>
+            </label>
+            {medicineTimingSelection(m) === "custom" && <label className="col-span-2 text-sm">{t("খাওয়ার সময় লিখুন", "Custom timing")}<input className={inp} value={m.timing} onChange={(e) => upd(i, "timing", e.target.value)} placeholder={t("যেমন খাবারের ২০ মিনিট আগে", "e.g. 20 minutes before a meal")} /></label>}
+            <label className="col-span-2 text-sm">{t("কতদিন খাবেন", "Duration")}<input className={inp} placeholder={t("যেমন ১ মাস", "e.g. 1 month")} value={m.duration} onChange={(e) => upd(i, "duration", e.target.value)} /></label>
+            <label className="col-span-2 text-sm">{t("এই ওষুধের মন্তব্য (চাইলে)", "Comment for this medicine (optional)")}<textarea rows={2} className={inp} value={m.comment ?? ""} onChange={(e) => upd(i, "comment", e.target.value)} /></label>
           </div>
         ))}
       </div>
-      <button onClick={() => setItems([...its, blank])} className="mt-2 text-sm text-primary underline underline-offset-4">{t("+ আরেকটা ওষুধ যোগ করুন", "+ Add another medicine")}</button>
+      <Button variant="link" onClick={() => { setSaved(false); setItems([...its, { ...blank }]); }} className="mt-2 px-0">{t("+ আরেকটা ওষুধ যোগ করুন", "+ Add another medicine")}</Button>
       <label className="mt-3 block text-sm">{t("পরামর্শ", "Advice")}
         <textarea rows={3} className={inp} value={advice ?? rx?.advice ?? ""} onChange={(e) => setAdvice(e.target.value)} /></label>
       <label className="mt-3 block text-sm">{t("আবার দেখাবেন", "Follow-up date")}
         <input type="date" className={inp} value={follow ?? rx?.follow_up_date ?? ""} onChange={(e) => setFollow(e.target.value)} /></label>
-      <button onClick={save} className="mt-4 w-full rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("প্রেসক্রিপশন সংরক্ষণ করুন", "Save prescription")}</button>
+      <Button onClick={save} disabled={saving} className="mt-4 h-auto w-full whitespace-normal shadow-none">{saving ? t("সংরক্ষণ হচ্ছে…", "Saving…") : t("প্রেসক্রিপশন সংরক্ষণ করুন", "Save prescription")}</Button>
+      {saveError && <p role="alert" className="mt-2 break-words text-sm text-destructive">{t("সংরক্ষণ হয়নি", "Couldn't save")}: {saveError}</p>}
+      {saved && <p role="status" className="mt-2 text-sm text-glucose-ok">{t("প্রেসক্রিপশন সংরক্ষণ হয়েছে।", "Prescription saved.")}</p>}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka } from "@/lib/locale";
 import { useAppointment, usePrescription } from "@/lib/consult";
+import { medicineTimingText } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/prescription/$id")({
   head: () => pageHead('Patient prescription', 'Read and print your private DiabeCare doctor prescription.'),
@@ -61,9 +62,9 @@ function Page() {
                   {rx.items.map((m, i) => (
                     <tr key={i} className="border-b border-border align-top">
                       <td className="py-3 pr-2">{i + 1}.</td>
-                      <td className="py-3 pr-3 font-semibold">{m.name}</td>
+                      <td className="py-3 pr-3 break-words"><span className="font-semibold">{m.name}</span>{m.comment && <p className="mt-1 text-sm whitespace-pre-wrap text-muted-foreground">{t("মন্তব্য", "Comment")}: {m.comment}</p>}</td>
                       <td className="py-3 pr-3">{m.dose}</td>
-                      <td className="py-3 pr-3">{m.timing}</td>
+                      <td className="py-3 pr-3">{medicineTimingText(m, t)}</td>
                       <td className="py-3">{m.duration}</td>
                     </tr>
                   ))}
