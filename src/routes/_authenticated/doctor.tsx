@@ -54,7 +54,7 @@ function Page() {
       </div>
       {msg && <p role={msg.ok ? "status" : "alert"} className={`mt-4 border-l-2 pl-3 ${msg.ok ? "border-primary" : "border-destructive text-destructive"}`}>{msg.text}</p>}
 
-      <section className="mt-8">
+      <section id="pending" className="mt-8 scroll-mt-4">
         <h2 className="flex items-baseline gap-2 font-display text-xl font-semibold">{t("অপেক্ষমাণ অনুরোধ", "Pending requests")}<span className="rounded-md bg-accent px-2 text-sm text-accent-foreground">{formatNumber(pending.length, lang)}</span></h2>
         {!isLoading && !pending.length && <p className="mt-2 text-muted-foreground">{t("এখন কোনো অনুরোধ অপেক্ষায় নেই।", "No requests waiting right now.")}</p>}
         {pending.length > 0 && <div className="mt-3 overflow-x-auto rounded-[10px] border border-border bg-card">
@@ -74,7 +74,7 @@ function Page() {
         </div>}
       </section>
 
-      <section className="mt-8">
+      <section id="today" className="mt-8 scroll-mt-4">
         <h2 className="font-display text-xl font-semibold">{t("আজকের রোগী", "Today's patients")}</h2>
         {!isLoading && !todays.length && <p className="mt-2 text-muted-foreground">{t("আজ কোনো নিশ্চিত অ্যাপয়েন্টমেন্ট নেই।", "No confirmed appointments today.")}</p>}
         <ul className="mt-3 divide-y divide-border border-y border-border">{todays.map(a => <li key={a.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
@@ -85,10 +85,10 @@ function Page() {
           </div></li>)}</ul>
       </section>
 
-      <details className="mt-8 border-t border-border pt-4">
-        <summary className="cursor-pointer font-display text-xl font-semibold">{t("সব অ্যাপয়েন্টমেন্ট", "All appointments")}</summary>
+      <section id="all" className="mt-8 scroll-mt-4 border-t border-border pt-4">
+        <h2 className="font-display text-xl font-semibold">{t("সব অ্যাপয়েন্টমেন্ট", "All appointments")}</h2>
         <AppointmentList as="doctor" />
-      </details>
+      </section>
     </RoleShell>
   );
 }

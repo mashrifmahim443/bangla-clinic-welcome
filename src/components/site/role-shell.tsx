@@ -71,6 +71,12 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
             </Link>
           )}
+          {roles.includes("doctor") && <div className="ml-3 space-y-0.5 border-l border-border pl-2 text-sm">
+            <Link to="/doctor" hash="pending" className="block rounded-md px-3 py-1.5 hover:bg-secondary">{t("অপেক্ষমাণ অনুরোধ", "Pending requests")}</Link>
+            <Link to="/doctor" hash="today" className="block rounded-md px-3 py-1.5 hover:bg-secondary">{t("আজকের রোগী", "Today's patients")}</Link>
+            <Link to="/doctor" hash="all" className="block rounded-md px-3 py-1.5 hover:bg-secondary">{t("সব অ্যাপয়েন্টমেন্ট", "All appointments")}</Link>
+          </div>}
+          {roles.includes("doctor") && <Link to="/doctor-analytics" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("আমার পরিসংখ্যান", "My analytics")}</Link>}
           {roles.includes("doctor") && <Link to="/doctor-messages" search={{}} className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("রোগীদের বার্তা", "Patient messages")}</Link>}
           {roles.includes("doctor") && <Link to="/doctor-schedule" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("সময়সূচি ও উপলব্ধতা", "Schedule & availability")}</Link>}
           {roles.includes("doctor") && (
