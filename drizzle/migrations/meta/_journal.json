@@ -183,6 +183,13 @@
       "when": 1794053124873,
       "tag": "0025_medicine_schedules_and_reminder_claims",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1794053402815,
+      "tag": "0026_custom_medicine_reminder_lead_time",
+      "breakpoints": true
     }
   ]
 }
