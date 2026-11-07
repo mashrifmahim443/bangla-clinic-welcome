@@ -54,7 +54,7 @@ async def main():
             assert approved, 'Admin-assigned role did not approve account'
             if role == "doctor":
                 await page.goto("http://localhost:8080/doctors")
-                await page.get_by_text("ডা. ফোরহাদ হোসেন",exact=True).first.wait_for()
+                await page.locator("text=ডা. ফোরহাদ হোসেন").filter(visible=True).first.wait_for()
                 await page.screenshot(path="/tmp/browser/role-approval/doctor-listed.png")
             print("verified")
         finally:
