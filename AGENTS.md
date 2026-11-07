@@ -16,3 +16,4 @@
 - Standalone medicine schedules are doctor-authored and patient-readable; patient-owned SMS consent and service-only atomic dose claims prevent unauthorized reminders and duplicate provider submissions. Managed authenticated HTTP scheduling checks Dhaka dose windows using each schedule’s persisted lead time; unknown provider results are not automatically retried.
 
 - Outside service addresses (video call, BMDC, WhatsApp, payment/email placeholders) are admin-editable non-secret values in site_content key "integrations" with code defaults; keys stay in the secret store.
+- Doctor portal: /doctor (pending + today), /doctor-messages (inbox of accepted appointments reusing the shared Chat), /rx-write/$id (full-page prescription editor); notification bell in RoleShell merges status notifications with recent incoming messages.
