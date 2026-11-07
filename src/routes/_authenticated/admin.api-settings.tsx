@@ -40,10 +40,10 @@ function Page() {
     <section className="mt-6 border-t border-border pt-4">
       <h2 className="text-base font-semibold">{t("গোপন সংযোগ তথ্য", "Private connection credentials")}</h2>
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
-        {auth !== "login" && <label className="block">{t("API কী / টোকেন", "API key / token")}<input disabled type="password" placeholder={t("নিরাপদ সংযোগ চালু হলে এখানে যোগ হবে", "Available after secure connection setup")} className={input} /></label>}
+        {auth !== "login" && <label className="block">{t("API কী (apikey)", "API key (apikey)")}<input disabled type="password" placeholder={t("নিরাপত্তার জন্য এখানে কী দেখানো হয় না", "Keys are never displayed here for security")} className={input} /></label>}
         {auth === "login" && <><label className="block">{t("ইউজারনেম", "Username")}<input disabled placeholder={t("নিরাপদ সংযোগের সময় যোগ হবে", "Added during secure connection setup")} className={input} /></label><label className="block">{t("পাসওয়ার্ড", "Password")}<input disabled type="password" placeholder={t("নিরাপদ সংযোগের সময় যোগ হবে", "Added during secure connection setup")} className={input} /></label></>}
       </div>
-      <p className="mt-2 text-sm text-muted-foreground">{t("গোপন কী বা পাসওয়ার্ড সাধারণ সাইটের লেখার সঙ্গে রাখা হবে না।", "Private keys and passwords will not be stored with public site content.")}</p>
+      <p className="mt-2 text-sm text-muted-foreground">{t("API কী শুধু আলাদা নিরাপদ ফর্মে দিন। এটি এনক্রিপ্ট করে রাখা হয়; এই পাতায়, সাইটের লেখায় বা ব্রাউজারে রাখা হয় না। কী বদলাতে Lovable-এর Project Settings → Secrets খুলুন। শুধু কী রাখলেই SMS পাঠানো চালু হবে না।", "Enter the API key only through the separate secure form. It is encrypted, never stored on this page, in public site content or in browser storage. To replace it, open Lovable Project Settings → Secrets. Storing a key does not enable SMS sending.")}</p>
     </section>
     <section className="mt-6 border-t border-border pt-4">
       <h2 className="text-base font-semibold">{t("অ্যাপয়েন্টমেন্টের SMS", "Appointment SMS")}</h2>
