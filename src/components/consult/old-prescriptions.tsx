@@ -6,6 +6,14 @@ import { formatDhaka } from "@/lib/locale";
 
 const BUCKET = "old-prescriptions";
 const MAX_BYTES = 10 * 1024 * 1024;
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"];
+const ALLOWED_EXTS = ["jpg", "jpeg", "png", "pdf"];
+
+/** Only JPG, JPEG, PNG or PDF — checked by both MIME type and file extension. */
+export function isAllowedDocumentFile(file: File): boolean {
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return ALLOWED_TYPES.includes(file.type) && ALLOWED_EXTS.includes(ext);
+}
 
 /** Previous (paper) prescriptions a patient uploaded. Pass patientId to show read-only to their doctor. */
 export function OldPrescriptions({ patientId, kind = "prescription" }: { patientId?: string; kind?: "prescription" | "test_report" }) {
