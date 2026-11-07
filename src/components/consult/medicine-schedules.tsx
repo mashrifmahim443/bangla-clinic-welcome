@@ -7,7 +7,7 @@ import { dhakaNowParts, formatDhaka, formatNumber } from "@/lib/locale";
 import { medicineTimings } from "@/lib/medicine";
 import { validDoseTimes } from "@/lib/medicine-reminders";
 
-export function MedicineSchedules({ patientId, doctorId }: { patientId?: string; doctorId?: string }) {
+export function MedicineSchedules({ patientId, doctorId }: { patientId?: string; doctorId?: string | undefined }) {
   const { t, lang } = useLang();
   const qc = useQueryClient();
   const [name, setName] = useState(""); const [dose, setDose] = useState("");
