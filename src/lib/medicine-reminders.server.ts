@@ -20,7 +20,7 @@ export async function sendDueMedicineReminders() {
       if (stampError) return;
       let httpStatus: number | null = null; let providerStatus: number | null = null;
       try {
-        const response = await fetch("https://api.automas.com.bd/smsapiv3", { method: "POST", body: smsProviderParameters(row.recipient, message, sender, key), redirect: "error", signal: AbortSignal.timeout(4000) });
+        const response = await fetch("https://api.automas.com.bd/smsapiv3", { method: "POST", body: smsProviderParameters(row.recipient, message, sender, key), redirect: "manual", signal: AbortSignal.timeout(4000) });
         httpStatus = response.status; providerStatus = smsProviderStatus(await response.json().catch(() => null));
       } catch { /* Unknown result must never be retried: the provider may have accepted it. */ }
       const delivery = httpStatus !== null && (httpStatus < 200 || httpStatus >= 300) ? "failed" : smsDeliveryState(providerStatus);

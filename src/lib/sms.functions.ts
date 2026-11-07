@@ -35,7 +35,7 @@ export const sendCustomSms = createServerFn({ method: "POST" })
     try {
       const response = await fetch("https://api.automas.com.bd/smsapiv3", {
         method: "POST", body: smsProviderParameters(data.recipient, data.message, settings.sender_id, key),
-        redirect: "error", signal: AbortSignal.timeout(30000),
+        redirect: "manual", signal: AbortSignal.timeout(30000),
       });
       httpStatus = response.status;
       const payload: unknown = await response.json().catch(() => null);
