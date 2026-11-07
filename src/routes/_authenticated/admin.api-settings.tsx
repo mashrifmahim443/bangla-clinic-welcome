@@ -45,7 +45,6 @@ function Page() {
     } finally { setSaving(false); }
   };
   const input = "mt-1 w-full min-w-0 rounded-md border border-input bg-card px-3 py-2 text-sm disabled:bg-secondary disabled:text-muted-foreground";
-  const field = (bn: string, en: string, placeholder: string, type = "text") => <label className="block">{t(bn, en)}<input type={type} placeholder={placeholder} className={input} autoComplete="off" /></label>;
   return <form onSubmit={save} className="max-w-4xl">
     <h1 className="font-display text-2xl font-semibold">{t("SMS API সেটআপ", "SMS API setup")}</h1>
     <div className="mt-4 border-l-2 border-accent bg-secondary px-4 py-3 text-sm">

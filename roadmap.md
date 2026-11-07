@@ -2,7 +2,7 @@
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
 - [x] Automas API key collected through the encrypted project secret form at the user's request; never entered into public CMS or browser storage.
 - [x] Automas test SMS accepted by provider and receipt confirmed by user.
-- [ ] Save SMS configuration button with admin-only storage and reload verification.
+- [x] Save SMS configuration button with admin-only storage; authenticated save/reload and mobile layout verified, credential allowlist tests passed.
 - [ ] Automas automatic SMS sending implementation; storing settings alone does not enable sending.
 - [x] Admin-controlled Verified and Special doctor badges on homepage, directory and profile; signed-in saving/removal tested, writes restricted by admin-only policies.
 - [x] Admin role checkmarks approve accounts and activate existing or subsequently completed doctor profiles; Forhad visible in directory, two signed-in regression tests passed.
