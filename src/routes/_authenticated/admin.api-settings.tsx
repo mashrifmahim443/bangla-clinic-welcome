@@ -7,6 +7,7 @@ import { defaultSmsSettings, smsSettingsPayload, smsSettingsError } from "@/lib/
 import { useLang } from "@/lib/i18n";
 import { pageHead } from "@/lib/appointments";
 import { SmsHistory } from "@/components/admin/sms-history";
+import { SmsComposer } from "@/components/admin/sms-composer";
 
 export const Route = createFileRoute("/_authenticated/admin/api-settings")({
   head: () => pageHead("SMS API setup", "Prepare Automas SMS connection settings for DiabeCare doctor appointment notifications."),
@@ -82,6 +83,7 @@ function Page() {
       <Button type="submit" disabled={saving || saved.isLoading || Boolean(saved.error)} className="shadow-none">{saving ? t("সংরক্ষণ হচ্ছে…", "Saving…") : t("SMS সেটিংস সংরক্ষণ করুন", "Save SMS settings")}</Button>
       {notice && <p role={failed ? "alert" : "status"} className={failed ? "text-sm text-destructive" : "text-sm text-primary"}>{notice}</p>}
     </div>
+    <SmsComposer />
     <SmsHistory />
   </form>;
 }
