@@ -54,7 +54,7 @@ function ResetPage() {
       setMsg({ kind: "err", text: `${error.message} — ${weak ? t("আরেকটু কঠিন পাসওয়ার্ড দিন।", "Pick a harder password.") : t("পাসওয়ার্ড বদলানো গেল না।", "Couldn't change the password.")}` });
       return;
     }
-    setMsg({ kind: "ok", text: t("নতুন পাসওয়ার্ড সেট হয়েছে। ড্যাশবোর্ডে নিয়ে যাচ্ছি…", "New password set. Taking you to your dashboard…") });
+    setMsg({ kind: "ok", text: t("নতুন পাসওয়ার্ড রাখা হয়েছে। আপনার পাতায় নিয়ে যাচ্ছি…", "New password set. Taking you to your dashboard…") });
     setTimeout(() => navigate({ to: "/dashboard" }), 1200);
   }
 
@@ -69,8 +69,8 @@ function ResetPage() {
           {!ready ? (
             <p className="mt-3 text-muted-foreground">
               {checked
-                ? <>{t("লিংকটা কাজ করছে না বা মেয়াদ শেষ। আবার লিংক চেয়ে নিন।", "This link isn't valid or has expired. Please ask for a new one.")}{" "}
-                    <Link to="/forgot-password" className="text-primary underline underline-offset-4">{t("নতুন লিংক চান", "Get a new link")}</Link></>
+                ? <>{t("লিংকটা কাজ করছে না বা এর মেয়াদ শেষ হয়ে গেছে। নতুন লিংক নিন।", "This link isn't valid or has expired. Please ask for a new one.")}{" "}
+                    <Link to="/forgot-password" className="text-primary underline underline-offset-4">{t("নতুন লিংক নিন", "Get a new link")}</Link></>
                 : t("লিংক যাচাই হচ্ছে…", "Checking your link…")}
             </p>
           ) : (
@@ -85,7 +85,7 @@ function ResetPage() {
               </div>
               {msg && <p className={`rounded-md border px-3 py-2 text-sm ${msg.kind === "ok" ? "border-glucose-ok text-glucose-ok" : "border-destructive text-destructive"}`}>{msg.text}</p>}
               <button disabled={busy} className="w-full rounded-md bg-primary py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
-                {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : t("পাসওয়ার্ড সেট করুন", "Save password")}
+                {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : t("নতুন পাসওয়ার্ড রাখুন", "Save password")}
               </button>
             </form>
           )}

@@ -9,7 +9,7 @@ import { MIN_COMPLETION, ageFromBirthYear, diabetesTypes, profileCompletion, typ
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "My details — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My details — DiabeCare" }, { name: "description", content: "Manage your DiabeCare patient profile and health details." }, { property: "og:title", content: "My details — DiabeCare" }, { property: "og:description", content: "Manage your DiabeCare patient profile and health details." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 
@@ -65,7 +65,7 @@ function Page() {
     const nowY = new Date().getFullYear();
     if (v.diagnosed_year && (!dy || dy < 1930 || dy > nowY)) er["diagnosed_year"] = t(`সালটা ১৯৩০ থেকে ${formatNumber(nowY, "bn")}-এর মধ্যে লিখুন, যেমন ২০১৫।`, `Enter a year between 1930 and ${nowY}, e.g. 2015.`);
     if (v.weight_kg && (!wt || wt < 20 || wt > 250)) er["weight_kg"] = t("ওজন ২০ থেকে ২৫০ কেজির মধ্যে লিখুন।", "Enter a weight between 20 and 250 kg.");
-    if ((v.height_ft || v.height_in) && (!Number.isInteger(ft) || ft < 3 || ft > 7 || !Number.isInteger(inch) || inch < 0 || inch > 11)) er["height"] = t("উচ্চতা লিখুন ৩ থেকে ৭ ফুট, ইঞ্চি ০ থেকে ১১, যেমন ৫ ফুট ৪ ইঞ্চি।", "Enter 3–7 feet and 0–11 inches, e.g. 5 ft 4 in.");
+    if ((v.height_ft || v.height_in) && (!Number.isInteger(ft) || ft < 3 || ft > 7 || !Number.isInteger(inch) || inch < 0 || inch > 11)) er["height"] = t("উচ্চতা ৩ থেকে ৭ ফুট এবং ০ থেকে ১১ ইঞ্চির মধ্যে লিখুন। যেমন: ৫ ফুট ৪ ইঞ্চি।", "Enter 3–7 feet and 0–11 inches, e.g. 5 ft 4 in.");
     setErrs(er);
     if (Object.keys(er).length) return;
     const { error } = await supabase.from("profiles").update({
@@ -88,11 +88,11 @@ function Page() {
     <main className="mx-auto max-w-xl px-6 py-12">
       <Link to="/dashboard" className="text-primary underline underline-offset-4">{t("← ফিরে যান", "← Back")}</Link>
       <h1 className="mt-6 font-display text-3xl font-semibold">{t("আমার তথ্য", "My details")}</h1>
-      <p className="mt-1 text-muted-foreground">{t("ডাক্তার এই তথ্য দেখে আপনাকে ঠিক পরামর্শ দেবেন।", "Your doctor uses this to give you the right advice.")}</p>
+      <p className="mt-1 text-muted-foreground">{t("এই তথ্য দেখে ডাক্তার আপনাকে ভালোভাবে পরামর্শ দিতে পারবেন।", "Your doctor uses this to give you the right advice.")}</p>
       <div className="mt-6 rounded-[10px] border border-border bg-card p-4">
         <p className="font-medium">{t(`প্রোফাইল ${formatNumber(pct, "bn")}% পূরণ হয়েছে`, `Profile ${pct}% complete`)}</p>
         <div className="mt-2 h-2 w-full rounded-sm bg-secondary"><div className={`h-2 rounded-sm ${pct >= MIN_COMPLETION ? "bg-glucose-ok" : "bg-accent"}`} style={{ width: `${pct}%` }} /></div>
-        <p className="mt-2 text-muted-foreground">{pct >= MIN_COMPLETION ? t("এখন ডাক্তার দেখাতে পারবেন।", "You can now book a doctor.") : t(`ডাক্তার দেখাতে অন্তত ${formatNumber(MIN_COMPLETION, "bn")}% পূরণ করতে হবে।`, `Fill at least ${MIN_COMPLETION}% to book a doctor.`)}</p>
+        <p className="mt-2 text-muted-foreground">{pct >= MIN_COMPLETION ? t("এখন ডাক্তারের অ্যাপয়েন্টমেন্ট নিতে পারবেন।", "You can now book a doctor.") : t(`ডাক্তারের অ্যাপয়েন্টমেন্ট নিতে প্রোফাইল অন্তত ${formatNumber(MIN_COMPLETION, "bn")}% পূরণ করুন।`, `Fill at least ${MIN_COMPLETION}% to book a doctor.`)}</p>
       </div>
       <form onSubmit={save} className="mt-8 space-y-6 rounded-[10px] border border-border bg-card p-6">
         <div><label htmlFor="n" className="font-medium">{t("নাম", "Name")}</label><input id="n" className={field} value={v.full_name} onChange={(e) => set("full_name", e.target.value)} maxLength={100} /><Err k="full_name" /></div>
@@ -147,7 +147,7 @@ function Page() {
         <button className="w-full rounded-md bg-primary px-4 py-3 text-lg font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("তথ্য সংরক্ষণ করুন", "Save details")}</button>
         {saved && <p className="text-glucose-ok">{t("সংরক্ষণ হয়েছে।", "Saved.")}</p>}
       </form>
-      <p className="mt-6 text-muted-foreground">{t("লেখা ছোট লাগলে:", "If the text feels small:")} <TextSizeToggle className="text-primary underline underline-offset-4" /></p>
+      <p className="mt-6 text-muted-foreground">{t("লেখা ছোট মনে হলে:", "If the text feels small:")} <TextSizeToggle className="text-primary underline underline-offset-4" /></p>
       <DeletionRequest />
     </main>
   );

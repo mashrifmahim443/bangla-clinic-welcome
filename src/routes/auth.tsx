@@ -112,7 +112,7 @@ function AuthPage() {
       <SiteHeader />
       <main className="mx-auto max-w-md px-6 py-14">
         <div className="rounded-[10px] border border-border bg-card p-8">
-          <h1 className="font-display text-3xl font-semibold">{mode === "in" ? t("ঢুকুন", "Sign in") : t("নতুন অ্যাকাউন্ট খুলুন", "Open a new account")}</h1>
+          <h1 className="font-display text-3xl font-semibold">{mode === "in" ? t("লগইন করুন", "Sign in") : t("নতুন অ্যাকাউন্ট খুলুন", "Open a new account")}</h1>
           <p className="mt-1 text-muted-foreground">
             {mode === "in" ? t("আপনার ইমেইল আর পাসওয়ার্ড দিন।", "Enter your email and password.") : t("দুই মিনিট লাগবে।", "It takes two minutes.")}
           </p>
@@ -143,7 +143,7 @@ function AuthPage() {
               <p className={`rounded-md border px-3 py-2 text-sm ${msg.kind === "ok" ? "border-glucose-ok text-glucose-ok" : "border-destructive text-destructive"}`}>{msg.text}</p>
             )}
             <button disabled={busy} className="w-full rounded-md bg-primary py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
-              {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : mode === "in" ? t("ঢুকুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open account")}
+              {busy ? t("একটু অপেক্ষা করুন…", "Please wait…") : mode === "in" ? t("লগইন করুন", "Sign in") : t("অ্যাকাউন্ট খুলুন", "Open account")}
             </button>
           </form>
           {mode === "in" && (
@@ -154,7 +154,7 @@ function AuthPage() {
           <p className="mt-6 border-t border-border pt-5 text-sm text-muted-foreground">
             {mode === "in" ? t("নতুন এসেছেন?", "New here?") : t("আগে থেকে অ্যাকাউন্ট আছে?", "Already have an account?")}{" "}
             <button onClick={switchMode} className="font-medium text-primary underline underline-offset-4">
-              {mode === "in" ? t("অ্যাকাউন্ট খুলুন", "Open an account") : t("ঢুকুন", "Sign in")}
+              {mode === "in" ? t("অ্যাকাউন্ট খুলুন", "Open an account") : t("লগইন করুন", "Sign in")}
             </button>
           </p>
         </div>

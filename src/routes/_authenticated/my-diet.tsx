@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 
 export const Route = createFileRoute("/_authenticated/my-diet")({
-  head: () => ({ meta: [{ title: "My diet plan — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My diet plan — DiabeCare" }, { name: "description", content: "Read your personal weekly diet plan from your DiabeCare doctor." }, { property: "og:title", content: "My diet plan — DiabeCare" }, { property: "og:description", content: "Read your personal weekly diet plan from your DiabeCare doctor." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 
@@ -28,7 +28,7 @@ function Page() {
       <h1 className="font-display text-3xl font-semibold">{t("আমার খাদ্য তালিকা", "My diet plan")}</h1>
       {isLoading ? <p className="mt-4 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p> : !data ? (
         <div className="mt-5 max-w-2xl rounded-[10px] border border-border bg-card p-5">
-          <p>{t("আপনার জন্য এখনো খাদ্য তালিকা বানানো হয়নি। ডাক্তার দেখালে তিনি আপনার ওজন, সুগার আর ওষুধ দেখে তালিকা বানিয়ে দেবেন।", "No diet plan yet. After a consultation, your doctor will make one from your weight, sugar and medicines.")}</p>
+          <p>{t("আপনার জন্য এখনো খাবারের তালিকা তৈরি হয়নি। পরামর্শের সময় ডাক্তার আপনার ওজন, সুগার আর ওষুধের তথ্য দেখে তালিকা বানিয়ে দেবেন।", "No diet plan yet. After a consultation, your doctor will make one from your weight, sugar and medicines.")}</p>
           <div className="mt-4 flex flex-wrap gap-4">
             <Link to="/doctors" className="rounded-md bg-primary px-5 py-2.5 font-medium text-primary-foreground hover:bg-primary/90">{t("ডাক্তার দেখান", "See a doctor")}</Link>
             <Link to="/diet" className="py-2.5 text-primary underline underline-offset-4">{t("সাধারণ খাদ্য তালিকা দেখুন", "See the general diet chart")}</Link>
@@ -37,7 +37,7 @@ function Page() {
       ) : (
         <>
           <p className="mt-1 text-muted-foreground">
-            {data.doctors ? t(data.doctors.name_bn, data.doctors.name_en) : ""} · {t("হালনাগাদ", "updated")} {formatDhaka(new Date(data.updated_at), lang, { day: "numeric", month: "long", year: "numeric" })}
+            {data.doctors ? t(data.doctors.name_bn, data.doctors.name_en) : ""} · {t("সর্বশেষ বদলানো হয়েছে", "updated")} {formatDhaka(new Date(data.updated_at), lang, { day: "numeric", month: "long", year: "numeric" })}
             {data.calories ? <> · {t("দিনে প্রায়", "about")} {formatNumber(data.calories, lang)} {t("ক্যালরি", "kcal a day")}</> : null}
           </p>
           {data.notes && <blockquote className="mt-4 max-w-3xl border-l-4 border-accent pl-4 text-lg whitespace-pre-line">{data.notes}</blockquote>}
