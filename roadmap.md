@@ -1,6 +1,7 @@
 # Roadmap (from product brief)
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
-- [ ] Automas SMS secure connection and sending: needs confirmed read-only credential verification endpoint and provider credentials; private developer docs require login.
+- [x] Automas API key collected through the encrypted project secret form at the user's request; never entered into public CMS or browser storage.
+- [ ] Automas SMS connection verification and sending: needs confirmed credential verification endpoint and sending implementation; storing the API key alone does not enable SMS.
 - [x] Admin-controlled Verified and Special doctor badges on homepage, directory and profile; signed-in saving/removal tested, writes restricted by admin-only policies.
 - [x] Admin role checkmarks approve accounts and activate existing or subsequently completed doctor profiles; Forhad visible in directory, two signed-in regression tests passed.
 - [x] Per-medicine timing dropdown, custom instructions and individual comments in doctor and patient prescription views (4 tests passed; signed-in save check unavailable without a matching account)
