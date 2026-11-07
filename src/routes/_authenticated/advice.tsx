@@ -1,6 +1,7 @@
 import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { DoctorAdvice } from "@/components/consult/doctor-advice";
+import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { RoleShell } from "@/components/site/role-shell";
 
 export const Route = createFileRoute("/_authenticated/advice")({
@@ -8,6 +9,7 @@ export const Route = createFileRoute("/_authenticated/advice")({
   component: () => (
     <RoleShell role="patient">
       <DoctorAdvice />
+      <MedicineSchedules />
     </RoleShell>
   ),
 });

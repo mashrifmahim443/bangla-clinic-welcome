@@ -635,6 +635,118 @@ export type Database = {
         }
         Relationships: []
       }
+      medicine_reminder_dispatches: {
+        Row: {
+          claimed_at: string
+          dose_at: string
+          id: string
+          schedule_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          dose_at: string
+          id?: string
+          schedule_id: string
+        }
+        Update: {
+          claimed_at?: string
+          dose_at?: string
+          id?: string
+          schedule_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medicine_reminder_dispatches_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "medicine_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medicine_reminder_preferences: {
+        Row: {
+          patient_id: string
+          sms_enabled: boolean
+        }
+        Insert: {
+          patient_id: string
+          sms_enabled?: boolean
+        }
+        Update: {
+          patient_id?: string
+          sms_enabled?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medicine_reminder_preferences_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medicine_schedules: {
+        Row: {
+          active: boolean
+          comment: string
+          created_at: string
+          doctor_id: string
+          dose: string
+          dose_times: string[]
+          ends_on: string
+          id: string
+          medicine_name: string
+          patient_id: string
+          starts_on: string
+          timing: string
+        }
+        Insert: {
+          active?: boolean
+          comment?: string
+          created_at?: string
+          doctor_id: string
+          dose: string
+          dose_times: string[]
+          ends_on: string
+          id?: string
+          medicine_name: string
+          patient_id: string
+          starts_on: string
+          timing?: string
+        }
+        Update: {
+          active?: boolean
+          comment?: string
+          created_at?: string
+          doctor_id?: string
+          dose?: string
+          dose_times?: string[]
+          ends_on?: string
+          id?: string
+          medicine_name?: string
+          patient_id?: string
+          starts_on?: string
+          timing?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medicine_schedules_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medicine_schedules_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       old_prescriptions: {
         Row: {
           created_at: string
@@ -941,6 +1053,17 @@ export type Database = {
           first_name: string
           slot: Database["public"]["Enums"]["checkin_slot"]
           used: boolean
+        }[]
+      }
+      claim_due_medicine_reminders: {
+        Args: never
+        Returns: {
+          dose: string
+          dose_at: string
+          medicine_name: string
+          recipient: string
+          request_id: string
+          timing: string
         }[]
       }
       create_my_doctor_profile: {

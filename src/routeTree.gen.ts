@@ -48,6 +48,7 @@ import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
 import { Route as AuthenticatedPatientHistoryIdRouteImport } from './routes/_authenticated/patient-history.$id'
 import { Route as AuthenticatedPrescriptionIdRouteImport } from './routes/_authenticated/prescription.$id'
+import { Route as ApiPublicJobsMedicineRemindersRouteImport } from './routes/api/public/jobs/medicine-reminders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -257,6 +258,12 @@ const AuthenticatedPrescriptionIdRoute =
     path: '/prescription/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicJobsMedicineRemindersRoute =
+  ApiPublicJobsMedicineRemindersRouteImport.update({
+    id: '/api/public/jobs/medicine-reminders',
+    path: '/api/public/jobs/medicine-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -297,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -336,6 +344,7 @@ export interface FileRoutesByTo {
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -378,6 +387,7 @@ export interface FileRoutesById {
   '/_authenticated/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/_authenticated/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -420,6 +430,7 @@ export interface FileRouteTypes {
     | '/patient-history/$id'
     | '/prescription/$id'
     | '/admin/'
+    | '/api/public/jobs/medicine-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -459,6 +470,7 @@ export interface FileRouteTypes {
     | '/patient-history/$id'
     | '/prescription/$id'
     | '/admin'
+    | '/api/public/jobs/medicine-reminders'
   id:
     | '__root__'
     | '/'
@@ -500,6 +512,7 @@ export interface FileRouteTypes {
     | '/_authenticated/patient-history/$id'
     | '/_authenticated/prescription/$id'
     | '/_authenticated/admin/'
+    | '/api/public/jobs/medicine-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -516,6 +529,7 @@ export interface RootRouteChildren {
   DoctorsSlugRoute: typeof DoctorsSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   DoctorsIndexRoute: typeof DoctorsIndexRoute
+  ApiPublicJobsMedicineRemindersRoute: typeof ApiPublicJobsMedicineRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -793,6 +807,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPrescriptionIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/jobs/medicine-reminders': {
+      id: '/api/public/jobs/medicine-reminders'
+      path: '/api/public/jobs/medicine-reminders'
+      fullPath: '/api/public/jobs/medicine-reminders'
+      preLoaderRoute: typeof ApiPublicJobsMedicineRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -880,6 +901,7 @@ const rootRouteChildren: RootRouteChildren = {
   DoctorsSlugRoute: DoctorsSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   DoctorsIndexRoute: DoctorsIndexRoute,
+  ApiPublicJobsMedicineRemindersRoute: ApiPublicJobsMedicineRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

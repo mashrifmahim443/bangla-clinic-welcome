@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { pageHead } from "@/lib/appointments";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
+import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -67,6 +68,7 @@ function Page() {
           {appt.isDoctor && <Link to="/diet-plan/$id" params={{ id }} className="block rounded-md border border-primary px-4 py-2.5 text-center font-medium text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground">{t("খাদ্য তালিকা লিখুন", "Write diet plan")}</Link>}
           {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
           {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
+          <MedicineSchedules patientId={appt.patient_id} doctorId={appt.isDoctor ? d?.id : undefined} />
         </aside>
       </div>
     </div>
