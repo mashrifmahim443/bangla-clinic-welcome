@@ -29,3 +29,5 @@
 - [x] Patient history access and in-app status notifications
 - [x] Cancellation eligibility: 24-hour refunds; later requests reviewed by admin
 - [ ] Online payment collection and actual refunds (deferred by user; needs payment provider)
+
+- [x] Doctor portal redesign: pending section, patient messenger, notification bell, full-page prescription writer
