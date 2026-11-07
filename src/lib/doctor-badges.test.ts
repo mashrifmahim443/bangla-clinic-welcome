@@ -31,6 +31,7 @@ async def main():
    assert await check.is_checked(), 'Admin badge assignment failed'
    await page.goto('http://localhost:8080')
    card=page.locator('#doctors a').filter(has_text='ডা. ফোরহাদ হোসেন')
+   await card.wait_for()
    await card.get_by_text(label,exact=True).wait_for()
    await card.screenshot(path='/tmp/browser/doctor-badges/'+sys.argv[1]+'.png')
    await card.click()
