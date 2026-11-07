@@ -15,18 +15,19 @@ export async function sendDoctorBookingSms(appointmentId: string) {
     : { data: null, error: null };
   if (contact.error) throw new Error("Booking SMS contact read failed");
   const recipient = doctorSmsPhone(contact.data?.phone);
+  if (!recipient) return "missing_phone";
   const message = appointmentSmsMessage(appointment.slot_start);
   const { data: history, error: claimError } = await db.from("sms_history").insert({
-    request_id: appointmentId, sent_by: appointment.patient_id, recipient: recipient ?? "",
+    request_id: appointmentId, sent_by: appointment.patient_id, recipient,
     message_text: message, delivery_status: "pending",
   }).select("id").single();
   if (claimError?.code === "23505") return "already_submitted";
   if (claimError || !history) throw new Error("Booking SMS history claim failed");
   const key = process.env["AUTOMAS_SMS_API_KEY"];
   const { data: settings, error: settingsError } = await db.from("sms_settings").select("sender_id").eq("id", "automas").maybeSingle();
-  if (!recipient || !key || settingsError || !settings?.sender_id) {
+  if (!key || settingsError || !settings?.sender_id) {
     await db.from("sms_history").update({ delivery_status: "failed", delivery_updated_at: new Date().toISOString() }).eq("id", history.id);
-    return recipient ? "not_configured" : "missing_phone";
+    return "not_configured";
   }
   const { error: stampError } = await db.from("sms_history").update({ sent_at: new Date().toISOString() }).eq("id", history.id);
   if (stampError) throw new Error("Booking SMS timestamp failed");
