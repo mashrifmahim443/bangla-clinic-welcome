@@ -9,7 +9,7 @@ import { homeForRoles, useMyRoles, type AppRole } from "@/lib/roles";
 
 const navByRole: Record<AppRole, { to: "/admin" | "/doctor" | "/patient"; bn: string; en: string }> = {
   admin: { to: "/admin", bn: "অ্যাডমিন", en: "Admin" },
-  doctor: { to: "/doctor", bn: "ডাক্তার", en: "Doctor" },
+  doctor: { to: "/doctor", bn: "ডাক্তারের হোম", en: "Doctor home" },
   patient: { to: "/patient", bn: "রোগী", en: "Patient" },
 };
 
@@ -71,6 +71,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
             </Link>
           )}
+          {roles.includes("doctor") && <Link to="/doctor-messages" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("রোগীদের বার্তা", "Patient messages")}</Link>}
           {roles.includes("doctor") && <Link to="/doctor-schedule" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("সময়সূচি ও উপলব্ধতা", "Schedule & availability")}</Link>}
           {roles.includes("doctor") && (
             <Link to="/doctor-profile" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
@@ -93,7 +94,6 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
             </Link>
           )}
         </nav>
-        <Notifications />
         <div className="mt-8 rounded-[10px] border border-border bg-card text-sm">
           <p className="truncate border-b border-border px-3 py-2 text-muted-foreground">{data?.email}</p>
           <div className="grid grid-cols-2 gap-2 border-b border-border p-3">
@@ -111,7 +111,10 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
           </div>
         </div>
       </aside>
-      <main className="min-w-0 p-6 md:p-10">{children}</main>
+      <main className="min-w-0 p-6 md:p-10">
+        <div className="mb-4 flex justify-end"><Notifications isDoctor={roles.includes("doctor")} /></div>
+        {children}
+      </main>
     </div>
   );
 }
