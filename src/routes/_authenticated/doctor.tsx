@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppointmentList } from "@/components/consult/appointment-list";
 import { RoleShell } from "@/components/site/role-shell";
 import { useLang } from "@/lib/i18n";
+import { pageHead } from "@/lib/appointments";
 import { formatDhaka } from "@/lib/locale";
 
 export const Route = createFileRoute("/_authenticated/doctor")({
-  head: () => ({ meta: [{ title: "Doctor — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead("Doctor appointments", "Accept, reschedule and manage your patient consultations."),
   component: Page,
 });
 
