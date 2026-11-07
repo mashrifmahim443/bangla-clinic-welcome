@@ -148,6 +148,13 @@
       "when": 1794038169504,
       "tag": "0020_admin_role_profile_approval",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1794038851232,
+      "tag": "0021_doctor_verified_special_badges",
+      "breakpoints": true
     }
   ]
 }
