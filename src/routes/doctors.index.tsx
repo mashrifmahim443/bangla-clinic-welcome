@@ -102,9 +102,11 @@ function DoctorsPage() {
           <section className="min-w-0">
             <p className="mb-3 text-sm text-muted-foreground">{t(`${shown.length.toLocaleString("bn-BD")} জন ডাক্তার`, `${shown.length} doctors`)}</p>
             <ul className="border-t border-foreground/80 md:hidden">
+              {isLoading && <li className="py-6 text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</li>}
+              {!isLoading && shown.length === 0 && <li className="py-6 text-muted-foreground">{t("এই বাছাইয়ে কোনো ডাক্তার মিলল না।", "No doctors match these filters.")}</li>}
               {shown.map((d) => (
                 <li key={d.id} className="flex gap-3 border-b border-border py-3">
-                  <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 shrink-0 rounded-md border border-border object-cover" />
+                  {(d.photo_url || doctorPhotos[d.slug]) ? <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 shrink-0 rounded-md border border-border object-cover" /> : <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border border-border bg-secondary font-display text-xl" aria-hidden="true">{(lang === "bn" ? d.name_bn : d.name_en).slice(0, 1)}</span>}
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
                     <p className="text-sm text-muted-foreground">{d.degrees}</p><p className="text-sm">{d.experience_years ?? 0} {t("বছরের অভিজ্ঞতা", "years of experience")}</p><DoctorRating doctorId={d.id} />
@@ -139,7 +141,7 @@ function DoctorsPage() {
                   {shown.map((d) => (
                     <tr key={d.id} className="border-b border-border align-middle">
                       <td className="py-3 pr-3">
-                        <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 rounded-md border border-border object-cover" />
+                        {(d.photo_url || doctorPhotos[d.slug]) ? <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 rounded-md border border-border object-cover" /> : <span className="flex h-14 w-14 items-center justify-center rounded-md border border-border bg-secondary font-display text-xl" aria-hidden="true">{(lang === "bn" ? d.name_bn : d.name_en).slice(0, 1)}</span>}
                       </td>
                       <td className="py-3 pr-3">
                         <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>

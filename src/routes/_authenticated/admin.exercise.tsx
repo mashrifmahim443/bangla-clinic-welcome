@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -5,7 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { saveContent, useCms, fileToDataUrl } from "@/lib/cms";
 import { defaultExercises, type Ex } from "@/lib/exercise";
 
-export const Route = createFileRoute("/_authenticated/admin/exercise")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/exercise")({ head: () => pageHead('Admin exercises', 'Edit DiabeCare exercise routines and images.'), component: Page });
 
 const inp = "mt-0.5 w-full rounded-md border border-input bg-card px-2 py-1 text-sm";
 const btn = "rounded-md border border-border bg-card px-2 py-1 transition-colors duration-150 hover:bg-secondary";

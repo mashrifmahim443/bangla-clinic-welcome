@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { formatBDT } from "@/lib/locale";
 
 export const Route = createFileRoute("/_authenticated/doctor-profile")({
-  head: () => ({ meta: [{ title: "Doctor profile — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('My doctor profile', 'Manage your DiabeCare professional and private contact details.'),
   component: Page,
 });
 

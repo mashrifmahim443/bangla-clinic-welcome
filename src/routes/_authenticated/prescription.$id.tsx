@@ -1,10 +1,11 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka } from "@/lib/locale";
 import { useAppointment, usePrescription } from "@/lib/consult";
 
 export const Route = createFileRoute("/_authenticated/prescription/$id")({
-  head: () => ({ meta: [{ title: "Prescription — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Patient prescription', 'Read and print your private DiabeCare doctor prescription.'),
   component: Page,
 });
 

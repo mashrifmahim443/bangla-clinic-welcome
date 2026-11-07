@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -13,7 +14,7 @@ import { formatNumber } from "@/lib/locale";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated/diet-plan/$id")({
-  head: () => ({ meta: [{ title: "Write diet plan — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Write a patient diet plan', 'Prepare a private weekly DiabeCare diet plan for your patient.'),
   component: Page,
 });
 

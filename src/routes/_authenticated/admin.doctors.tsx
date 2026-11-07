@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,7 +10,7 @@ import { doctorPhotos, specialties, statusInfo } from "@/lib/doctors";
 import { fileToDataUrl } from "@/lib/cms";
 import type { Database } from "@/integrations/supabase/types";
 
-export const Route = createFileRoute("/_authenticated/admin/doctors")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/doctors")({ head: () => pageHead('Admin doctors', 'Manage DiabeCare doctor details and directory visibility.'), component: Page });
 
 type D = Database["public"]["Tables"]["doctors"]["Row"];
 type Form = { id?: string; slug: string; name_bn: string; name_en: string; degrees: string; specialty: string; bmdc_no: string; fee_bdt: string; gender: string; designation: string; workplace: string; experience_years: string; photo_url: string; status: D["status"]; active: boolean };

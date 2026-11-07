@@ -1,10 +1,11 @@
+import { pageHead } from "@/lib/appointments";
 import { createFileRoute } from "@tanstack/react-router";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { RoleShell } from "@/components/site/role-shell";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/old-prescriptions")({
-  head: () => ({ meta: [{ title: "Prescriptions & test reports — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Prescriptions and test reports', 'Manage your private DiabeCare prescriptions and medical reports.'),
   component: Page,
 });
 
