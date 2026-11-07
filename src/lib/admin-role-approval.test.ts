@@ -69,7 +69,7 @@ async def main():
 asyncio.run(main())
 `;
 
-describe("admin-assigned role approval (live signed-in regression)", () => {
+describe.skipIf(process.env.RUN_LIVE_ROLE_TESTS !== "1")("admin-assigned role approval (live signed-in regression)", () => {
   it("activates an existing doctor profile when admin checks doctor", () => {
     mkdirSync("/tmp/browser/role-approval", { recursive: true });
     writeFileSync("/tmp/browser/role-approval/check_role.py", script);
