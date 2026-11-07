@@ -6,3 +6,4 @@
 
 - Appointment booking and lifecycle changes use authenticated database RPCs; direct appointment writes are revoked so slot, ownership, transition and cancellation checks run atomically.
 - Doctor availability is persisted as Dhaka-local weekly schedules and leave dates; public slots are derived from them, and Realtime subscriptions are scoped and cleaned up.
+- Prescription medicine instructions stay in the existing items JSON; shared medicine helpers resolve bilingual timing presets while preserving legacy/custom text and per-medicine comments.
