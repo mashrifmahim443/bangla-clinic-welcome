@@ -64,7 +64,7 @@ export function OldPrescriptions({ patientId, kind = "prescription" }: { patient
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!file) return setErr(t("আগে একটা ছবি বা PDF বেছে নিন।", "Choose a photo or PDF first."));
-    if (!/^(image\/|application\/pdf)/.test(file.type)) return setErr(t("শুধু ছবি (JPG, PNG) বা PDF দেওয়া যাবে।", "Only photos (JPG, PNG) or PDF."));
+    if (!isAllowedDocumentFile(file)) return setErr(t("শুধু JPG, JPEG, PNG বা PDF ফাইল দেওয়া যাবে।", "Only JPG, JPEG, PNG or PDF files are allowed."));
     if (file.size > MAX_BYTES) return setErr(t("ফাইলটা ১০ MB-এর চেয়ে বড়। ছোট ছবি দিন।", "File is over 10 MB. Use a smaller one."));
     upload.mutate();
   }
