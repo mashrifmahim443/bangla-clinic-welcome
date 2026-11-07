@@ -134,6 +134,13 @@
       "when": 1794027863266,
       "tag": "0018_m3_booking_integrity",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794034081281,
+      "tag": "0019_create_my_doctor_profile",
+      "breakpoints": true
     }
   ]
 }

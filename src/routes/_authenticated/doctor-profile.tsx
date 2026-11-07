@@ -14,6 +14,91 @@ export const Route = createFileRoute("/_authenticated/doctor-profile")({
 
 const bnDigits = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d)));
 type F = { degrees: string; designation: string; workplace: string; experience: string; phone: string; whatsapp: string; email: string; address: string };
+type CF = F & { nameBn: string; nameEn: string; specialty: string; bmdc: string; fee: string; gender: string };
+
+function CreateProfile({ uid }: { uid: string }) {
+  const { t } = useLang();
+  const qc = useQueryClient();
+  const [v, setV] = useState<CF>({ nameBn: "", nameEn: "", specialty: "", bmdc: "", fee: "", gender: "male", degrees: "", designation: "", workplace: "", experience: "", phone: "", whatsapp: "", email: "", address: "" });
+  const [errs, setErrs] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    const er: Record<string, string> = {};
+    const phone = bnDigits(v.phone).replace(/\D/g, ""), wa = bnDigits(v.whatsapp).replace(/\D/g, "").slice(-11);
+    const exp = Number(bnDigits(v.experience)), fee = Number(bnDigits(v.fee));
+    if (v.nameBn.trim().length < 2) er["nameBn"] = t("বাংলায় নাম লিখুন।", "Enter your name in Bangla.");
+    if (v.nameEn.trim().length < 2) er["nameEn"] = t("ইংরেজিতে নাম লিখুন।", "Enter your name in English.");
+    if (!v.degrees.trim()) er["degrees"] = t("ডিগ্রি লিখুন।", "Enter degrees.");
+    if (!v.specialty.trim()) er["specialty"] = t("বিশেষত্ব লিখুন।", "Enter specialty.");
+    if (v.bmdc.trim().length < 3) er["bmdc"] = t("BMDC নম্বর লিখুন।", "Enter your BMDC number.");
+    if (!v.fee || !Number.isInteger(fee) || fee < 0 || fee > 100000) er["fee"] = t("ফি ০ থেকে ১,০০,০০০ টাকার মধ্যে লিখুন।", "Fee must be 0–100,000 BDT.");
+    if (!v.designation.trim()) er["designation"] = t("বর্তমান পদবি লিখুন।", "Enter designation.");
+    if (!v.workplace.trim()) er["workplace"] = t("কর্মস্থল লিখুন।", "Enter workplace.");
+    if (!v.experience || !Number.isInteger(exp) || exp < 0 || exp > 60) er["experience"] = t("অভিজ্ঞতা ০ থেকে ৬০ বছরের মধ্যে লিখুন।", "Experience must be 0–60 years.");
+    if (!/^01\d{9}$/.test(phone)) er["phone"] = t("ফোন নম্বর ১১ ডিজিটের হতে হবে।", "Phone must be 11 digits.");
+    if (!/^01\d{9}$/.test(wa)) er["whatsapp"] = t("হোয়াটসঅ্যাপ নম্বর ১১ ডিজিটের হতে হবে।", "WhatsApp must be 11 digits.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) er["email"] = t("ইমেইল ঠিক নেই।", "Email looks wrong.");
+    if (v.address.trim().length < 10) er["address"] = t("পুরো ঠিকানা লিখুন।", "Enter the full address.");
+    setErrs(er);
+    if (Object.keys(er).length) return;
+    setBusy(true);
+    const { error } = await supabase.rpc("create_my_doctor_profile", {
+      _name_bn: v.nameBn, _name_en: v.nameEn, _degrees: v.degrees, _specialty: v.specialty, _bmdc_no: v.bmdc,
+      _fee_bdt: fee, _gender: v.gender, _designation: v.designation, _workplace: v.workplace, _experience: exp,
+      _phone: phone, _whatsapp: wa, _email: v.email.trim(), _address: v.address.trim(),
+    });
+    setBusy(false);
+    if (error) return setErrs({ form: error.message });
+    qc.invalidateQueries({ queryKey: ["my-doctor-profile"] });
+  }
+
+  const field = "mt-1 w-full rounded-md border border-input bg-card px-3 py-2.5";
+  const inp = (k: keyof CF, label: string, ph = "") => (
+    <div><label htmlFor={`c-${k}`} className="font-medium">{label} <span className="text-accent">*</span></label>
+      <input id={`c-${k}`} className={field} value={v[k]} placeholder={ph} onChange={(e) => setV({ ...v, [k]: e.target.value })} />
+      {errs[k] && <p className="mt-1 text-sm text-destructive">{errs[k]}</p>}</div>
+  );
+  return (
+    <RoleShell role="doctor">
+      <h1 className="font-display text-3xl font-semibold">{t("ডাক্তার প্রোফাইল তৈরি করুন", "Create your doctor profile")}</h1>
+      <p className="mt-2 max-w-2xl rounded-md border border-accent px-3 py-2 text-accent">{t("আপনাকে ডাক্তার হিসেবে যুক্ত করা হয়েছে, কিন্তু প্রোফাইল এখনো তৈরি হয়নি। নিচের তথ্যগুলো পূরণ করুন—অ্যাডমিন যাচাই করে প্রোফাইলটি প্রকাশ করবেন।", "You've been added as a doctor, but your profile isn't set up yet. Fill in the details below—an admin will review and publish it.")}</p>
+      <form onSubmit={save} className="mt-5 max-w-4xl space-y-5 rounded-[10px] border border-border bg-card p-6">
+        <div className="grid gap-5 sm:grid-cols-2">
+          {inp("nameBn", t("নাম (বাংলা)", "Name (Bangla)"), "ডা. আব্দুল করিম")}
+          {inp("nameEn", t("নাম (ইংরেজি)", "Name (English)"), "Dr. Abdul Karim")}
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {inp("degrees", t("সব ডিগ্রি", "All degrees"), "MBBS, FCPS (Medicine)")}
+          {inp("specialty", t("বিশেষত্ব", "Specialty"), t("ডায়াবেটিস ও হরমোন", "Diabetes & Hormones"))}
+        </div>
+        <div className="grid gap-5 sm:grid-cols-3">
+          {inp("bmdc", t("BMDC নম্বর", "BMDC number"), "A-12345")}
+          {inp("fee", t("ফি (টাকা)", "Fee (BDT)"), "৫০০")}
+          <div><label htmlFor="c-gender" className="font-medium">{t("লিঙ্গ", "Gender")} <span className="text-accent">*</span></label>
+            <select id="c-gender" className={field} value={v.gender} onChange={(e) => setV({ ...v, gender: e.target.value })}>
+              <option value="male">{t("পুরুষ", "Male")}</option><option value="female">{t("নারী", "Female")}</option><option value="other">{t("অন্যান্য", "Other")}</option>
+            </select></div>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-3">
+          {inp("designation", t("বর্তমান পদবি", "Current designation"), t("সহকারী অধ্যাপক", "Assistant Professor"))}
+          {inp("workplace", t("কর্মস্থল", "Workplace"))}
+          {inp("experience", t("অভিজ্ঞতা (বছর)", "Experience (years)"), "১০")}
+        </div>
+        <h2 className="border-t border-border pt-5 text-lg font-semibold">{t("যোগাযোগ (রোগীরা দেখবেন না)", "Contact (not shown to patients)")}</h2>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {inp("phone", t("মোবাইল নম্বর", "Mobile number"), "০১৭১১০০০০০০")}
+          {inp("whatsapp", t("হোয়াটসঅ্যাপ নম্বর", "WhatsApp number"), "০১৭১১০০০০০০")}
+        </div>
+        {inp("email", t("ইমেইল", "Email"), "name@gmail.com")}
+        {inp("address", t("চেম্বার / ঠিকানা", "Chamber / address"))}
+        {errs["form"] && <p className="text-destructive">{errs["form"]}</p>}
+        <button disabled={busy} className="rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">{busy ? t("সংরক্ষণ হচ্ছে…", "Saving…") : t("প্রোফাইল তৈরি করুন", "Create profile")}</button>
+      </form>
+    </RoleShell>
+  );
+}
 
 function Page() {
   const { lang, t } = useLang();
@@ -34,7 +119,7 @@ function Page() {
   const [saved, setSaved] = useState(false);
   if (isLoading || !data) return <RoleShell role="doctor"><p className="text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p></RoleShell>;
   const { d, c } = data;
-  if (!d) return <RoleShell role="doctor"><p>{t("আপনার ডাক্তার প্রোফাইল পাওয়া যায়নি।", "Doctor profile not found.")}</p></RoleShell>;
+  if (!d) return <CreateProfile uid={data.uid} />;
   const v: F = {
     degrees: f.degrees ?? d.degrees, designation: f.designation ?? d.designation ?? "", workplace: f.workplace ?? d.workplace ?? "",
     experience: f.experience ?? (d.experience_years != null ? String(d.experience_years) : ""),

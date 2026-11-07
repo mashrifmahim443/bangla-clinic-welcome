@@ -865,6 +865,25 @@ export type Database = {
           used: boolean
         }[]
       }
+      create_my_doctor_profile: {
+        Args: {
+          _address: string
+          _bmdc_no: string
+          _degrees: string
+          _designation: string
+          _email: string
+          _experience: number
+          _fee_bdt: number
+          _gender: string
+          _name_bn: string
+          _name_en: string
+          _phone: string
+          _specialty: string
+          _whatsapp: string
+          _workplace: string
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
