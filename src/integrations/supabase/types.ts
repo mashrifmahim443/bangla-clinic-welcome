@@ -699,6 +699,7 @@ export type Database = {
           id: string
           medicine_name: string
           patient_id: string
+          reminder_minutes: number
           starts_on: string
           timing: string
         }
@@ -713,6 +714,7 @@ export type Database = {
           id?: string
           medicine_name: string
           patient_id: string
+          reminder_minutes?: number
           starts_on: string
           timing?: string
         }
@@ -727,6 +729,7 @@ export type Database = {
           id?: string
           medicine_name?: string
           patient_id?: string
+          reminder_minutes?: number
           starts_on?: string
           timing?: string
         }
