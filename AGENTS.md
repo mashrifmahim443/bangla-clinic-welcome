@@ -4,7 +4,7 @@
 - Roles live in public.user_roles (enum admin/doctor/patient, new users get patient via trigger); role pages wrap content in RoleShell — never store roles on profiles.
 - Database triggers couple authenticated admin role grants to account approval and doctor activation, including doctor profiles created after the grant; ordinary signup never inherits this approval.
 - Doctor badges are independent boolean fields protected by the existing admin-only doctor write policies; a shared bilingual badge display keeps public surfaces consistent.
-- SMS provider settings remain draft-only until sending is implemented; credentials use a verified connector or, when explicitly requested, the encrypted project secret store, never public CMS data or browser storage.
+- Non-secret SMS configuration uses the admin-only sms_settings table with explicit field allowlisting; credentials use a verified connector or the encrypted project secret store, never public CMS data or browser storage. Automatic sending remains disabled until implemented.
 - Admin-editable site copy/images live in public.site_content (key → jsonb), read via useCms() from src/lib/cms.tsx with code defaults as fallback; images stored as resized data URLs because public storage buckets are blocked in this workspace.
 
 - Appointment booking and lifecycle changes use authenticated database RPCs; direct appointment writes are revoked so slot, ownership, transition and cancellation checks run atomically.
