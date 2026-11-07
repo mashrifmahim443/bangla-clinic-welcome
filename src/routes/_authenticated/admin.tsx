@@ -15,6 +15,7 @@ const groups = [
     { to: "/admin", bn: "সারসংক্ষেপ", en: "Overview" },
     { to: "/admin/users", bn: "ব্যবহারকারী", en: "Users" },
     { to: "/admin/appointments", bn: "অ্যাপয়েন্টমেন্ট", en: "Appointments" },
+    { to: "/admin/api-settings", bn: "SMS API সেটআপ", en: "SMS API setup" },
   ] },
   { bn: "ডাক্তার", en: "Doctors", links: [
     { to: "/admin/doctors", bn: "ডাক্তারের তালিকা", en: "Doctor list" },
