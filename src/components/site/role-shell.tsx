@@ -44,7 +44,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
       <main className="min-h-screen px-6 py-16 md:px-16">
         <div className="max-w-xl rounded-[10px] border border-border bg-card p-6">
           <p className="font-display text-xl font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</p>
-          <h1 className="mt-4 font-display text-2xl font-semibold">{blocked ? t("আপনার অ্যাকাউন্ট বন্ধ আছে।", "Your account is blocked.") : t("আপনার অ্যাকাউন্ট অনুমোদনের অপেক্ষায়।", "Your account is waiting for approval.")}</h1>
+          <h1 className="mt-4 font-display text-2xl font-semibold">{blocked ? t("আপনার অ্যাকাউন্ট বন্ধ আছে।", "Your account is blocked.") : t("আপনার অ্যাকাউন্ট এখনো অনুমোদন পায়নি।", "Your account is waiting for approval.")}</h1>
           <p className="mt-2 text-muted-foreground">{blocked ? t("কোনো প্রশ্ন থাকলে আমাদের ফোন করুন।", "Please call us if you have any questions.") : t("আমরা সাধারণত এক কর্মদিবসের মধ্যে অনুমোদন দিই। অনুমোদন হলে এই পাতা নিজে খুলে যাবে।", "We usually approve within one working day. This page opens by itself once approved.")}</p>
           <div className="mt-5 flex flex-wrap gap-2">
             <button onClick={() => qc.invalidateQueries({ queryKey: ["my-account-status"] })} className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("আবার দেখুন", "Check again")}</button>
@@ -72,7 +72,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
           )}
           {roles.includes("doctor") && (
             <Link to="/doctor-profile" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
-              {t("ডাক্তার প্রোফাইল", "Doctor profile")}
+              {t("ডাক্তারের প্রোফাইল", "Doctor profile")}
             </Link>
           )}
           {roles.includes("doctor") && (

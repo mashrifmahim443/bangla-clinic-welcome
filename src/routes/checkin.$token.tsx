@@ -7,7 +7,7 @@ import { MAX_VALUE, MIN_VALUE, UNIT, glucoseState, parseGlucose } from "@/lib/gl
 
 export const Route = createFileRoute("/checkin/$token")({
   ssr: false,
-  head: () => ({ meta: [{ title: "সুগার লিখুন — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "সুগার লিখুন — DiabeCare" }, { name: "description", content: "Write your meal, medicine and glucose check-in for DiabeCare." }, { property: "og:title", content: "সুগার লিখুন — DiabeCare" }, { property: "og:description", content: "Write your meal, medicine and glucose check-in for DiabeCare." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 
@@ -41,7 +41,7 @@ function Page() {
     <main lang="bn" className="font-bn mx-auto flex min-h-screen max-w-md flex-col px-5 pt-16 pb-10 text-[22px]">{children}</main>
   );
   if (isLoading) return shell(<p>একটু অপেক্ষা করুন…</p>);
-  if (!data) return shell(<p>এই লিংকের সময় শেষ হয়ে গেছে। পরের মেসেজের লিংকে লিখুন।</p>);
+  if (!data) return shell(<p>এই লিংকের মেয়াদ শেষ হয়ে গেছে। পরের মেসেজে যে লিংক পাবেন, সেখানে লিখুন।</p>);
   if (data.used || step === 4) return shell(
     <div>
       <p className="font-display text-4xl font-semibold text-primary">ধন্যবাদ{data.first_name ? `, ${data.first_name}` : ""}!</p>
@@ -53,12 +53,12 @@ function Page() {
   async function submit() {
     const n = parseGlucose(value);
     if (Number.isNaN(n)) return setErr("শুধু সংখ্যা লিখুন, যেমন ৬.২।");
-    if (n < MIN_VALUE || n > MAX_VALUE) return setErr("সংখ্যাটা ১.১ থেকে ৩৩.৩-এর মধ্যে হতে হব।");
+    if (n < MIN_VALUE || n > MAX_VALUE) return setErr("সংখ্যাটা ১.১ থেকে ৩৩.৩-এর মধ্যে হতে হবে।");
     setErr(""); setSaving(true);
     const eaten = [...food, foodText.trim()].filter(Boolean).join(", ");
     const { data: ok, error } = await supabase.rpc("submit_checkin", { _token: token, _ate: !!ate, _took_medicine: !!meds, _value: n, ...(eaten ? { _food: eaten } : {}) });
     setSaving(false);
-    if (error || !ok) return setErr("লেখা যায়নি। আবার চাপুন।");
+    if (error || !ok) return setErr("লেখা পাঠানো যায়নি। আবার চেষ্টা করুন।");
     setStep(4);
   }
 
@@ -75,7 +75,7 @@ function Page() {
     <>
       {progress}
       <h1 className="font-display text-4xl leading-tight font-semibold">কী খেয়েছেন?</h1>
-      <p className="mt-2 text-lg text-muted-foreground">যা যা খেয়েছেন, চাপ দিন।</p>
+      <p className="mt-2 text-lg text-muted-foreground">যে খাবারগুলো খেয়েছেন, সেগুলো বেছে নিন।</p>
       <div className="mt-8 grid grid-cols-2 gap-3">
         {(foodChoices[data.slot as Slot] ?? []).map((f) => {
           const on = food.includes(f);

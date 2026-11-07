@@ -5,7 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { homeForRoles, useMyRoles } from "@/lib/roles";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Admin — DiabeCare" }, { name: "description", content: "Manage DiabeCare users, doctors and site content." }, { property: "og:title", content: "Admin — DiabeCare" }, { property: "og:description", content: "Manage DiabeCare users, doctors and site content." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: AdminLayout,
 });
 
@@ -19,7 +19,7 @@ const groups = [
     { to: "/admin/doctors", bn: "ডাক্তারের তালিকা", en: "Doctor list" },
     { to: "/admin/applications", bn: "ডাক্তারের আবেদন", en: "Doctor applications" },
   ] },
-  { bn: "সাইটের বিষয়বস্তু", en: "Site content", links: [
+  { bn: "সাইটের লেখা ও ছবি", en: "Site content", links: [
     { to: "/admin/content", bn: "সাইটের লেখা ও ছবি", en: "Site text & images" },
     { to: "/admin/articles", bn: "লেখা", en: "Articles" },
     { to: "/admin/diet", bn: "খাদ্য তালিকা", en: "Diet chart" },

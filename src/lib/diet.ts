@@ -1,7 +1,7 @@
 export type GI = "low" | "medium" | "high";
 export type Cell = { bn: string; en: string; portionBn: string; portionEn: string; gi: GI };
 export const days: [string, string][] = [["শনি","Sat"],["রবি","Sun"],["সোম","Mon"],["মঙ্গল","Tue"],["বুধ","Wed"],["বৃহঃ","Thu"],["শুক্র","Fri"]];
-export const meals: [string, string, string][] = [["সকালের নাশতা","Breakfast","৭–৮টা"],["মাঝ সকাল","Mid-morning","১০–১১টা"],["দুপুর","Lunch","১–২টা"],["বিকেল","Afternoon","৫টা"],["রাত","Dinner","৮–৯টা"]];
+export const meals: [string, string, string][] = [["সকালের নাশতা","Breakfast","৭–৮টা"],["সকালের মাঝামাঝি","Mid-morning","১০–১১টা"],["দুপুর","Lunch","১–২টা"],["বিকেল","Afternoon","৫টা"],["রাত","Dinner","৮–৯টা"]];
 const c = (bn: string, en: string, portionBn: string, portionEn: string, gi: GI): Cell => ({ bn, en, portionBn, portionEn, gi });
 const B = [
   c("আটার রুটি, সবজি ভাজি","Atta roti, mixed veg","২টা রুটি, ১ বাটি","2 roti, 1 bowl","low"),
@@ -32,7 +32,7 @@ const A = [
   c("ছোলা সেদ্ধ","Boiled chickpeas","আধা কাপ","½ cup","low"),
   c("চিনি ছাড়া চা, ২টা বিস্কুট","Tea, 2 marie biscuits","২টা","2","medium"),
   c("টক দই","Plain yoghurt","১ ছোট বাটি","1 small bowl","low"),
-  c("চিনি ছাড়া লেবু পানি","Lemon water (no sugar)","১ গ্লাস","1 glass","low"),
+  c("চিনি ছাড়া লেবুর পানি","Lemon water (no sugar)","১ গ্লাস","1 glass","low"),
   c("পেয়ারা","Guava","১টা","1","low"),
   c("চিনি ছাড়া চা, চানাচুর","Tea, chanachur","২ চামচ","2 spoons","medium"),
 ];

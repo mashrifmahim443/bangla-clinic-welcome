@@ -12,7 +12,7 @@ import { formatDhaka, formatNumber, dhakaNowParts, dhakaToISO } from "@/lib/loca
 import { MAX_VALUE, MIN_VALUE, RANGE_HIGH, RANGE_LOW, UNIT, countToday, formatGlucose, glucoseState, parseGlucose, statusSentence } from "@/lib/glucose";
 
 export const Route = createFileRoute("/_authenticated/patient")({
-  head: () => ({ meta: [{ title: "My sugar diary — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My sugar diary — DiabeCare" }, { name: "description", content: "Record glucose readings and review your DiabeCare sugar diary." }, { property: "og:title", content: "My sugar diary — DiabeCare" }, { property: "og:description", content: "Record glucose readings and review your DiabeCare sugar diary." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 
@@ -26,12 +26,12 @@ const typeLabels: Record<ReadingType, [string, string]> = {
 };
 type Slot = "breakfast_before" | "breakfast_after" | "lunch_before" | "lunch_after" | "dinner_before" | "dinner_after" | "random";
 const slotLabels: Record<Slot, [string, string]> = {
-  breakfast_before: ["সকালে খাবার আগে", "Before breakfast"],
-  breakfast_after: ["সকালে খাবার পরে", "After breakfast"],
-  lunch_before: ["দুপুরে খাবার আগে", "Before lunch"],
-  lunch_after: ["দুপুরে খাবার পরে", "After lunch"],
-  dinner_before: ["রাতে খাবার আগে", "Before dinner"],
-  dinner_after: ["রাতে খাবার পরে", "After dinner"],
+  breakfast_before: ["সকালের খাবারের আগে", "Before breakfast"],
+  breakfast_after: ["সকালের খাবারের পরে", "After breakfast"],
+  lunch_before: ["দুপুরের খাবারের আগে", "Before lunch"],
+  lunch_after: ["দুপুরের খাবারের পরে", "After lunch"],
+  dinner_before: ["রাতের খাবারের আগে", "Before dinner"],
+  dinner_after: ["রাতের খাবারের পরে", "After dinner"],
   random: ["যেকোনো সময়", "Random"],
 };
 const mealLabels: Record<string, [string, string]> = { breakfast: ["সকাল", "Breakfast"], lunch: ["দুপুর", "Lunch"], dinner: ["রাত", "Dinner"] };
@@ -90,7 +90,7 @@ function Page() {
           </div>
           <div className="mt-4 h-72">
             {chartData.length === 0 ? (
-              <p className="pt-6 text-muted-foreground">{isLoading ? t("লোড হচ্ছে…", "Loading…") : t("এখনো কোনো রিডিং নেই। ডান পাশে প্রথমটা লিখুন।", "No readings yet. Write your first one on the right.")}</p>
+              <p className="pt-6 text-muted-foreground">{isLoading ? t("লোড হচ্ছে…", "Loading…") : t("এখনো কোনো রিডিং নেই। আপনার প্রথম সুগারের রিডিং লিখুন।", "No readings yet. Write your first one on the right.")}</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 8, right: 12, bottom: 24, left: 8 }}>
@@ -183,7 +183,7 @@ function AddReading() {
       setValue(""); setNote(""); setDay(dhakaNowParts().date); setTime(dhakaNowParts().time);
       qc.invalidateQueries({ queryKey: ["readings"] });
     },
-    onError: () => setErr(t("সেভ হলো না। আবার চেষ্টা করুন।", "Couldn't save. Please try again.")),
+    onError: () => setErr(t("লেখা রাখা যায়নি। আবার চেষ্টা করুন।", "Couldn't save. Please try again.")),
   });
 
   function submit(e: React.FormEvent) {
@@ -231,7 +231,7 @@ function AddReading() {
         <input className={input} value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("যেমন: দুপুরে বিরিয়ানি", "e.g. biryani at lunch")} />
       </label>
       <button disabled={save.isPending} className="mt-4 w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
-        {save.isPending ? t("সেভ হচ্ছে…", "Saving…") : t("সুগার লিখুন", "Write it down")}
+        {save.isPending ? t("লেখা হচ্ছে…", "Saving…") : t("সুগার লিখুন", "Write it down")}
       </button>
     </form>
   );
