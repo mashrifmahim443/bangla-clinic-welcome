@@ -6,15 +6,14 @@ import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { Chat } from "@/components/consult/chat";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { UNIT, formatGlucose, glucoseState } from "@/lib/glucose";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
-import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
-import { medicineTimings, medicineTimingSelection, medicineTimingText, selectMedicineTiming } from "@/lib/medicine";
+import { useAppointment, usePrescription } from "@/lib/consult";
+import { medicineTimingText } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
   head: () => pageHead("Consultation room", "Private chat and consultation with your DiabeCare doctor."),
