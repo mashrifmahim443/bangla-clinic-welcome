@@ -804,11 +804,14 @@ export type Database = {
           delivery_updated_at: string | null
           http_status: number | null
           id: string
+          message_text: string | null
           provider: string
           provider_status: number | null
           recipient: string
           recorded_at: string
+          request_id: string | null
           sent_at: string | null
+          sent_by: string | null
         }
         Insert: {
           delivery_source?: string
@@ -816,11 +819,14 @@ export type Database = {
           delivery_updated_at?: string | null
           http_status?: number | null
           id?: string
+          message_text?: string | null
           provider?: string
           provider_status?: number | null
           recipient: string
           recorded_at?: string
+          request_id?: string | null
           sent_at?: string | null
+          sent_by?: string | null
         }
         Update: {
           delivery_source?: string
@@ -828,11 +834,14 @@ export type Database = {
           delivery_updated_at?: string | null
           http_status?: number | null
           id?: string
+          message_text?: string | null
           provider?: string
           provider_status?: number | null
           recipient?: string
           recorded_at?: string
+          request_id?: string | null
           sent_at?: string | null
+          sent_by?: string | null
         }
         Relationships: []
       }

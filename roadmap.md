@@ -2,6 +2,7 @@
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
 - [x] Automas API key collected through the encrypted project secret form at the user's request; never entered into public CMS or browser storage.
 - [x] Automas test SMS accepted by provider and receipt confirmed by user.
+- [ ] Admin custom SMS composer with authenticated sending and recorded results.
 - [x] Save SMS configuration button with admin-only storage; authenticated save/reload and mobile layout verified, credential allowlist tests passed.
 - [x] Admin SMS history with nullable send time, recipient, safe provider response and separately sourced delivery status; earlier test recorded, authenticated refresh/reload and mobile checks passed. Automatic capture awaits the sending integration.
 - [ ] Automas automatic SMS sending implementation; storing settings alone does not enable sending.
