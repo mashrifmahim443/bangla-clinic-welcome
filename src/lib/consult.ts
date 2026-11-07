@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export type RxItem = { name: string; dose: string; timing: string; duration: string };
+export type { RxItem } from "./medicine";
+import type { RxItem } from "./medicine";
 
 export function useAppointment(id: string) {
   return useQuery({
