@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Standalone doctor-written medicine schedules with daily dose times and patient SMS reminders before each dose.
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
 - [x] Automas API key collected through the encrypted project secret form at the user's request; never entered into public CMS or browser storage.
 - [x] Automas test SMS accepted by provider and receipt confirmed by user.
