@@ -8,9 +8,10 @@ import { useLang } from "@/lib/i18n";
 import { pageHead } from "@/lib/appointments";
 import { SmsHistory } from "@/components/admin/sms-history";
 import { SmsComposer } from "@/components/admin/sms-composer";
+import { IntegrationsSettings } from "@/components/admin/integrations-settings";
 
 export const Route = createFileRoute("/_authenticated/admin/api-settings")({
-  head: () => pageHead("SMS API setup", "Prepare Automas SMS connection settings for DiabeCare doctor appointment notifications."),
+  head: () => pageHead("API settings", "Manage SMS, video call, BMDC, payment and email service settings for DiabeCare."),
   component: Page,
 });
 
@@ -85,5 +86,6 @@ function Page() {
     </div>
     <SmsComposer />
     <SmsHistory />
+    <IntegrationsSettings />
   </form>;
 }

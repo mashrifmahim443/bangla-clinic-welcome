@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
+import { useCms } from "@/lib/cms";
+import { INTEGRATIONS_KEY, withDefaults } from "@/lib/integrations";
 import { formatBDT, formatDhaka } from "@/lib/locale";
 import { specialties } from "@/lib/doctors";
 import { SortableTable, type Col } from "@/components/admin/sortable-table";
@@ -61,7 +63,7 @@ function Page() {
       </div>
       <p className="mt-1 text-[13px] text-muted-foreground">
         {t("অনুমোদনের আগে BMDC-র ওয়েবসাইটে নম্বরটা মিলিয়ে নিন:", "Before approving, check the number on the BMDC website:")}{" "}
-        <a href="https://verify.bmdc.org.bd/" target="_blank" rel="noreferrer" className="text-primary underline">verify.bmdc.org.bd</a>
+        <a href={withDefaults(cms.json(INTEGRATIONS_KEY, null)).bmdc_verify} target="_blank" rel="noreferrer" className="text-primary underline">{withDefaults(cms.json(INTEGRATIONS_KEY, null)).bmdc_verify.replace(/^https:\/\//, "")}</a>
       </p>
       <div className="mt-3">{isLoading ? <p className="text-muted-foreground">{t("লোড হচ্ছে…", "Loading…")}</p> : <SortableTable rows={rows} cols={cols} rowKey={(a) => a.id} empty={t("কোনো অপেক্ষমাণ আবেদন নেই।", "No pending applications.")} />}</div>
     </div>
