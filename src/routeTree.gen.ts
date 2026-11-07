@@ -23,6 +23,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDietTemplatesRouteImport } from './routes/_authenticated/diet-templates'
 import { Route as AuthenticatedDoctorRouteImport } from './routes/_authenticated/doctor'
 import { Route as AuthenticatedDoctorApplyRouteImport } from './routes/_authenticated/doctor-apply'
+import { Route as AuthenticatedDoctorMessagesRouteImport } from './routes/_authenticated/doctor-messages'
 import { Route as AuthenticatedDoctorProfileRouteImport } from './routes/_authenticated/doctor-profile'
 import { Route as AuthenticatedDoctorScheduleRouteImport } from './routes/_authenticated/doctor-schedule'
 import { Route as AuthenticatedMyDietRouteImport } from './routes/_authenticated/my-diet'
@@ -48,6 +49,7 @@ import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
 import { Route as AuthenticatedPatientHistoryIdRouteImport } from './routes/_authenticated/patient-history.$id'
 import { Route as AuthenticatedPrescriptionIdRouteImport } from './routes/_authenticated/prescription.$id'
+import { Route as AuthenticatedRxWriteIdRouteImport } from './routes/_authenticated/rx-write.$id'
 import { Route as ApiPublicJobsMedicineRemindersRouteImport } from './routes/api/public/jobs/medicine-reminders'
 
 const IndexRoute = IndexRouteImport.update({
@@ -119,6 +121,12 @@ const AuthenticatedDoctorApplyRoute =
   AuthenticatedDoctorApplyRouteImport.update({
     id: '/doctor-apply',
     path: '/doctor-apply',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedDoctorMessagesRoute =
+  AuthenticatedDoctorMessagesRouteImport.update({
+    id: '/doctor-messages',
+    path: '/doctor-messages',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedDoctorProfileRoute =
@@ -258,6 +266,11 @@ const AuthenticatedPrescriptionIdRoute =
     path: '/prescription/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRxWriteIdRoute = AuthenticatedRxWriteIdRouteImport.update({
+  id: '/rx-write/$id',
+  path: '/rx-write/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiPublicJobsMedicineRemindersRoute =
   ApiPublicJobsMedicineRemindersRouteImport.update({
     id: '/api/public/jobs/medicine-reminders',
@@ -279,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/my-diet': typeof AuthenticatedMyDietRoute
@@ -303,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -319,6 +334,7 @@ export interface FileRoutesByTo {
   '/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/doctor': typeof AuthenticatedDoctorRoute
   '/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/my-diet': typeof AuthenticatedMyDietRoute
@@ -343,6 +359,7 @@ export interface FileRoutesByTo {
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -362,6 +379,7 @@ export interface FileRoutesById {
   '/_authenticated/diet-templates': typeof AuthenticatedDietTemplatesRoute
   '/_authenticated/doctor': typeof AuthenticatedDoctorRoute
   '/_authenticated/doctor-apply': typeof AuthenticatedDoctorApplyRoute
+  '/_authenticated/doctor-messages': typeof AuthenticatedDoctorMessagesRoute
   '/_authenticated/doctor-profile': typeof AuthenticatedDoctorProfileRoute
   '/_authenticated/doctor-schedule': typeof AuthenticatedDoctorScheduleRoute
   '/_authenticated/my-diet': typeof AuthenticatedMyDietRoute
@@ -386,6 +404,7 @@ export interface FileRoutesById {
   '/_authenticated/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/_authenticated/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/_authenticated/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/_authenticated/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -405,6 +424,7 @@ export interface FileRouteTypes {
     | '/diet-templates'
     | '/doctor'
     | '/doctor-apply'
+    | '/doctor-messages'
     | '/doctor-profile'
     | '/doctor-schedule'
     | '/my-diet'
@@ -429,6 +449,7 @@ export interface FileRouteTypes {
     | '/diet-plan/$id'
     | '/patient-history/$id'
     | '/prescription/$id'
+    | '/rx-write/$id'
     | '/admin/'
     | '/api/public/jobs/medicine-reminders'
   fileRoutesByTo: FileRoutesByTo
@@ -445,6 +466,7 @@ export interface FileRouteTypes {
     | '/diet-templates'
     | '/doctor'
     | '/doctor-apply'
+    | '/doctor-messages'
     | '/doctor-profile'
     | '/doctor-schedule'
     | '/my-diet'
@@ -469,6 +491,7 @@ export interface FileRouteTypes {
     | '/diet-plan/$id'
     | '/patient-history/$id'
     | '/prescription/$id'
+    | '/rx-write/$id'
     | '/admin'
     | '/api/public/jobs/medicine-reminders'
   id:
@@ -487,6 +510,7 @@ export interface FileRouteTypes {
     | '/_authenticated/diet-templates'
     | '/_authenticated/doctor'
     | '/_authenticated/doctor-apply'
+    | '/_authenticated/doctor-messages'
     | '/_authenticated/doctor-profile'
     | '/_authenticated/doctor-schedule'
     | '/_authenticated/my-diet'
@@ -511,6 +535,7 @@ export interface FileRouteTypes {
     | '/_authenticated/diet-plan/$id'
     | '/_authenticated/patient-history/$id'
     | '/_authenticated/prescription/$id'
+    | '/_authenticated/rx-write/$id'
     | '/_authenticated/admin/'
     | '/api/public/jobs/medicine-reminders'
   fileRoutesById: FileRoutesById
@@ -630,6 +655,13 @@ declare module '@tanstack/react-router' {
       path: '/doctor-apply'
       fullPath: '/doctor-apply'
       preLoaderRoute: typeof AuthenticatedDoctorApplyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/doctor-messages': {
+      id: '/_authenticated/doctor-messages'
+      path: '/doctor-messages'
+      fullPath: '/doctor-messages'
+      preLoaderRoute: typeof AuthenticatedDoctorMessagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/doctor-profile': {
@@ -807,6 +839,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPrescriptionIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rx-write/$id': {
+      id: '/_authenticated/rx-write/$id'
+      path: '/rx-write/$id'
+      fullPath: '/rx-write/$id'
+      preLoaderRoute: typeof AuthenticatedRxWriteIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/jobs/medicine-reminders': {
       id: '/api/public/jobs/medicine-reminders'
       path: '/api/public/jobs/medicine-reminders'
@@ -853,6 +892,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDietTemplatesRoute: typeof AuthenticatedDietTemplatesRoute
   AuthenticatedDoctorRoute: typeof AuthenticatedDoctorRoute
   AuthenticatedDoctorApplyRoute: typeof AuthenticatedDoctorApplyRoute
+  AuthenticatedDoctorMessagesRoute: typeof AuthenticatedDoctorMessagesRoute
   AuthenticatedDoctorProfileRoute: typeof AuthenticatedDoctorProfileRoute
   AuthenticatedDoctorScheduleRoute: typeof AuthenticatedDoctorScheduleRoute
   AuthenticatedMyDietRoute: typeof AuthenticatedMyDietRoute
@@ -863,6 +903,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDietPlanIdRoute: typeof AuthenticatedDietPlanIdRoute
   AuthenticatedPatientHistoryIdRoute: typeof AuthenticatedPatientHistoryIdRoute
   AuthenticatedPrescriptionIdRoute: typeof AuthenticatedPrescriptionIdRoute
+  AuthenticatedRxWriteIdRoute: typeof AuthenticatedRxWriteIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -872,6 +913,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDietTemplatesRoute: AuthenticatedDietTemplatesRoute,
   AuthenticatedDoctorRoute: AuthenticatedDoctorRoute,
   AuthenticatedDoctorApplyRoute: AuthenticatedDoctorApplyRoute,
+  AuthenticatedDoctorMessagesRoute: AuthenticatedDoctorMessagesRoute,
   AuthenticatedDoctorProfileRoute: AuthenticatedDoctorProfileRoute,
   AuthenticatedDoctorScheduleRoute: AuthenticatedDoctorScheduleRoute,
   AuthenticatedMyDietRoute: AuthenticatedMyDietRoute,
@@ -882,6 +924,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDietPlanIdRoute: AuthenticatedDietPlanIdRoute,
   AuthenticatedPatientHistoryIdRoute: AuthenticatedPatientHistoryIdRoute,
   AuthenticatedPrescriptionIdRoute: AuthenticatedPrescriptionIdRoute,
+  AuthenticatedRxWriteIdRoute: AuthenticatedRxWriteIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

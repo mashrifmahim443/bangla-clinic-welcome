@@ -4,16 +4,16 @@ import { useCms } from "@/lib/cms";
 import { INTEGRATIONS_KEY, joinUrl, withDefaults } from "@/lib/integrations";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { MedicineSchedules } from "@/components/consult/medicine-schedules";
+import { Chat } from "@/components/consult/chat";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 import { UNIT, formatGlucose, glucoseState } from "@/lib/glucose";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
-import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
-import { medicineTimings, medicineTimingSelection, medicineTimingText, selectMedicineTiming } from "@/lib/medicine";
+import { useAppointment, usePrescription } from "@/lib/consult";
+import { medicineTimingText } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
   head: () => pageHead("Consultation room", "Private chat and consultation with your DiabeCare doctor."),
@@ -70,67 +70,11 @@ function Page() {
           </div>
           {appt.isDoctor && <Link to="/diet-plan/$id" params={{ id }} className="block rounded-md border border-primary px-4 py-2.5 text-center font-medium text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground">{t("খাদ্য তালিকা লিখুন", "Write diet plan")}</Link>}
           {appt.isDoctor && <CompleteButton id={id} status={appt.status} />}
-          {appt.isDoctor && d && <RxForm appointmentId={id} patientId={appt.patient_id} doctorId={d.id} />}
+          {appt.isDoctor && <Link to="/rx-write/$id" params={{ id }} className="mt-4 block rounded-md bg-primary px-4 py-2.5 text-center font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">{t("প্রেসক্রিপশন লিখুন", "Write prescription")}</Link>}
           <MedicineSchedules patientId={appt.patient_id} doctorId={appt.isDoctor ? d?.id : undefined} />
         </aside>
       </div>
     </div>
-  );
-}
-
-function Chat({ appointmentId, me }: { appointmentId: string; me: string }) {
-  const { lang, t } = useLang();
-  const qc = useQueryClient();
-  const [text, setText] = useState("");
-  const endRef = useRef<HTMLDivElement>(null);
-  const key = ["messages", appointmentId];
-  const { data: msgs = [] } = useQuery({
-    queryKey: key,
-    queryFn: async () => {
-      const { data, error } = await supabase.from("consult_messages").select("id, sender_id, body, created_at").eq("appointment_id", appointmentId).order("created_at");
-      if (error) throw error;
-      return data;
-    },
-  });
-  useEffect(() => {
-    const ch = supabase.channel(`consult-${appointmentId}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "consult_messages", filter: `appointment_id=eq.${appointmentId}` }, () => qc.invalidateQueries({ queryKey: key }))
-      .subscribe();
-    return () => { supabase.removeChannel(ch); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appointmentId]);
-  useEffect(() => { endRef.current?.scrollIntoView(); }, [msgs.length]);
-
-  const send = useMutation({
-    mutationFn: async (body: string) => {
-      const { error } = await supabase.from("consult_messages").insert({ appointment_id: appointmentId, body });
-      if (error) throw error;
-    },
-    onSuccess: () => { setText(""); qc.invalidateQueries({ queryKey: key }); },
-  });
-
-  return (
-    <section className="flex min-h-0 flex-col">
-      <div className="flex-1 space-y-3 overflow-y-auto p-6">
-        {msgs.length === 0 && <p className="text-muted-foreground">{t("এখনো কোনো কথা হয়নি। প্রথম বার্তাটা লিখুন।", "No messages yet. Write the first one.")}</p>}
-        {msgs.map((m) => {
-          const mine = m.sender_id === me;
-          return (
-            <div key={m.id} className={`max-w-[75%] rounded-md border border-border px-4 py-2 ${mine ? "ml-auto bg-secondary" : "bg-card"}`}>
-              <p className="whitespace-pre-wrap">{m.body}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{formatDhaka(new Date(m.created_at), lang, { timeStyle: "short" })}</p>
-            </div>
-          );
-        })}
-        <div ref={endRef} />
-      </div>
-      <form onSubmit={(e) => { e.preventDefault(); const b = text.trim(); if (b) send.mutate(b); }} className="flex gap-2 border-t border-border bg-card p-4">
-        <input value={text} onChange={(e) => setText(e.target.value)} maxLength={2000} placeholder={t("বার্তা লিখুন…", "Write a message…")}
-          className="flex-1 rounded-md border border-input bg-background px-3 py-2" />
-        <button disabled={send.isPending} className="rounded-md bg-primary px-4 py-2 text-primary-foreground transition-colors duration-150 hover:bg-primary/90 disabled:opacity-60">{t("পাঠান", "Send")}</button>
-      </form>
-      {send.isError && <p className="px-4 pb-3 text-sm text-destructive">{t("বার্তাটা যায়নি, আবার চেষ্টা করুন।", "The message didn't send. Try again.")}</p>}
-    </section>
   );
 }
 
@@ -189,84 +133,6 @@ function Summary({ patientId, appointmentId, phone, dtype, birthYear }: { patien
           {rx.items.map((m, i) => <li key={i} className="py-1.5 break-words"><span className="font-medium">{m.name}</span> — {m.dose} · {medicineTimingText(m, t)}{m.comment && <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{t("মন্তব্য", "Comment")}: {m.comment}</p>}</li>)}
         </ul>
       )}
-    </div>
-  );
-}
-
-const blank: RxItem = { name: "", dose: "", timing: "", duration: "", comment: "" };
-
-function RxForm({ appointmentId, patientId, doctorId }: { appointmentId: string; patientId: string; doctorId: string }) {
-  const { t } = useLang();
-  const qc = useQueryClient();
-  const { data: rx, isLoading } = usePrescription(appointmentId);
-  const [items, setItems] = useState<RxItem[] | null>(null);
-  const [cc, setCc] = useState<string | null>(null);
-  const [advice, setAdvice] = useState<string | null>(null);
-  const [follow, setFollow] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState("");
-  const [saved, setSaved] = useState(false);
-  if (isLoading) return null;
-  const its = items ?? (rx?.items.length ? rx.items : [blank]);
-  const save = async () => {
-    setSaving(true);
-    setSaved(false);
-    setSaveError("");
-    const payload = {
-      appointment_id: appointmentId, patient_id: patientId, doctor_id: doctorId,
-      chief_complaints: cc ?? rx?.chief_complaints ?? null,
-      items: its.filter((i) => i.name.trim()),
-      advice: advice ?? rx?.advice ?? null,
-      follow_up_date: (follow ?? rx?.follow_up_date) || null,
-      updated_at: new Date().toISOString(),
-    };
-    try {
-      const { error } = await supabase.from("prescriptions").upsert(payload, { onConflict: "appointment_id" });
-      if (error) throw error;
-      await qc.invalidateQueries({ queryKey: ["prescription", appointmentId] });
-      await qc.invalidateQueries({ queryKey: ["my-advice"] });
-      setSaved(true);
-    } catch (error) {
-      setSaveError(error instanceof Error ? error.message : String((error as { message?: string })?.message ?? error));
-    } finally {
-      setSaving(false);
-    }
-  };
-  const inp = "w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm";
-  const upd = (i: number, k: keyof RxItem, v: string) => { setSaved(false); setItems(its.map((x, j) => (j === i ? { ...x, [k]: v } : x))); };
-  return (
-    <div className="mt-8 border-t border-border pt-6">
-      <h2 className="font-display text-lg font-semibold">{t("প্রেসক্রিপশন লিখুন", "Write prescription")}</h2>
-      <label className="mt-3 block text-sm">{t("সমস্যা", "Complaints")}
-        <textarea rows={2} className={inp} value={cc ?? rx?.chief_complaints ?? ""} onChange={(e) => setCc(e.target.value)} /></label>
-      <div className="mt-3 space-y-3">
-        {its.map((m, i) => (
-          <div key={i} className="grid min-w-0 grid-cols-2 gap-2 border-b border-border pb-3">
-            <label className="col-span-2 min-w-0 text-sm">{t("ওষুধের নাম", "Medicine name")}
-              <input className={inp} placeholder={t("যেমন Tab. Metformin 500mg", "e.g. Tab. Metformin 500mg")} value={m.name} onChange={(e) => upd(i, "name", e.target.value)} />
-            </label>
-            <label className="min-w-0 text-sm">{t("মাত্রা", "Dose")}<input className={inp} placeholder={t("১+০+১", "1+0+1")} value={m.dose} onChange={(e) => upd(i, "dose", e.target.value)} /></label>
-            <label className="min-w-0 text-sm">{t("কখন খাবেন", "When to take")}
-              <select className={inp} value={medicineTimingSelection(m)} onChange={(e) => { setSaved(false); setItems(its.map((x, j) => j === i ? selectMedicineTiming(x, e.target.value) : x)); }}>
-                <option value="">{t("সময় বাছুন", "Select timing")}</option>
-                {medicineTimings.map((option) => <option key={option.value} value={option.value}>{t(option.bn, option.en)}</option>)}
-                <option value="custom">{t("নিজের মতো লিখুন", "Custom")}</option>
-              </select>
-            </label>
-            {medicineTimingSelection(m) === "custom" && <label className="col-span-2 text-sm">{t("খাওয়ার সময় লিখুন", "Custom timing")}<input className={inp} value={m.timing} onChange={(e) => upd(i, "timing", e.target.value)} placeholder={t("যেমন খাবারের ২০ মিনিট আগে", "e.g. 20 minutes before a meal")} /></label>}
-            <label className="col-span-2 text-sm">{t("কতদিন খাবেন", "Duration")}<input className={inp} placeholder={t("যেমন ১ মাস", "e.g. 1 month")} value={m.duration} onChange={(e) => upd(i, "duration", e.target.value)} /></label>
-            <label className="col-span-2 text-sm">{t("এই ওষুধের মন্তব্য (চাইলে)", "Comment for this medicine (optional)")}<textarea rows={2} className={inp} value={m.comment ?? ""} onChange={(e) => upd(i, "comment", e.target.value)} /></label>
-          </div>
-        ))}
-      </div>
-      <Button variant="link" onClick={() => { setSaved(false); setItems([...its, { ...blank }]); }} className="mt-2 px-0">{t("+ আরেকটা ওষুধ যোগ করুন", "+ Add another medicine")}</Button>
-      <label className="mt-3 block text-sm">{t("পরামর্শ", "Advice")}
-        <textarea rows={3} className={inp} value={advice ?? rx?.advice ?? ""} onChange={(e) => setAdvice(e.target.value)} /></label>
-      <label className="mt-3 block text-sm">{t("আবার দেখাবেন", "Follow-up date")}
-        <input type="date" className={inp} value={follow ?? rx?.follow_up_date ?? ""} onChange={(e) => setFollow(e.target.value)} /></label>
-      <Button onClick={save} disabled={saving} className="mt-4 h-auto w-full whitespace-normal shadow-none">{saving ? t("সংরক্ষণ হচ্ছে…", "Saving…") : t("প্রেসক্রিপশন সংরক্ষণ করুন", "Save prescription")}</Button>
-      {saveError && <p role="alert" className="mt-2 break-words text-sm text-destructive">{t("সংরক্ষণ হয়নি", "Couldn't save")}: {saveError}</p>}
-      {saved && <p role="status" className="mt-2 text-sm text-glucose-ok">{t("প্রেসক্রিপশন সংরক্ষণ হয়েছে।", "Prescription saved.")}</p>}
     </div>
   );
 }
