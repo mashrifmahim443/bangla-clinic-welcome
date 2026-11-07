@@ -2,6 +2,8 @@ import { MIN_COMPLETION, profileCompletion } from "@/lib/profile";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { bookAppointment } from "@/lib/booking.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -18,6 +20,7 @@ export const Route = createFileRoute("/doctors/$slug")({
 });
 function BookingPage() {
   const { slug } = Route.useParams(); const { lang, t } = useLang(); const qc = useQueryClient();
+  const submitBooking = useServerFn(bookAppointment);
   useAppointmentRealtime(); useDoctorRealtime();
   const [date, setDate] = useState(dhakaNowParts().date); const [picked, setPicked] = useState(""); const [type, setType] = useState("video"); const [reason, setReason] = useState(""); const [reports, setReports] = useState<string[]>([]); const [file, setFile] = useState<File | null>(null); const [msg, setMsg] = useState("");
   const { data: doctor, isLoading } = useQuery({ queryKey: ["doctor", slug], queryFn: async () => { const { data, error } = await supabase.from("doctors").select("*").eq("slug", slug).eq("active", true).maybeSingle(); if (error) throw error; return data; } });
@@ -33,7 +36,7 @@ function BookingPage() {
     const { data, error } = await supabase.from("old_prescriptions").insert({ kind: "test_report", file_path: path, file_name: file.name }).select("id").single();
     if (error) { await supabase.storage.from("old-prescriptions").remove([path]); throw error; } return data.id;
   }, onSuccess: id => { setReports(r => [...r, id]); setFile(null); setMsg(t("রিপোর্ট যোগ হয়েছে।", "Report attached.")); void qc.invalidateQueries({ queryKey: ["booking-reports"] }); }, onError: e => setMsg(e.message) });
-  const book = useMutation({ mutationFn: async () => { if (!doctor || !picked || !user) throw new Error(t("একটি খালি সময় বেছে নিন।", "Choose an available time.")); const { error } = await supabase.rpc("book_appointment", { _doctor: doctor.id, _slot: picked, _type: type, _reason: reason, _reports: reports }); if (error) throw error; }, onSuccess: () => { setPicked(""); setMsg(t("অনুরোধ পাঠানো হয়েছে। ডাক্তার গ্রহণ করলে নোটিফিকেশন পাবেন।", "Request sent. You will be notified when the doctor accepts.")); void qc.invalidateQueries({ queryKey: ["available-slots"] }); void qc.invalidateQueries({ queryKey: ["appointments"] }); }, onError: e => setMsg(e.message) });
+  const book = useMutation({ mutationFn: async () => { if (!doctor || !picked || !user) throw new Error(t("একটি খালি সময় বেছে নিন।", "Choose an available time.")); return submitBooking({ data: { doctorId: doctor.id, slot: picked, type: type as "video" | "audio" | "chat", reason, reports } }); }, onSuccess: result => { setPicked(""); setMsg(t("অনুরোধ পাঠানো হয়েছে। ডাক্তার গ্রহণ করলে নোটিফিকেশন পাবেন।", "Request sent. You will be notified when the doctor accepts.") + " " + (result.smsStatus === "accepted" ? t("ডাক্তারের জন্য SMS পাঠানোর অনুরোধও গ্রহণ হয়েছে।", "The doctor's SMS notification was accepted by the SMS service.") : t("বুকিং ঠিক আছে, তবে ডাক্তারের SMS পাঠানো নিশ্চিত হয়নি।", "Your booking is saved, but the doctor's SMS could not be confirmed."))); void qc.invalidateQueries({ queryKey: ["available-slots"] }); void qc.invalidateQueries({ queryKey: ["appointments"] }); }, onError: e => setMsg(e.message) });
   return <div className="min-h-screen"><SiteHeader /><main className="mx-auto max-w-4xl px-5 py-10">
     <Link to="/doctors" className="text-primary underline">{t("সব ডাক্তার", "All doctors")}</Link>
     {isLoading ? <p>{t("লোড হচ্ছে…", "Loading…")}</p> : !doctor ? <p>{t("ডাক্তারকে পাওয়া গেল না।", "Doctor not found.")}</p> : <>

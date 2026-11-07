@@ -10,6 +10,7 @@
 - Admin-editable site copy/images live in public.site_content (key → jsonb), read via useCms() from src/lib/cms.tsx with code defaults as fallback; images stored as resized data URLs because public storage buckets are blocked in this workspace.
 
 - Appointment booking and lifecycle changes use authenticated database RPCs; direct appointment writes are revoked so slot, ownership, transition and cancellation checks run atomically.
+- App bookings call an authenticated server function around the booking RPC, then notify the doctor's private profile phone through Automas; the appointment ID uniquely claims SMS history before sending, and SMS failure never invalidates a saved booking.
 - Doctor availability is persisted as Dhaka-local weekly schedules and leave dates; public slots are derived from them, and Realtime subscriptions are scoped and cleaned up.
 - Prescription medicine instructions stay in the existing items JSON; shared medicine helpers resolve bilingual timing presets while preserving legacy/custom text and per-medicine comments.
 - Standalone medicine schedules are doctor-authored and patient-readable; patient-owned SMS consent and service-only atomic dose claims prevent unauthorized reminders and duplicate provider submissions. Managed authenticated HTTP scheduling checks Dhaka dose windows using each schedule’s persisted lead time; unknown provider results are not automatically retried.
