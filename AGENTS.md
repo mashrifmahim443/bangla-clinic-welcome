@@ -6,6 +6,7 @@
 - Doctor badges are independent boolean fields protected by the existing admin-only doctor write policies; a shared bilingual badge display keeps public surfaces consistent.
 - Non-secret SMS configuration uses the admin-only sms_settings table with explicit field allowlisting; credentials use a verified connector or the encrypted project secret store, never public CMS data or browser storage. Automatic sending remains disabled until implemented.
 - SMS history is admin-read-only and trusted-service-written; store only safe response codes, distinguish provider acceptance from delivery and recipient confirmation, and never invent missing send timestamps.
+- Custom SMS uses an authenticated admin server function, fixed provider HTTPS endpoint, saved sender and server-only key; claim a unique request ID before calling the provider to prevent duplicate submissions.
 - Admin-editable site copy/images live in public.site_content (key → jsonb), read via useCms() from src/lib/cms.tsx with code defaults as fallback; images stored as resized data URLs because public storage buckets are blocked in this workspace.
 
 - Appointment booking and lifecycle changes use authenticated database RPCs; direct appointment writes are revoked so slot, ownership, transition and cancellation checks run atomically.
