@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { pageHead } from "@/lib/appointments";
 import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +12,7 @@ import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profil
 import { useAppointment, usePrescription, type RxItem } from "@/lib/consult";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
-  head: () => ({ meta: [{ title: "Consultation room — DiabeCare" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead("Consultation room", "Private chat and consultation with your DiabeCare doctor."),
   component: Page,
 });
 
@@ -36,10 +38,10 @@ function Page() {
           <p className="text-sm text-muted-foreground">{formatDhaka(new Date(appt.slot_start), lang, { dateStyle: "full", timeStyle: "short" })}</p>
         </div>
         <div className="flex items-center gap-4 text-sm">
-          <a href={`https://meet.jit.si/DiabeCare-${id}`} target="_blank" rel="noreferrer"
+          {appt.consultation_type !== "chat" && <a href={`https://meet.jit.si/DiabeCare-${id}`} target="_blank" rel="noreferrer"
             className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors duration-150 hover:bg-primary/90">
-            {t("ভিডিও কলে যান", "Join video call")}
-          </a>
+            {appt.consultation_type === "audio" ? t("অডিও কলে যান", "Join audio call") : t("ভিডিও কলে যান", "Join video call")}
+          </a>}
           <Link to="/prescription/$id" params={{ id }} className="text-primary underline underline-offset-4">{t("প্রেসক্রিপশন দেখুন", "View prescription")}</Link>
           <button onClick={() => setLang(lang === "bn" ? "en" : "bn")} className="text-primary underline underline-offset-4">{lang === "bn" ? "English" : "বাংলা"}</button>
         </div>
@@ -131,13 +133,13 @@ function CompleteButton({ id, status }: { id: string; status: string }) {
   const qc = useQueryClient();
   if (status === "completed") return <p className="mt-4 text-sm text-glucose-ok">{t("এই পরামর্শ শেষ হয়েছে।", "This consultation is complete.")}</p>;
   return (
-    <button onClick={async () => {
-      const { error } = await supabase.from("appointments").update({ status: "completed" }).eq("id", id);
-      if (error) return alert(t("সম্পন্ন করা যায়নি।", "Couldn't mark as complete."));
+    <Button disabled={status !== "confirmed"} onClick={async () => {
+      const { error } = await supabase.rpc("change_appointment", { _id: id, _status: "completed" });
+      if (error) return alert(error.message);
       qc.invalidateQueries({ queryKey: ["appointment", id] });
     }} className="mt-4 w-full rounded-md border border-primary px-4 py-2 text-primary transition-colors duration-150 hover:bg-secondary">
       {t("পরামর্শ শেষ হয়েছে", "Mark consultation complete")}
-    </button>
+    </Button>
   );
 }
 

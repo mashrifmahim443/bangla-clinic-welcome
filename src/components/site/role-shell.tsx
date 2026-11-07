@@ -1,3 +1,4 @@
+import { Notifications } from "@/components/consult/notifications";
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -70,6 +71,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
             </Link>
           )}
+          {roles.includes("doctor") && <Link to="/doctor-schedule" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("সময়সূচি ও উপলব্ধতা", "Schedule & availability")}</Link>}
           {roles.includes("doctor") && (
             <Link to="/doctor-profile" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>
               {t("ডাক্তারের প্রোফাইল", "Doctor profile")}
@@ -91,6 +93,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
             </Link>
           )}
         </nav>
+        <Notifications />
         <div className="mt-8 rounded-[10px] border border-border bg-card text-sm">
           <p className="truncate border-b border-border px-3 py-2 text-muted-foreground">{data?.email}</p>
           <div className="grid grid-cols-2 gap-2 border-b border-border p-3">
@@ -108,7 +111,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
           </div>
         </div>
       </aside>
-      <main className="p-6 md:p-10">{children}</main>
+      <main className="min-w-0 p-6 md:p-10">{children}</main>
     </div>
   );
 }

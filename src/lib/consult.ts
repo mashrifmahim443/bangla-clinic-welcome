@@ -10,7 +10,7 @@ export function useAppointment(id: string) {
       const { data: u } = await supabase.auth.getUser();
       const { data, error } = await supabase
         .from("appointments")
-        .select("id, slot_start, status, patient_id, doctor_id, doctors(id, name_bn, name_en, degrees, specialty, bmdc_no, user_id)")
+        .select("id, slot_start, status, consultation_type, reason, patient_id, doctor_id, doctors(id, name_bn, name_en, degrees, specialty, bmdc_no, user_id)")
         .eq("id", id).maybeSingle();
       if (error) throw error;
       if (!data) return null;

@@ -25,6 +25,8 @@ export const adminDeleteUser = createServerFn({ method: "POST" })
     await db.from("consult_messages").delete().eq("sender_id", uid);
     await db.from("prescriptions").delete().eq("patient_id", uid);
     await db.from("diet_plans").delete().eq("patient_id", uid);
+    await db.from("doctor_reviews").delete().eq("patient_id", uid);
+    await db.from("appointment_notifications").delete().eq("user_id", uid);
     await db.from("appointments").delete().eq("patient_id", uid);
     await db.from("glucose_readings").delete().eq("user_id", uid);
     await db.from("checkin_links").delete().eq("user_id", uid);

@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { DoctorRating } from "@/components/consult/doctor-reviews";
+import { useDoctorRealtime } from "@/lib/appointments";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -44,6 +47,8 @@ function DoctorsPage() {
   const { lang, t } = useLang();
   const { c } = useCms();
   const { data: doctors = [], isLoading } = useDoctors();
+  useDoctorRealtime();
+  const [search, setSearch] = useState("");
   const [spec, setSpec] = useState<string[]>([]);
   const [status, setStatus] = useState<string[]>([]);
   const [fee, setFee] = useState<string[]>([]);
@@ -54,6 +59,7 @@ function DoctorsPage() {
 
   const shown = doctors.filter(
     (d) =>
+      (!search.trim() || `${d.name_bn} ${d.name_en}`.toLowerCase().includes(search.trim().toLowerCase())) &&
       (!spec.length || spec.includes(d.specialty)) &&
       (!status.length || status.includes(d.status)) &&
       (!gender.length || gender.includes(d.gender)) &&
@@ -79,6 +85,7 @@ function DoctorsPage() {
         <h1 className="font-display text-4xl font-semibold">{c("pages.doctors_title")}</h1>
         <p className="mt-1 text-muted-foreground">{c("pages.doctors_sub")}</p>
 
+        <label className="mt-5 block max-w-lg font-medium">{t("নাম দিয়ে খুঁজুন", "Search by name")}<input value={search} onChange={e => setSearch(e.target.value)} type="search" className="mt-1 w-full rounded-md border border-input bg-card px-3 py-2.5" /></label>
         <div className="mt-8 grid gap-10 md:grid-cols-[13rem_1fr]">
           <aside className="min-w-0" aria-label={t("ছাঁকনি", "Filters")}>
             {group(t("বিশেষত্ব", "Specialty"), Object.entries(specialties).map(([v, l]) => ({ v, label: t(...l) })), spec, setSpec)}
@@ -86,9 +93,9 @@ function DoctorsPage() {
             {group(t("ফি", "Fee"), feeBands.map((b) => ({ v: b.key, label: t(b.bn, b.en) })), fee, setFee)}
             {group(t("ডাক্তার", "Doctor"), [{ v: "female", label: t("মহিলা", "Female") }, { v: "male", label: t("পুরুষ", "Male") }], gender, setGender)}
             {(spec.length || status.length || fee.length || gender.length) > 0 && (
-              <button onClick={() => { setSpec([]); setStatus([]); setFee([]); setGender([]); }} className="mt-4 text-sm text-primary underline underline-offset-4">
+              <Button variant="link" onClick={() => { setSpec([]); setStatus([]); setFee([]); setGender([]); }} className="mt-4 text-sm text-primary underline underline-offset-4">
                 {t("সব মুছুন", "Clear all")}
-              </button>
+              </Button>
             )}
           </aside>
 
@@ -100,7 +107,7 @@ function DoctorsPage() {
                   <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 shrink-0 rounded-md border border-border object-cover" />
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
-                    <p className="text-sm text-muted-foreground">{d.degrees}</p>
+                    <p className="text-sm text-muted-foreground">{d.degrees}</p><p className="text-sm">{d.experience_years ?? 0} {t("বছরের অভিজ্ঞতা", "years of experience")}</p><DoctorRating doctorId={d.id} />
                     <p className="text-sm">{t(...(specialties[d.specialty] ?? [d.specialty, d.specialty]))} · BMDC {d.bmdc_no}</p>
                     <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
                       <span className="whitespace-nowrap font-medium">{formatBDT(d.fee_bdt, lang)}</span>
@@ -136,7 +143,7 @@ function DoctorsPage() {
                       </td>
                       <td className="py-3 pr-3">
                         <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
-                        <p className="text-sm text-muted-foreground">{d.degrees}</p>
+                        <p className="text-sm text-muted-foreground">{d.degrees}</p><p className="text-sm">{d.experience_years ?? 0} {t("বছরের অভিজ্ঞতা", "years of experience")}</p><DoctorRating doctorId={d.id} />
                         {d.designation && <p className="text-sm">{d.designation}</p>}
                       </td>
                       <td className="py-3 pr-3">{t(...(specialties[d.specialty] ?? [d.specialty, d.specialty]))}</td>

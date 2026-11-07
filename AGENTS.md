@@ -3,3 +3,6 @@
 - Format dates/money only via src/lib/locale.ts (Asia/Dhaka, BDT) — one place for locale rules.
 - Roles live in public.user_roles (enum admin/doctor/patient, new users get patient via trigger); role pages wrap content in RoleShell — never store roles on profiles.
 - Admin-editable site copy/images live in public.site_content (key → jsonb), read via useCms() from src/lib/cms.tsx with code defaults as fallback; images stored as resized data URLs because public storage buckets are blocked in this workspace.
+
+- Appointment booking and lifecycle changes use authenticated database RPCs; direct appointment writes are revoked so slot, ownership, transition and cancellation checks run atomically.
+- Doctor availability is persisted as Dhaka-local weekly schedules and leave dates; public slots are derived from them, and Realtime subscriptions are scoped and cleaned up.

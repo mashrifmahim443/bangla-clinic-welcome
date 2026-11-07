@@ -1,3 +1,4 @@
+import { Notifications } from "@/components/consult/notifications";
 import { createFileRoute, Link, Navigate, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -77,6 +78,7 @@ function AdminLayout() {
             </div>
           ))}
         </nav>
+        <div className="px-3"><Notifications /></div>
         <div className="border-t border-border p-3 text-xs">
           <p className="truncate text-muted-foreground" title={data?.email ?? ""}>{data?.email}</p>
           <div className="mt-2 grid grid-cols-2 gap-2">
