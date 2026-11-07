@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { DoctorRating } from "@/components/consult/doctor-reviews";
+import { DoctorBadges } from "@/components/consult/doctor-badges";
 import { useDoctorRealtime } from "@/lib/appointments";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site/site-header";
@@ -109,6 +110,7 @@ function DoctorsPage() {
                   {(d.photo_url || doctorPhotos[d.slug]) ? <img src={d.photo_url || doctorPhotos[d.slug]} alt="" width={56} height={56} loading="lazy" className="h-14 w-14 shrink-0 rounded-md border border-border object-cover" /> : <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border border-border bg-secondary font-display text-xl" aria-hidden="true">{(lang === "bn" ? d.name_bn : d.name_en).slice(0, 1)}</span>}
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
+                    <DoctorBadges {...d} />
                     <p className="text-sm text-muted-foreground">{d.degrees}</p><p className="text-sm">{d.experience_years ?? 0} {t("বছরের অভিজ্ঞতা", "years of experience")}</p><DoctorRating doctorId={d.id} />
                     <p className="text-sm">{t(...(specialties[d.specialty] ?? [d.specialty, d.specialty]))} · BMDC {d.bmdc_no}</p>
                     <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -145,6 +147,7 @@ function DoctorsPage() {
                       </td>
                       <td className="py-3 pr-3">
                         <p className="font-semibold">{lang === "bn" ? d.name_bn : d.name_en}</p>
+                        <DoctorBadges {...d} />
                         <p className="text-sm text-muted-foreground">{d.degrees}</p><p className="text-sm">{d.experience_years ?? 0} {t("বছরের অভিজ্ঞতা", "years of experience")}</p><DoctorRating doctorId={d.id} />
                         {d.designation && <p className="text-sm">{d.designation}</p>}
                       </td>

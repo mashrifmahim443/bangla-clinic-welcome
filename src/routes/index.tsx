@@ -16,6 +16,7 @@ import { useCms } from "@/lib/cms";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { doctorPhotos, specialties } from "@/lib/doctors";
+import { DoctorBadges } from "@/components/consult/doctor-badges";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,7 +51,7 @@ function Landing() {
   const { data: doctors = [] } = useQuery({
     queryKey: ["home-doctors"],
     queryFn: async () => {
-      const { data } = await supabase.from("doctors").select("id, slug, name_bn, name_en, specialty, fee_bdt, status, photo_url").eq("active", true).order("status").limit(20);
+      const { data } = await supabase.from("doctors").select("id, slug, name_bn, name_en, specialty, fee_bdt, status, photo_url, is_verified, is_special").eq("active", true).order("status").limit(20);
       return data ?? [];
     },
   });
@@ -164,6 +165,7 @@ function Landing() {
                 {photo ? <img src={photo} alt="" loading="lazy" className="h-16 w-16 rounded-md border border-border object-cover" /> : <div className="flex h-16 w-16 items-center justify-center rounded-md border border-border bg-secondary font-display text-xl font-semibold text-primary">{d.name_bn.replace("ডা. ", "").slice(0, 2)}</div>}
                 <div className="min-w-0">
                 <h3 className="break-words text-lg font-semibold leading-snug">{t(d.name_bn, d.name_en)}</h3>
+                <DoctorBadges {...d} />
                 <p className="mt-1 break-words text-sm text-muted-foreground">{spec ? t(spec[0], spec[1]) : d.specialty}</p>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                 <p className="font-semibold text-primary">{formatBDT(d.fee_bdt, lang)}</p>

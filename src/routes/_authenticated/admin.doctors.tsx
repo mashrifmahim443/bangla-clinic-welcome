@@ -28,7 +28,7 @@ function Page() {
     queryKey: ["admin-doctors"],
     queryFn: async () => { const { data, error } = await supabase.from("doctors").select("*").order("name_en"); if (error) throw error; return data; },
   });
-  const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-doctors"] }); qc.invalidateQueries({ queryKey: ["home-doctors"] }); };
+  const refresh = () => { for (const key of ["admin-doctors", "home-doctors", "doctors", "doctor"]) void qc.invalidateQueries({ queryKey: [key] }); };
 
   async function update(d: D, patch: Partial<D>) {
     const { error } = await supabase.from("doctors").update(patch).eq("id", d.id);
@@ -61,6 +61,10 @@ function Page() {
   const cols: Col<D>[] = [
     { key: "photo", label: "", value: () => null, render: (d) => { const p = d.photo_url || doctorPhotos[d.slug]; return p ? <img src={p} alt="" className="h-9 w-9 rounded-md object-cover" /> : <span className="text-muted-foreground">—</span>; } },
     { key: "name", label: t("নাম", "Name"), value: (d) => (lang === "bn" ? d.name_bn : d.name_en) },
+    { key: "badges", label: t("ব্যাজ", "Badges"), value: (d) => Number(d.is_verified) * 2 + Number(d.is_special), render: (d) => <div className="flex flex-col gap-2">
+      <label className="inline-flex cursor-pointer items-center gap-2"><input type="checkbox" checked={d.is_verified} onChange={e => update(d, { is_verified: e.target.checked })} />{t("যাচাইকৃত", "Verified")}</label>
+      <label className="inline-flex cursor-pointer items-center gap-2"><input type="checkbox" checked={d.is_special} onChange={e => update(d, { is_special: e.target.checked })} />{t("বিশেষ", "Special")}</label>
+    </div> },
     { key: "deg", label: t("ডিগ্রি", "Degrees"), value: (d) => d.degrees },
     { key: "spec", label: t("বিশেষত্ব", "Specialty"), value: (d) => d.specialty, render: (d) => { const s = specialties[d.specialty]; return s ? t(s[0], s[1]) : d.specialty; } },
     { key: "bmdc", label: "BMDC", value: (d) => d.bmdc_no },
