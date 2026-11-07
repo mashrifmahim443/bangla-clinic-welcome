@@ -127,6 +127,13 @@
       "when": 1794027613487,
       "tag": "0017_m3_appointments",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794027863266,
+      "tag": "0018_m3_booking_integrity",
+      "breakpoints": true
     }
   ]
 }

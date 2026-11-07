@@ -876,6 +876,7 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
+      my_reviewed_appointments: { Args: never; Returns: string[] }
       profile_completion: { Args: { _user: string }; Returns: number }
       review_appointment_refund: {
         Args: { _approve: boolean; _id: string; _note: string }
