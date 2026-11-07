@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Send immediate doctor booking SMS using the doctor profile phone and existing Automas service; verify booking, history and duplicate protection.
 - [x] Custom per-medicine reminder lead time, including updating existing schedules; persisted column and five unit tests verified. Signed-in UI save verification was blocked because patient history did not finish loading in the browser.
 - [x] Standalone doctor-written medicine schedules, patient-controlled SMS consent and authenticated minute-by-minute reminder callback; signed-in save/readback, real provider acceptance, duplicate prevention and mobile layout verified. Publish latest app to activate the new scheduled endpoint on the published site.
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
