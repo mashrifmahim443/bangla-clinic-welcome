@@ -48,6 +48,7 @@ import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
 import { Route as AuthenticatedPatientHistoryIdRouteImport } from './routes/_authenticated/patient-history.$id'
 import { Route as AuthenticatedPrescriptionIdRouteImport } from './routes/_authenticated/prescription.$id'
+import { Route as AuthenticatedRxWriteIdRouteImport } from './routes/_authenticated/rx-write.$id'
 import { Route as ApiPublicJobsMedicineRemindersRouteImport } from './routes/api/public/jobs/medicine-reminders'
 
 const IndexRoute = IndexRouteImport.update({
@@ -258,6 +259,11 @@ const AuthenticatedPrescriptionIdRoute =
     path: '/prescription/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRxWriteIdRoute = AuthenticatedRxWriteIdRouteImport.update({
+  id: '/rx-write/$id',
+  path: '/rx-write/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiPublicJobsMedicineRemindersRoute =
   ApiPublicJobsMedicineRemindersRouteImport.update({
     id: '/api/public/jobs/medicine-reminders',
@@ -303,6 +309,7 @@ export interface FileRoutesByFullPath {
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -343,6 +350,7 @@ export interface FileRoutesByTo {
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -386,6 +394,7 @@ export interface FileRoutesById {
   '/_authenticated/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
   '/_authenticated/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/_authenticated/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
+  '/_authenticated/rx-write/$id': typeof AuthenticatedRxWriteIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/api/public/jobs/medicine-reminders': typeof ApiPublicJobsMedicineRemindersRoute
 }
@@ -429,6 +438,7 @@ export interface FileRouteTypes {
     | '/diet-plan/$id'
     | '/patient-history/$id'
     | '/prescription/$id'
+    | '/rx-write/$id'
     | '/admin/'
     | '/api/public/jobs/medicine-reminders'
   fileRoutesByTo: FileRoutesByTo
@@ -469,6 +479,7 @@ export interface FileRouteTypes {
     | '/diet-plan/$id'
     | '/patient-history/$id'
     | '/prescription/$id'
+    | '/rx-write/$id'
     | '/admin'
     | '/api/public/jobs/medicine-reminders'
   id:
@@ -511,6 +522,7 @@ export interface FileRouteTypes {
     | '/_authenticated/diet-plan/$id'
     | '/_authenticated/patient-history/$id'
     | '/_authenticated/prescription/$id'
+    | '/_authenticated/rx-write/$id'
     | '/_authenticated/admin/'
     | '/api/public/jobs/medicine-reminders'
   fileRoutesById: FileRoutesById
@@ -807,6 +819,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPrescriptionIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rx-write/$id': {
+      id: '/_authenticated/rx-write/$id'
+      path: '/rx-write/$id'
+      fullPath: '/rx-write/$id'
+      preLoaderRoute: typeof AuthenticatedRxWriteIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/jobs/medicine-reminders': {
       id: '/api/public/jobs/medicine-reminders'
       path: '/api/public/jobs/medicine-reminders'
@@ -863,6 +882,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDietPlanIdRoute: typeof AuthenticatedDietPlanIdRoute
   AuthenticatedPatientHistoryIdRoute: typeof AuthenticatedPatientHistoryIdRoute
   AuthenticatedPrescriptionIdRoute: typeof AuthenticatedPrescriptionIdRoute
+  AuthenticatedRxWriteIdRoute: typeof AuthenticatedRxWriteIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -882,6 +902,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDietPlanIdRoute: AuthenticatedDietPlanIdRoute,
   AuthenticatedPatientHistoryIdRoute: AuthenticatedPatientHistoryIdRoute,
   AuthenticatedPrescriptionIdRoute: AuthenticatedPrescriptionIdRoute,
+  AuthenticatedRxWriteIdRoute: AuthenticatedRxWriteIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
