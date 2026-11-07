@@ -13,7 +13,7 @@ export function smsSafeText(value: string | null | undefined, limit: number) {
   return characters.length > limit ? `${characters.slice(0, limit).join("").trimEnd()}...` : cleaned;
 }
 
-export function appointmentSmsMessage(input: { slot: string; patientName?: string | null; reason?: string | null; language?: "bn" | "en" }) {
+export function appointmentSmsMessage(input: { slot: string; patientName?: string | null | undefined; reason?: string | null | undefined; language?: "bn" | "en" }) {
   const language = input.language ?? "bn";
   const time = formatDhaka(new Date(input.slot), language);
   const name = smsSafeText(input.patientName, 60) || (language === "bn" ? "নাম জানা নাই" : "not given");
