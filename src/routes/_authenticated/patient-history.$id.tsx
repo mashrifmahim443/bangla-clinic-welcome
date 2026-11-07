@@ -5,7 +5,7 @@ import { OldPrescriptions } from "@/components/consult/old-prescriptions";
 import { supabase } from "@/integrations/supabase/client";
 import { useLang } from "@/lib/i18n";
 import { formatDhaka } from "@/lib/locale";
-import { formatGlucose } from "@/lib/glucose";
+import { averageGlucose, formatGlucose, readingLabel } from "@/lib/glucose";
 import { pageHead } from "@/lib/appointments";
 export const Route = createFileRoute("/_authenticated/patient-history/$id")({ head: () => pageHead("Patient medical history", "Private patient details, glucose readings, prescriptions and reports for their doctor."), component: Page });
 function Page() {
@@ -14,7 +14,7 @@ function Page() {
     const { data: user } = await supabase.auth.getUser(); if (!user.user) throw new Error("Sign in required");
     const { data: doctor } = await supabase.from("doctors").select("id").eq("user_id", user.user.id).maybeSingle(); if (!doctor) throw new Error("Doctor only");
     const { data: a, error } = await supabase.from("appointments").select("patient_id").eq("id", id).eq("doctor_id", doctor.id).maybeSingle(); if (error) throw error; if (!a) throw new Error("Appointment not found");
-    const [p,r,rx] = await Promise.all([supabase.from("profiles").select("*").eq("id",a.patient_id).maybeSingle(),supabase.from("glucose_readings").select("id,value_mmol,taken_at,note").eq("user_id",a.patient_id).order("taken_at",{ascending:false}).limit(100),supabase.from("prescriptions").select("id,appointment_id,advice,created_at").eq("patient_id",a.patient_id).order("created_at",{ascending:false})]);
+    const [p,r,rx] = await Promise.all([supabase.from("profiles").select("*").eq("id",a.patient_id).maybeSingle(),supabase.from("glucose_readings").select("id,value_mmol,taken_at,note,reading_type,meal_slot").eq("user_id",a.patient_id).order("taken_at",{ascending:false}).limit(100),supabase.from("prescriptions").select("id,appointment_id,advice,created_at").eq("patient_id",a.patient_id).order("created_at",{ascending:false})]);
     if(p.error) throw p.error; if(r.error) throw r.error; if(rx.error) throw rx.error;
     return { patientId:a.patient_id,profile:p.data,readings:r.data,prescriptions:rx.data };
   } });
