@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Custom per-medicine reminder lead time, including updating existing schedules and enforcing the same limits when sending.
 - [x] Standalone doctor-written medicine schedules, patient-controlled SMS consent and authenticated minute-by-minute reminder callback; signed-in save/readback, real provider acceptance, duplicate prevention and mobile layout verified. Publish latest app to activate the new scheduled endpoint on the published site.
 - [x] Automas SMS API setup placeholders from public documentation; admin page and mobile layout verified.
 - [x] Automas API key collected through the encrypted project secret form at the user's request; never entered into public CMS or browser storage.

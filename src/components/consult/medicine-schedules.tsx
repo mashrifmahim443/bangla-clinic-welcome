@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useLang } from "@/lib/i18n";
 import { dhakaNowParts, formatDhaka, formatNumber } from "@/lib/locale";
 import { medicineTimings } from "@/lib/medicine";
-import { validDoseTimes } from "@/lib/medicine-reminders";
+import { REMINDER_MINUTES, validDoseTimes, validReminderMinutes } from "@/lib/medicine-reminders";
 
 export function MedicineSchedules({ patientId, doctorId }: { patientId?: string; doctorId?: string | undefined }) {
   const { t, lang } = useLang();
@@ -13,6 +13,7 @@ export function MedicineSchedules({ patientId, doctorId }: { patientId?: string;
   const [name, setName] = useState(""); const [dose, setDose] = useState("");
   const [timing, setTiming] = useState(""); const [custom, setCustom] = useState(""); const [comment, setComment] = useState("");
   const [times, setTimes] = useState([""]); const [start, setStart] = useState(dhakaNowParts().date); const [end, setEnd] = useState("");
+  const [reminderMinutes, setReminderMinutes] = useState(String(REMINDER_MINUTES));
   const [busy, setBusy] = useState(false); const [notice, setNotice] = useState(""); const [failure, setFailure] = useState("");
   const key = ["medicine-schedules", patientId ?? "me"];
   const { data, error } = useQuery({ queryKey: key, queryFn: async () => {
@@ -30,11 +31,13 @@ export function MedicineSchedules({ patientId, doctorId }: { patientId?: string;
     <h2 className="font-display text-xl font-semibold">{t("ওষুধের সময়সূচি", "Medicine schedule")}</h2>
     {(failure || error) && <p role="alert" className="mt-3 break-words text-destructive">{failure || error?.message}</p>}
     {notice && <p role="status" className="mt-2 text-glucose-ok">{notice}</p>}
-    {!doctorId && data && <div className="my-4 border-b border-border pb-4"><p className="text-sm">{t("SMS নম্বর", "SMS number")}: {data.phone || t("প্রোফাইলে ফোন নম্বর দিন", "Add your phone number to your profile")}</p><label className="mt-2 flex items-start gap-3"><input type="checkbox" className="mt-2 size-5 shrink-0 accent-primary" checked={data.enabled} disabled={busy} onChange={e => { const enabled = e.target.checked; void act(async () => { if (enabled && !/^(01\d{9}|8801\d{9})$/.test(data.phone ?? "")) throw new Error(t("প্রোফাইলে সঠিক ফোন নম্বর দিন।", "Add a valid phone number to your profile.")); const { error } = await supabase.from("medicine_reminder_preferences").upsert({ patient_id: data.id, sms_enabled: enabled }); if (error) throw error; }); }} /><span>{t("প্রতিবার ওষুধ খাওয়ার ১৫ মিনিট আগে SMS পেতে চাই", "Send me an SMS 15 minutes before each dose")}</span></label></div>}
+    {!doctorId && data && <div className="my-4 border-b border-border pb-4"><p className="text-sm">{t("SMS নম্বর", "SMS number")}: {data.phone || t("প্রোফাইলে ফোন নম্বর দিন", "Add your phone number to your profile")}</p><label className="mt-2 flex items-start gap-3"><input type="checkbox" className="mt-2 size-5 shrink-0 accent-primary" checked={data.enabled} disabled={busy} onChange={e => { const enabled = e.target.checked; void act(async () => { if (enabled && !/^(01\d{9}|8801\d{9})$/.test(data.phone ?? "")) throw new Error(t("প্রোফাইলে সঠিক ফোন নম্বর দিন।", "Add a valid phone number to your profile.")); const { error } = await supabase.from("medicine_reminder_preferences").upsert({ patient_id: data.id, sms_enabled: enabled }); if (error) throw error; }); }} /><span>{t("ডাক্তারের ঠিক করা সময়ে ওষুধের রিমাইন্ডার SMS পেতে চাই", "Send medicine reminder SMS at the time set by my doctor")}</span></label></div>}
     {data?.rows.length === 0 && <p className="mt-3 text-muted-foreground">{t("এখনো ওষুধের সময় লেখা হয়নি।", "No medicine schedule yet.")}</p>}
     <ul className="mt-3 divide-y divide-border">{data?.rows.map(row => <li key={row.id} className="py-4">
       <div className="flex flex-wrap items-start justify-between gap-2"><h3 className="font-semibold">{row.medicine_name} — {row.dose}</h3><span className={row.active ? "text-primary" : "text-muted-foreground"}>{row.active ? t("চলছে", "Active") : t("বন্ধ", "Stopped")}</span></div>
       <p>{t("প্রতিদিন", "Daily")} {formatNumber(row.dose_times.length, lang)} {t("বার", "times")} · {row.dose_times.map(time => formatDhaka(new Date(`2000-01-01T${time}+06:00`), lang, { hour: "numeric", minute: "2-digit" })).join(" · ")}</p>
+      <p className="text-sm">{t("রিমাইন্ডার", "Reminder")}: {formatNumber(row.reminder_minutes, lang)} {t("মিনিট আগে", "minutes before each dose")}</p>
+      {doctorId === row.doctor_id && <form className="mt-2 flex flex-wrap items-end gap-2" onSubmit={e => { e.preventDefault(); const minutes = Number(new FormData(e.currentTarget).get("minutes")); void act(async () => { if (!validReminderMinutes(minutes)) throw new Error(t("১ থেকে ১৪৪০-এর মধ্যে পূর্ণ মিনিট লিখুন।", "Enter whole minutes between 1 and 1440.")); const { error } = await supabase.from("medicine_schedules").update({ reminder_minutes: minutes }).eq("id", row.id); if (error) throw error; }); }}><label>{t("কত মিনিট আগে রিমাইন্ডার যাবে", "Reminder lead time (minutes)")}<input name="minutes" type="number" required min={1} max={1440} step={1} defaultValue={row.reminder_minutes} className={input} /></label><Button variant="outline" disabled={busy} className="shadow-none">{t("রিমাইন্ডারের সময় সংরক্ষণ করুন", "Save reminder time")}</Button></form>}
       <p className="text-sm">{row.timing}{row.comment && <> · {row.comment}</>}</p>
       <p className="text-sm text-muted-foreground">{formatDhaka(new Date(`${row.starts_on}T00:00:00+06:00`), lang, { dateStyle: "medium" })} — {formatDhaka(new Date(`${row.ends_on}T00:00:00+06:00`), lang, { dateStyle: "medium" })}</p>
       <p className="text-sm text-muted-foreground">{row.doctors ? t(row.doctors.name_bn, row.doctors.name_en) : ""}</p>
@@ -42,9 +45,10 @@ export function MedicineSchedules({ patientId, doctorId }: { patientId?: string;
     </li>)}</ul>
     {doctorId && data && <form className="mt-5 grid min-w-0 gap-3 border-t border-border pt-5 sm:grid-cols-2" onSubmit={e => { e.preventDefault(); void act(async () => {
       if (!validDoseTimes(times)) throw new Error(t("প্রতিবারের আলাদা সঠিক সময় দিন।", "Enter a different valid time for each dose."));
+      if (!validReminderMinutes(Number(reminderMinutes))) throw new Error(t("১ থেকে ১৪৪০-এর মধ্যে পূর্ণ মিনিট লিখুন।", "Enter whole minutes between 1 and 1440."));
       const selected = medicineTimings.find(x => x.value === timing); const instruction = timing === "custom" ? custom.trim() : selected?.bn ?? "";
       if (!instruction) throw new Error(t("ওষুধ কখন খাবেন তা লিখুন।", "Specify when to take the medicine."));
-      const { error } = await supabase.from("medicine_schedules").insert({ patient_id: data.id, doctor_id: doctorId, medicine_name: name.trim(), dose: dose.trim(), timing: instruction, comment: comment.trim(), dose_times: times, starts_on: start, ends_on: end });
+      const { error } = await supabase.from("medicine_schedules").insert({ patient_id: data.id, doctor_id: doctorId, medicine_name: name.trim(), dose: dose.trim(), timing: instruction, comment: comment.trim(), dose_times: times, reminder_minutes: Number(reminderMinutes), starts_on: start, ends_on: end });
       if (error) throw error; setName(""); setDose(""); setComment(""); setTimes([""]);
     }); }}>
       <h3 className="sm:col-span-2 font-semibold">{t("আলাদা ওষুধের সময় লিখুন", "Add a medicine schedule")}</h3>
@@ -54,6 +58,7 @@ export function MedicineSchedules({ patientId, doctorId }: { patientId?: string;
       <label>{t("খাবারের আগে না পরে", "Meal timing")}<select className={input} required value={timing} onChange={e => setTiming(e.target.value)}><option value="">{t("সময় বাছুন", "Select timing")}</option>{medicineTimings.map(x => <option key={x.value} value={x.value}>{t(x.bn,x.en)}</option>)}<option value="custom">{t("নিজের মতো লিখুন", "Custom")}</option></select></label>
       {timing === "custom" && <label className="sm:col-span-2">{t("খাওয়ার নির্দেশ", "Timing instructions")}<input className={input} required maxLength={300} value={custom} onChange={e => setCustom(e.target.value)} /></label>}
       {times.map((time,i) => <label key={i}>{t("খাওয়ার সময়", "Dose time")} {formatNumber(i+1,lang)} {t("(ঢাকার সময়)", "(Dhaka time)")}<input type="time" required className={input} value={time} onChange={e => setTimes(times.map((x,j) => i===j ? e.target.value : x))} /></label>)}
+      <label className="sm:col-span-2">{t("কত মিনিট আগে রিমাইন্ডার যাবে", "Reminder lead time (minutes)")}<input type="number" required min={1} max={1440} step={1} className={input} value={reminderMinutes} onChange={e => setReminderMinutes(e.target.value)} /></label>
       <label>{t("শুরুর তারিখ", "Start date")}<input type="date" required className={input} value={start} onChange={e => setStart(e.target.value)} /></label>
       <label>{t("শেষের তারিখ", "End date")}<input type="date" required min={start} className={input} value={end} onChange={e => setEnd(e.target.value)} /></label>
       <label className="sm:col-span-2">{t("মন্তব্য (চাইলে)", "Comment (optional)")}<textarea className={input} maxLength={500} value={comment} onChange={e => setComment(e.target.value)} /></label>
