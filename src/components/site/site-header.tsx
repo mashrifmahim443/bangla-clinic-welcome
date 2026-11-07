@@ -14,14 +14,14 @@ export function SiteHeader() {
           <span className="font-bn">ডায়াবিকেয়ার</span>
           <span className="hidden sm:inline"><span className="mx-1.5 text-muted-foreground">/</span>DiabeCare</span>
         </Link>
-        <nav className="hidden flex-1 gap-6 text-[0.95rem] md:flex">
+        <nav className="hidden flex-1 gap-6 text-[0.95rem] lg:flex">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="text-foreground/80 hover:text-primary">
               {l.name}
             </a>
           ))}
         </nav>
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 md:ml-0">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:ml-0">
           <TextSizeToggle className="hidden sm:inline-block rounded-md border border-border px-2.5 py-1 text-sm text-foreground hover:bg-secondary" />
           <button
             onClick={() => setLang(lang === "bn" ? "en" : "bn")}
@@ -33,7 +33,7 @@ export function SiteHeader() {
           <Link to="/auth" className="hidden rounded-md bg-primary px-4 py-2 text-sm sm:inline-block font-medium text-primary-foreground hover:bg-primary/90">
             {c("header.cta")}
           </Link>
-          <details className="relative md:hidden">
+          <details className="relative lg:hidden">
             <summary className="cursor-pointer list-none rounded-md border border-border px-2.5 py-1 text-sm text-foreground hover:bg-secondary">
               {t("মেনু", "Menu")}
             </summary>
