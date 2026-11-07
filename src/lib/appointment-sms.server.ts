@@ -36,7 +36,7 @@ export async function sendDoctorBookingSms(appointmentId: string) {
   try {
     const response = await fetch("https://api.automas.com.bd/smsapiv3", {
       method: "POST", body: smsProviderParameters(recipient, message, settings.sender_id, key),
-      redirect: "error", signal: AbortSignal.timeout(8000),
+      redirect: "manual", signal: AbortSignal.timeout(15000),
     });
     httpStatus = response.status;
     providerStatus = smsProviderStatus(await response.json().catch(() => null));
