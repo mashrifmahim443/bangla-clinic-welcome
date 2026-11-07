@@ -50,7 +50,7 @@ function Landing() {
   const { data: doctors = [] } = useQuery({
     queryKey: ["home-doctors"],
     queryFn: async () => {
-      const { data } = await supabase.from("doctors").select("id, slug, name_bn, name_en, specialty, fee_bdt, status, photo_url").eq("active", true).order("status").limit(4);
+      const { data } = await supabase.from("doctors").select("id, slug, name_bn, name_en, specialty, fee_bdt, status, photo_url").eq("active", true).order("status").limit(20);
       return data ?? [];
     },
   });
@@ -155,27 +155,24 @@ function Landing() {
               {c("doctors.join_note")}
             </p>
           </div>
-          <div className="mt-8 overflow-hidden rounded-[10px] border border-border bg-card">
-            <div className="hidden grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr] gap-4 border-b border-border px-5 py-3 text-sm text-muted-foreground md:grid">
-              <span />
-              <span>{t("নাম", "Name")}</span>
-              <span>{t("বিশেষত্ব", "Specialty")}</span>
-              <span>{t("ফি", "Fee")}</span>
-              <span>{t("অবস্থা", "Status")}</span>
-            </div>
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {doctors.map((d) => {
               const photo = d.photo_url || doctorPhotos[d.slug];
               const spec = specialties[d.specialty];
               return (
-              <Link key={d.id} to="/doctors/$slug" params={{ slug: d.slug }} className="grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-1 border-b border-border px-5 py-4 transition-colors duration-150 last:border-0 hover:bg-secondary md:grid-cols-[3.5rem_2fr_1.5fr_1fr_1fr]">
-                {photo ? <img src={photo} alt="" className="row-span-3 h-12 w-12 rounded-md border border-border object-cover md:row-span-1" /> : <div className="row-span-3 flex h-12 w-12 items-center justify-center rounded-md bg-secondary font-semibold text-primary md:row-span-1">{d.name_bn.replace("ডা. ", "").slice(0, 2)}</div>}
-                <p className="font-semibold">{t(d.name_bn, d.name_en)}</p>
-                <p className="text-muted-foreground">{spec ? t(spec[0], spec[1]) : d.specialty}</p>
-                <p>{formatBDT(d.fee_bdt, lang)}</p>
-                <p className="flex items-center gap-2 text-sm">
+              <Link key={d.id} to="/doctors/$slug" params={{ slug: d.slug }} className="grid min-w-0 grid-cols-[4rem_minmax(0,1fr)] items-start gap-4 rounded-md border border-border bg-card p-5 transition-colors duration-150 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                {photo ? <img src={photo} alt="" loading="lazy" className="h-16 w-16 rounded-md border border-border object-cover" /> : <div className="flex h-16 w-16 items-center justify-center rounded-md border border-border bg-secondary font-display text-xl font-semibold text-primary">{d.name_bn.replace("ডা. ", "").slice(0, 2)}</div>}
+                <div className="min-w-0">
+                <h3 className="break-words text-lg font-semibold leading-snug">{t(d.name_bn, d.name_en)}</h3>
+                <p className="mt-1 break-words text-sm text-muted-foreground">{spec ? t(spec[0], spec[1]) : d.specialty}</p>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <p className="font-semibold text-primary">{formatBDT(d.fee_bdt, lang)}</p>
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span className={`h-2.5 w-2.5 rounded-full ${d.status === "online" ? "bg-glucose-ok" : d.status === "busy" ? "bg-glucose-high" : "bg-border"}`} />
                   {d.status === "online" ? t("এখন অনলাইনে", "Online now") : d.status === "busy" ? t("ব্যস্ত", "Busy") : t("অফলাইন", "Offline")}
                 </p>
+                </div>
+                </div>
               </Link>
             );})}
           </div>
