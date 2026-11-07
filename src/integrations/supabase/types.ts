@@ -797,6 +797,45 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_history: {
+        Row: {
+          delivery_source: string
+          delivery_status: string
+          delivery_updated_at: string | null
+          http_status: number | null
+          id: string
+          provider: string
+          provider_status: number | null
+          recipient: string
+          recorded_at: string
+          sent_at: string | null
+        }
+        Insert: {
+          delivery_source?: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
+          http_status?: number | null
+          id?: string
+          provider?: string
+          provider_status?: number | null
+          recipient: string
+          recorded_at?: string
+          sent_at?: string | null
+        }
+        Update: {
+          delivery_source?: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
+          http_status?: number | null
+          id?: string
+          provider?: string
+          provider_status?: number | null
+          recipient?: string
+          recorded_at?: string
+          sent_at?: string | null
+        }
+        Relationships: []
+      }
       sms_settings: {
         Row: {
           id: string
