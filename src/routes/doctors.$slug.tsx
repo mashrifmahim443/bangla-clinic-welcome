@@ -7,6 +7,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { Button } from "@/components/ui/button";
 import { DoctorReviews } from "@/components/consult/doctor-reviews";
+import { DoctorBadges } from "@/components/consult/doctor-badges";
 import { useLang } from "@/lib/i18n";
 import { dhakaNowParts, formatBDT, formatDhaka, formatNumber } from "@/lib/locale";
 import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors";
@@ -37,6 +38,7 @@ function BookingPage() {
     <Link to="/doctors" className="text-primary underline">{t("সব ডাক্তার", "All doctors")}</Link>
     {isLoading ? <p>{t("লোড হচ্ছে…", "Loading…")}</p> : !doctor ? <p>{t("ডাক্তারকে পাওয়া গেল না।", "Doctor not found.")}</p> : <>
       <div className="mt-5 flex flex-wrap gap-5 border-b border-border pb-6">{(doctor.photo_url || doctorPhotos[doctor.slug]) ? <img src={doctor.photo_url || doctorPhotos[doctor.slug]} alt={t(doctor.name_bn, doctor.name_en)} className="h-24 w-24 rounded-md border border-border object-cover" /> : <span className="flex h-24 w-24 items-center justify-center rounded-md border border-border bg-secondary font-display text-3xl" aria-hidden="true">{t(doctor.name_bn, doctor.name_en).slice(0, 1)}</span>}<div className="min-w-0 flex-1"><h1 className="font-display text-3xl font-semibold">{t(doctor.name_bn, doctor.name_en)}</h1><p>{doctor.degrees}</p><p className="text-muted-foreground">{doctor.designation} {doctor.workplace}</p><p className="text-sm">{t(...(specialties[doctor.specialty] ?? [doctor.specialty, doctor.specialty]))} · BMDC {doctor.bmdc_no}</p><p>{formatNumber(doctor.experience_years ?? 0, lang)} {t("বছরের অভিজ্ঞতা", "years of experience")} · {formatBDT(doctor.fee_bdt, lang)}</p></div><StatusDot status={doctor.status} label={t(statusInfo[doctor.status].bn, statusInfo[doctor.status].en)} /></div>
+      <DoctorBadges {...doctor} />
       {(doctor.bio_bn || doctor.bio_en) && <section className="mt-5"><h2 className="font-display text-xl font-semibold">{t("পরিচিতি", "About the doctor")}</h2><p className="whitespace-pre-wrap">{t(doctor.bio_bn ?? "", doctor.bio_en ?? "")}</p></section>}
       <section className="mt-7"><h2 className="font-display text-xl font-semibold">{t("সময় বেছে নিন", "Choose a time")}</h2><label className="mt-3 block max-w-xs">{t("তারিখ (ঢাকার সময়)", "Date (Dhaka time)")}<input type="date" className={fieldClass} value={date} min={dhakaNowParts().date} onChange={e => { setDate(e.target.value); setPicked(""); }} /></label>
         {slotError && <p role="alert" className="text-destructive">{slotError.message}</p>}

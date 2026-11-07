@@ -537,6 +537,8 @@ export type Database = {
           fee_bdt: number
           gender: string
           id: string
+          is_special: boolean
+          is_verified: boolean
           languages: string[]
           name_bn: string
           name_en: string
@@ -559,6 +561,8 @@ export type Database = {
           fee_bdt: number
           gender?: string
           id?: string
+          is_special?: boolean
+          is_verified?: boolean
           languages?: string[]
           name_bn: string
           name_en: string
@@ -581,6 +585,8 @@ export type Database = {
           fee_bdt?: number
           gender?: string
           id?: string
+          is_special?: boolean
+          is_verified?: boolean
           languages?: string[]
           name_bn?: string
           name_en?: string

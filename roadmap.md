@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [x] Admin-controlled Verified and Special doctor badges on homepage, directory and profile; signed-in saving/removal tested, writes restricted by admin-only policies.
 - [x] Admin role checkmarks approve accounts and activate existing or subsequently completed doctor profiles; Forhad visible in directory, two signed-in regression tests passed.
 - [x] Per-medicine timing dropdown, custom instructions and individual comments in doctor and patient prescription views (4 tests passed; signed-in save check unavailable without a matching account)
 - [x] Video consultation (free Jitsi link; move to paid video service before launch)
