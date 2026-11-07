@@ -71,7 +71,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
               {t("ডাক্তারের পরামর্শ", "Doctor's advice")}
             </Link>
           )}
-          {roles.includes("doctor") && <Link to="/doctor-messages" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("রোগীদের বার্তা", "Patient messages")}</Link>}
+          {roles.includes("doctor") && <Link to="/doctor-messages" search={{}} className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("রোগীদের বার্তা", "Patient messages")}</Link>}
           {roles.includes("doctor") && <Link to="/doctor-schedule" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>{t("সময়সূচি ও উপলব্ধতা", "Schedule & availability")}</Link>}
           {roles.includes("doctor") && (
             <Link to="/doctor-profile" className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>

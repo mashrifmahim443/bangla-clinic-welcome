@@ -49,7 +49,7 @@ function Page() {
           `${pending.length} requests waiting for you, ${todays.length} patients today, ${upcoming} confirmed appointments ahead.`)}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
-        <Button asChild className="shadow-none"><Link to="/doctor-messages" search={{ a: undefined }}>{t("রোগীদের বার্তা দেখুন", "Open patient messages")}</Link></Button>
+        <Button asChild className="shadow-none"><Link to="/doctor-messages" search={{}}>{t("রোগীদের বার্তা দেখুন", "Open patient messages")}</Link></Button>
         <Button asChild variant="outline" className="shadow-none"><Link to="/doctor-schedule">{t("সময়সূচি ঠিক করুন", "Set schedule")}</Link></Button>
       </div>
       {msg && <p role={msg.ok ? "status" : "alert"} className={`mt-4 border-l-2 pl-3 ${msg.ok ? "border-primary" : "border-destructive text-destructive"}`}>{msg.text}</p>}

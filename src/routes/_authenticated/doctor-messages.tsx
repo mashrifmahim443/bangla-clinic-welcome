@@ -11,7 +11,7 @@ import { isChatOpen, latestByAppointment, useDoctorAppointments, type LastMessag
 
 export const Route = createFileRoute("/_authenticated/doctor-messages")({
   head: () => pageHead("Patient messages", "Chat with your accepted DiabeCare patients."),
-  validateSearch: (s: Record<string, unknown>) => ({ a: typeof s.a === "string" ? s.a : undefined }),
+  validateSearch: (s: Record<string, unknown>): { a?: string } => (typeof s["a"] === "string" ? { a: s["a"] } : {}),
   component: Page,
 });
 
@@ -57,7 +57,7 @@ function Page() {
       <div className={`min-h-0 flex-col ${active ? "flex" : "hidden md:flex"}`}>
         {!active ? <p className="m-auto p-6 text-muted-foreground">{t("বাম পাশ থেকে একজন রোগী বেছে নিন।", "Choose a patient on the left.")}</p> : <>
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
-            <div className="min-w-0"><button className="mr-2 text-sm text-primary underline md:hidden" onClick={() => navigate({ search: {} })}>{t("← সব", "← All")}</button>
+            <div className="min-w-0"><button className="mr-2 text-sm text-primary underline md:hidden" onClick={() => navigate({ search: { a: undefined } })}>{t("← সব", "← All")}</button>
               <span className="font-semibold">{active.patientName || t("রোগী", "Patient")}</span>
               <span className="ml-2 text-sm text-muted-foreground">{formatDhaka(new Date(active.slot_start), lang)} · {t(...(appointmentLabels[active.status] ?? [active.status, active.status]))}</span></div>
             <div className="flex gap-3 text-sm">
