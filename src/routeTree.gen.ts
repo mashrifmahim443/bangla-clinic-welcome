@@ -45,6 +45,7 @@ import { Route as AuthenticatedAdminExerciseRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authenticated/consult.$id'
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
+import { Route as AuthenticatedPatientHistoryIdRouteImport } from './routes/_authenticated/patient-history.$id'
 import { Route as AuthenticatedPrescriptionIdRouteImport } from './routes/_authenticated/prescription.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -237,6 +238,12 @@ const AuthenticatedDietPlanIdRoute = AuthenticatedDietPlanIdRouteImport.update({
   path: '/diet-plan/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPatientHistoryIdRoute =
+  AuthenticatedPatientHistoryIdRouteImport.update({
+    id: '/patient-history/$id',
+    path: '/patient-history/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPrescriptionIdRoute =
   AuthenticatedPrescriptionIdRouteImport.update({
     id: '/prescription/$id',
@@ -279,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
+  '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -316,6 +324,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
+  '/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
@@ -356,6 +365,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/consult/$id': typeof AuthenticatedConsultIdRoute
   '/_authenticated/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
+  '/_authenticated/patient-history/$id': typeof AuthenticatedPatientHistoryIdRoute
   '/_authenticated/prescription/$id': typeof AuthenticatedPrescriptionIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
@@ -396,6 +406,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
+    | '/patient-history/$id'
     | '/prescription/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -433,6 +444,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
+    | '/patient-history/$id'
     | '/prescription/$id'
     | '/admin'
   id:
@@ -472,6 +484,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users'
     | '/_authenticated/consult/$id'
     | '/_authenticated/diet-plan/$id'
+    | '/_authenticated/patient-history/$id'
     | '/_authenticated/prescription/$id'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
@@ -746,6 +759,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDietPlanIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/patient-history/$id': {
+      id: '/_authenticated/patient-history/$id'
+      path: '/patient-history/$id'
+      fullPath: '/patient-history/$id'
+      preLoaderRoute: typeof AuthenticatedPatientHistoryIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/prescription/$id': {
       id: '/_authenticated/prescription/$id'
       path: '/prescription/$id'
@@ -798,6 +818,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedConsultIdRoute: typeof AuthenticatedConsultIdRoute
   AuthenticatedDietPlanIdRoute: typeof AuthenticatedDietPlanIdRoute
+  AuthenticatedPatientHistoryIdRoute: typeof AuthenticatedPatientHistoryIdRoute
   AuthenticatedPrescriptionIdRoute: typeof AuthenticatedPrescriptionIdRoute
 }
 
@@ -816,6 +837,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedConsultIdRoute: AuthenticatedConsultIdRoute,
   AuthenticatedDietPlanIdRoute: AuthenticatedDietPlanIdRoute,
+  AuthenticatedPatientHistoryIdRoute: AuthenticatedPatientHistoryIdRoute,
   AuthenticatedPrescriptionIdRoute: AuthenticatedPrescriptionIdRoute,
 }
 
