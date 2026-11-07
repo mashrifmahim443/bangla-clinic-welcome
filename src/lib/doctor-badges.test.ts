@@ -10,6 +10,17 @@ async def main():
   browser=await p.chromium.launch(headless=True)
   context=await browser.new_context(viewport={"width":1280,"height":1800})
   page=await context.new_page()
+  if sys.argv[1]=='access':
+   await page.goto('http://localhost:8080')
+   allowed=await page.evaluate('''async () => {
+    const {supabase}=await import('/src/integrations/supabase/client.ts');
+    const {data}=await supabase.from('doctors').update({is_verified:true,is_special:true}).eq('id','bfd2a16f-5353-41ff-bc6a-11ba9490208f').select('id');
+    return Boolean(data?.length);
+   }''')
+   assert not allowed, 'Public visitor could assign doctor badges'
+   await browser.close()
+   print('verified')
+   return
   key=os.environ['LOVABLE_BROWSER_SUPABASE_STORAGE_KEY']
   session=os.environ['LOVABLE_BROWSER_SUPABASE_SESSION_JSON']
   cookies=json.loads(os.environ.get('LOVABLE_BROWSER_SUPABASE_COOKIES_JSON') or '[]')
@@ -55,7 +66,7 @@ asyncio.run(main())
 `;
 
 describe.skipIf(process.env["RUN_LIVE_BADGE_TESTS"] !== "1")("admin doctor badges", () => {
-  for (const badge of ["verified", "special"]) {
+  for (const badge of ["verified", "special", "access"]) {
     it(`admin can award and remove the ${badge} badge on public doctor surfaces`, () => {
       mkdirSync("/tmp/browser/doctor-badges", { recursive: true });
       writeFileSync("/tmp/browser/doctor-badges/check_badges.py", script);
