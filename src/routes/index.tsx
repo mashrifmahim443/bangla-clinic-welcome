@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { useLang } from "@/lib/i18n";
@@ -35,6 +36,17 @@ export const Route = createFileRoute("/")({
 function Landing() {
   const { lang, t } = useLang();
   const { c, lines, img } = useCms();
+  const navigate = useNavigate();
+
+  // Email-confirmation links land here with tokens in the URL hash; supabase-js
+  // signs the user in automatically, so send them straight to the dashboard.
+  useEffect(() => {
+    if (!window.location.hash.includes("type=signup") && !window.location.hash.includes("type=email")) return;
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") navigate({ to: "/dashboard" });
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [navigate]);
   const { data: doctors = [] } = useQuery({
     queryKey: ["home-doctors"],
     queryFn: async () => {
