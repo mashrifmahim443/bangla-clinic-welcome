@@ -35,6 +35,7 @@ import { Route as CheckinTokenRouteImport } from './routes/checkin.$token'
 import { Route as DoctorsIndexRouteImport } from './routes/doctors.index'
 import { Route as DoctorsSlugRouteImport } from './routes/doctors.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminApiSettingsRouteImport } from './routes/_authenticated/admin.api-settings'
 import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_authenticated/admin.applications'
 import { Route as AuthenticatedAdminAppointmentsRouteImport } from './routes/_authenticated/admin.appointments'
 import { Route as AuthenticatedAdminArticlesRouteImport } from './routes/_authenticated/admin.articles'
@@ -182,6 +183,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminApiSettingsRoute =
+  AuthenticatedAdminApiSettingsRouteImport.update({
+    id: '/api-settings',
+    path: '/api-settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminApplicationsRoute =
   AuthenticatedAdminApplicationsRouteImport.update({
     id: '/applications',
@@ -276,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
+  '/admin/api-settings': typeof AuthenticatedAdminApiSettingsRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
   '/admin/articles': typeof AuthenticatedAdminArticlesRoute
@@ -314,6 +322,7 @@ export interface FileRoutesByTo {
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles': typeof ArticlesIndexRoute
   '/doctors': typeof DoctorsIndexRoute
+  '/admin/api-settings': typeof AuthenticatedAdminApiSettingsRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
   '/admin/articles': typeof AuthenticatedAdminArticlesRoute
@@ -355,6 +364,7 @@ export interface FileRoutesById {
   '/doctors/$slug': typeof DoctorsSlugRoute
   '/articles/': typeof ArticlesIndexRoute
   '/doctors/': typeof DoctorsIndexRoute
+  '/_authenticated/admin/api-settings': typeof AuthenticatedAdminApiSettingsRoute
   '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/_authenticated/admin/appointments': typeof AuthenticatedAdminAppointmentsRoute
   '/_authenticated/admin/articles': typeof AuthenticatedAdminArticlesRoute
@@ -396,6 +406,7 @@ export interface FileRouteTypes {
     | '/doctors/$slug'
     | '/articles/'
     | '/doctors/'
+    | '/admin/api-settings'
     | '/admin/applications'
     | '/admin/appointments'
     | '/admin/articles'
@@ -434,6 +445,7 @@ export interface FileRouteTypes {
     | '/doctors/$slug'
     | '/articles'
     | '/doctors'
+    | '/admin/api-settings'
     | '/admin/applications'
     | '/admin/appointments'
     | '/admin/articles'
@@ -474,6 +486,7 @@ export interface FileRouteTypes {
     | '/doctors/$slug'
     | '/articles/'
     | '/doctors/'
+    | '/_authenticated/admin/api-settings'
     | '/_authenticated/admin/applications'
     | '/_authenticated/admin/appointments'
     | '/_authenticated/admin/articles'
@@ -689,6 +702,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/api-settings': {
+      id: '/_authenticated/admin/api-settings'
+      path: '/api-settings'
+      fullPath: '/admin/api-settings'
+      preLoaderRoute: typeof AuthenticatedAdminApiSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/applications': {
       id: '/_authenticated/admin/applications'
       path: '/applications'
@@ -777,6 +797,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminApiSettingsRoute: typeof AuthenticatedAdminApiSettingsRoute
   AuthenticatedAdminApplicationsRoute: typeof AuthenticatedAdminApplicationsRoute
   AuthenticatedAdminAppointmentsRoute: typeof AuthenticatedAdminAppointmentsRoute
   AuthenticatedAdminArticlesRoute: typeof AuthenticatedAdminArticlesRoute
@@ -789,6 +810,7 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminApiSettingsRoute: AuthenticatedAdminApiSettingsRoute,
   AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
   AuthenticatedAdminAppointmentsRoute: AuthenticatedAdminAppointmentsRoute,
   AuthenticatedAdminArticlesRoute: AuthenticatedAdminArticlesRoute,
