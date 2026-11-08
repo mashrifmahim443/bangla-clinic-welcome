@@ -211,6 +211,13 @@
       "when": 1794113918923,
       "tag": "0029_registration_rpc_verification_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1794113943267,
+      "tag": "0030_verified_registration_role_authorization",
+      "breakpoints": true
     }
   ]
 }
