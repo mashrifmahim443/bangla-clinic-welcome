@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Admin-managed doctor/patient popup messages with persistent dismissal; verify publish, targeting and readback.
 - [x] Immediate doctor booking SMS uses the private doctor profile phone and existing Automas service; signed-in booking accepted by provider, history readback verified, test appointment cancelled and duplicate protection tested. Publish latest changes to activate on the public site.
 - [x] Custom per-medicine reminder lead time, including updating existing schedules; persisted column and five unit tests verified. Signed-in UI save verification was blocked because patient history did not finish loading in the browser.
 - [x] Standalone doctor-written medicine schedules, patient-controlled SMS consent and authenticated minute-by-minute reminder callback; signed-in save/readback, real provider acceptance, duplicate prevention and mobile layout verified. Publish latest app to activate the new scheduled endpoint on the published site.
