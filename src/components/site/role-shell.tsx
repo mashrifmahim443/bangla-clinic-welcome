@@ -1,4 +1,5 @@
 import { Notifications } from "@/components/consult/notifications";
+import { AdminPopups } from "@/components/site/admin-popups";
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 import { Link, Navigate, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -58,6 +59,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
 
   return (
     <div className="min-h-screen md:grid md:grid-cols-[15rem_1fr]">
+      <AdminPopups role={role} />
       <aside className="border-b border-border bg-card p-6 md:border-r md:border-b-0">
         <Link to="/" className="font-display text-lg font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</Link>
         <nav className="mt-8 space-y-1">
