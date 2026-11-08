@@ -1,4 +1,5 @@
 # Agent rules
+- New registrations use trusted registration_verifications records and service-only atomic OTP claims/consumption; existing accounts are grandfathered. Phone changes invalidate proof, contact verification independently gates approval-based access and RLS; Automas OTP codes are never stored in SMS history.
 - Portal announcements use admin-only popup_messages writes, role-targeted RLS reads and owner-only persistent popup_dismissals; RoleShell displays unread messages without storing acknowledgements in browser storage.
 - All UI strings go through `useLang().t(bn, en)` from src/lib/i18n.tsx — keeps both languages in sync without a translation library.
 - Format dates/money only via src/lib/locale.ts (Asia/Dhaka, BDT) — one place for locale rules.

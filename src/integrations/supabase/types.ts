@@ -786,6 +786,65 @@ export type Database = {
         }
         Relationships: []
       }
+      phone_verification_challenges: {
+        Row: {
+          attempts: number
+          challenge_id: string
+          code_hash: string
+          consumed: boolean
+          expires_at: string
+          phone: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          challenge_id: string
+          code_hash: string
+          consumed?: boolean
+          expires_at: string
+          phone: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          challenge_id?: string
+          code_hash?: string
+          consumed?: boolean
+          expires_at?: string
+          phone?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phone_verification_challenges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phone_verification_rate_limits: {
+        Row: {
+          bucket: string
+          hits: number
+          window_start: string
+        }
+        Insert: {
+          bucket: string
+          hits: number
+          window_start: string
+        }
+        Update: {
+          bucket?: string
+          hits?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       popup_dismissals: {
         Row: {
           dismissed_at: string
@@ -952,6 +1011,35 @@ export type Database = {
           weight_kg?: number | null
         }
         Relationships: []
+      }
+      registration_verifications: {
+        Row: {
+          phone_verified_at: string | null
+          required: boolean
+          user_id: string
+          verified_phone: string | null
+        }
+        Insert: {
+          phone_verified_at?: string | null
+          required?: boolean
+          user_id: string
+          verified_phone?: string | null
+        }
+        Update: {
+          phone_verified_at?: string | null
+          required?: boolean
+          user_id?: string
+          verified_phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registration_verifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_content: {
         Row: {
@@ -1128,6 +1216,20 @@ export type Database = {
           timing: string
         }[]
       }
+      claim_phone_verification: {
+        Args: {
+          _challenge: string
+          _hash: string
+          _ip_hash: string
+          _phone: string
+          _user: string
+        }
+        Returns: string
+      }
+      consume_phone_verification: {
+        Args: { _challenge: string; _hash: string; _user: string }
+        Returns: string
+      }
       create_my_doctor_profile: {
         Args: {
           _address: string
@@ -1158,8 +1260,13 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
+      my_registration_status: { Args: never; Returns: Json }
       my_reviewed_appointments: { Args: never; Returns: string[] }
       profile_completion: { Args: { _user: string }; Returns: number }
+      registration_contacts_verified: {
+        Args: { _user: string }
+        Returns: boolean
+      }
       review_appointment_refund: {
         Args: { _approve: boolean; _id: string; _note: string }
         Returns: undefined

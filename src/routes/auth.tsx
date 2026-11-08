@@ -85,7 +85,7 @@ function AuthPage() {
         options: { emailRedirectTo: window.location.origin, data: { full_name: form.name.trim(), phone: form.phone } },
       });
       if (error) setMsg({ kind: "err", text: `${error.message}` + " — " + (/weak|easy to guess|pwned/i.test(error.message) ? t("এই পাসওয়ার্ডটা খুব সহজ, অনেকে ব্যবহার করেন। অক্ষর, সংখ্যা মিলিয়ে আরেকটু কঠিন পাসওয়ার্ড দিন।", "This password is too common. Please pick a harder one mixing letters and numbers.") : /rate limit/i.test(error.message) ? t("অল্প সময়ে অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।", "Too many tries. Please wait a bit and try again.") : error.message.includes("registered") ? t("এই ইমেইলে আগেই অ্যাকাউন্ট আছে। লগইন করুন।", "An account with this email already exists. Sign in instead.") : t("অ্যাকাউন্ট খোলা গেল না। একটু পরে আবার চেষ্টা করুন।", "Couldn't open the account. Please try again shortly.")) });
-      else setMsg({ kind: "ok", text: t("আপনার ইমেইলে একটা লিংক পাঠানো হয়েছে। সেটায় চাপ দিলেই অ্যাকাউন্ট চালু হবে।", "We sent a link to your email. Click it to turn on your account.") });
+      else setMsg({ kind: "ok", text: t("ইমেইলে পাঠানো লিংকে চাপ দিয়ে ইমেইল যাচাই করুন। এরপর লগইন করে ফোনে পাঠানো কোড দিয়ে মোবাইল নম্বর যাচাই করতে হবে। দুটো যাচাই বাধ্যতামূলক।", "Verify your email using the emailed link. Then sign in and verify your mobile number using an SMS code. Both verifications are required.") });
     }
     setBusy(false);
   }

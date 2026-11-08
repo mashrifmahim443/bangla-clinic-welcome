@@ -197,6 +197,27 @@
       "when": 1794113281111,
       "tag": "0027_admin_popup_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1794113843315,
+      "tag": "0028_mandatory_registration_contact_verification",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1794113918923,
+      "tag": "0029_registration_rpc_verification_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1794113943267,
+      "tag": "0030_verified_registration_role_authorization",
+      "breakpoints": true
     }
   ]
 }
