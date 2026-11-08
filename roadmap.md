@@ -1,4 +1,5 @@
 # Roadmap (from product brief)
+- [ ] Mandatory email and SMS phone verification for new registrations; preserve existing accounts and prevent unverified access.
 - [x] Admin-managed doctor/patient popup messages with persistent dismissal; authenticated creation/reload, patient display/dismissal, deactivation and mobile layout verified; four targeting tests passed.
 - [x] Immediate doctor booking SMS uses the private doctor profile phone and existing Automas service; signed-in booking accepted by provider, history readback verified, test appointment cancelled and duplicate protection tested. Publish latest changes to activate on the public site.
 - [x] Custom per-medicine reminder lead time, including updating existing schedules; persisted column and five unit tests verified. Signed-in UI save verification was blocked because patient history did not finish loading in the browser.
