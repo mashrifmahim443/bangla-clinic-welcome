@@ -1260,6 +1260,7 @@ export type Database = {
       is_appointment_participant: { Args: { _appt: string }; Returns: boolean }
       is_doctor_of_patient: { Args: { _patient: string }; Returns: boolean }
       my_doctor_id: { Args: never; Returns: string }
+      my_registration_status: { Args: never; Returns: Json }
       my_reviewed_appointments: { Args: never; Returns: string[] }
       profile_completion: { Args: { _user: string }; Returns: number }
       registration_contacts_verified: {
