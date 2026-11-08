@@ -786,6 +786,65 @@ export type Database = {
         }
         Relationships: []
       }
+      popup_dismissals: {
+        Row: {
+          dismissed_at: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          dismissed_at?: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          dismissed_at?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "popup_dismissals_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "popup_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      popup_messages: {
+        Row: {
+          active: boolean
+          audience: string
+          body_bn: string
+          body_en: string
+          created_at: string
+          id: string
+          title_bn: string
+          title_en: string
+        }
+        Insert: {
+          active?: boolean
+          audience: string
+          body_bn: string
+          body_en?: string
+          created_at?: string
+          id?: string
+          title_bn: string
+          title_en?: string
+        }
+        Update: {
+          active?: boolean
+          audience?: string
+          body_bn?: string
+          body_en?: string
+          created_at?: string
+          id?: string
+          title_bn?: string
+          title_en?: string
+        }
+        Relationships: []
+      }
       prescriptions: {
         Row: {
           advice: string | null
