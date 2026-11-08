@@ -45,6 +45,7 @@ import { Route as AuthenticatedAdminContentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminDietRouteImport } from './routes/_authenticated/admin.diet'
 import { Route as AuthenticatedAdminDoctorsRouteImport } from './routes/_authenticated/admin.doctors'
 import { Route as AuthenticatedAdminExerciseRouteImport } from './routes/_authenticated/admin.exercise'
+import { Route as AuthenticatedAdminPopupsRouteImport } from './routes/_authenticated/admin.popups'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedConsultIdRouteImport } from './routes/_authenticated/consult.$id'
 import { Route as AuthenticatedDietPlanIdRouteImport } from './routes/_authenticated/diet-plan.$id'
@@ -246,6 +247,12 @@ const AuthenticatedAdminExerciseRoute =
     path: '/exercise',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPopupsRoute =
+  AuthenticatedAdminPopupsRouteImport.update({
+    id: '/popups',
+    path: '/popups',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -320,6 +327,7 @@ export interface FileRoutesByFullPath {
   '/admin/diet': typeof AuthenticatedAdminDietRoute
   '/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
   '/admin/exercise': typeof AuthenticatedAdminExerciseRoute
+  '/admin/popups': typeof AuthenticatedAdminPopupsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -363,6 +371,7 @@ export interface FileRoutesByTo {
   '/admin/diet': typeof AuthenticatedAdminDietRoute
   '/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
   '/admin/exercise': typeof AuthenticatedAdminExerciseRoute
+  '/admin/popups': typeof AuthenticatedAdminPopupsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/consult/$id': typeof AuthenticatedConsultIdRoute
   '/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -409,6 +418,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/diet': typeof AuthenticatedAdminDietRoute
   '/_authenticated/admin/doctors': typeof AuthenticatedAdminDoctorsRoute
   '/_authenticated/admin/exercise': typeof AuthenticatedAdminExerciseRoute
+  '/_authenticated/admin/popups': typeof AuthenticatedAdminPopupsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/consult/$id': typeof AuthenticatedConsultIdRoute
   '/_authenticated/diet-plan/$id': typeof AuthenticatedDietPlanIdRoute
@@ -455,6 +465,7 @@ export interface FileRouteTypes {
     | '/admin/diet'
     | '/admin/doctors'
     | '/admin/exercise'
+    | '/admin/popups'
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/admin/diet'
     | '/admin/doctors'
     | '/admin/exercise'
+    | '/admin/popups'
     | '/admin/users'
     | '/consult/$id'
     | '/diet-plan/$id'
@@ -543,6 +555,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/diet'
     | '/_authenticated/admin/doctors'
     | '/_authenticated/admin/exercise'
+    | '/_authenticated/admin/popups'
     | '/_authenticated/admin/users'
     | '/_authenticated/consult/$id'
     | '/_authenticated/diet-plan/$id'
@@ -824,6 +837,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminExerciseRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/popups': {
+      id: '/_authenticated/admin/popups'
+      path: '/popups'
+      fullPath: '/admin/popups'
+      preLoaderRoute: typeof AuthenticatedAdminPopupsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/users': {
       id: '/_authenticated/admin/users'
       path: '/users'
@@ -885,6 +905,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminDietRoute: typeof AuthenticatedAdminDietRoute
   AuthenticatedAdminDoctorsRoute: typeof AuthenticatedAdminDoctorsRoute
   AuthenticatedAdminExerciseRoute: typeof AuthenticatedAdminExerciseRoute
+  AuthenticatedAdminPopupsRoute: typeof AuthenticatedAdminPopupsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -898,6 +919,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminDietRoute: AuthenticatedAdminDietRoute,
   AuthenticatedAdminDoctorsRoute: AuthenticatedAdminDoctorsRoute,
   AuthenticatedAdminExerciseRoute: AuthenticatedAdminExerciseRoute,
+  AuthenticatedAdminPopupsRoute: AuthenticatedAdminPopupsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
