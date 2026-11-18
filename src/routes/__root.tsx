@@ -14,7 +14,7 @@ import { LangProvider } from "@/lib/i18n";
 import { ContactVerificationGate } from "@/components/account/contact-verification-gate";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportRuntimeError } from "../lib/error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -35,7 +35,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportRuntimeError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (

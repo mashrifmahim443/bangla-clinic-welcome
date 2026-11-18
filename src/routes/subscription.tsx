@@ -7,9 +7,9 @@ import { formatBDT } from "@/lib/locale";
 
 export const Route = createFileRoute("/subscription")({
   head: () => ({ meta: [
-    { title: "Plans and fees in taka — DiabeCare" },
-    { name: "description", content: "Compare DiabeCare plans: free sugar log, monthly and family plans with doctor consults and SMS check-ins." },
-    { property: "og:title", content: "Plans and fees — DiabeCare" },
+    { title: "Plans and fees in taka — Diacare" },
+    { name: "description", content: "Compare Diacare plans: free sugar log, monthly and family plans with doctor consults and SMS check-ins." },
+    { property: "og:title", content: "Plans and fees — Diacare" },
     { property: "og:description", content: "A plain comparison of free, monthly and family plans in BDT." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),

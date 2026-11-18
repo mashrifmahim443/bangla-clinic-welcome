@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { formatDhaka, formatNumber } from "@/lib/locale";
 
 export const Route = createFileRoute("/_authenticated/my-diet")({
-  head: () => ({ meta: [{ title: "My diet plan — DiabeCare" }, { name: "description", content: "Read your personal weekly diet plan from your DiabeCare doctor." }, { property: "og:title", content: "My diet plan — DiabeCare" }, { property: "og:description", content: "Read your personal weekly diet plan from your DiabeCare doctor." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My diet plan — Diacare" }, { name: "description", content: "Read your personal weekly diet plan from your Diacare doctor." }, { property: "og:title", content: "My diet plan — Diacare" }, { property: "og:description", content: "Read your personal weekly diet plan from your Diacare doctor." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 

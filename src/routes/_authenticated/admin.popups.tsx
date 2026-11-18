@@ -9,7 +9,7 @@ import { pageHead } from "@/lib/appointments";
 import type { PopupAudience } from "@/lib/popup-messages";
 
 export const Route = createFileRoute("/_authenticated/admin/popups")({
-  head: () => pageHead("Popup messages", "Manage DiabeCare popup announcements for doctors and patients."),
+  head: () => pageHead("Popup messages", "Manage Diacare popup announcements for doctors and patients."),
   component: Page,
 });
 

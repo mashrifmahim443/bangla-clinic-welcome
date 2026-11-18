@@ -42,5 +42,5 @@ export function useDoctorRealtime() {
   }, [qc]);
 }
 export function pageHead(title: string, description: string) {
-  return { meta: [{ title: `${title} — DiabeCare` }, { name: "description", content: description }, { property: "og:title", content: `${title} — DiabeCare` }, { property: "og:description", content: description }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
+  return { meta: [{ title: `${title} — Diacare` }, { name: "description", content: description }, { property: "og:title", content: `${title} — Diacare` }, { property: "og:description", content: description }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
 }

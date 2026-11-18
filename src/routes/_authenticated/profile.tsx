@@ -9,7 +9,7 @@ import { MIN_COMPLETION, ageFromBirthYear, diabetesTypes, profileCompletion, typ
 import { TextSizeToggle } from "@/components/site/text-size-toggle";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  head: () => ({ meta: [{ title: "My details — DiabeCare" }, { name: "description", content: "Manage your DiabeCare patient profile and health details." }, { property: "og:title", content: "My details — DiabeCare" }, { property: "og:description", content: "Manage your DiabeCare patient profile and health details." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My details — Diacare" }, { name: "description", content: "Manage your Diacare patient profile and health details." }, { property: "og:title", content: "My details — Diacare" }, { property: "og:description", content: "Manage your Diacare patient profile and health details." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 

@@ -8,9 +8,9 @@ import { defaultExercises, type Ex } from "@/lib/exercise";
 
 export const Route = createFileRoute("/exercise")({
   head: () => ({ meta: [
-    { title: "Simple exercises for diabetes — DiabeCare" },
+    { title: "Simple exercises for diabetes — Diacare" },
     { name: "description", content: "Brisk walking, chair sit-to-stand and seated leg exercises, explained step by step in Bangla and English." },
-    { property: "og:title", content: "Simple exercises for diabetes — DiabeCare" },
+    { property: "og:title", content: "Simple exercises for diabetes — Diacare" },
     { property: "og:description", content: "Three easy exercises with step-by-step instructions." },
     { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" },
   ] }),

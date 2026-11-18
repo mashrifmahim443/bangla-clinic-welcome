@@ -11,8 +11,8 @@ export function SiteHeader() {
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:gap-8 sm:px-6 sm:py-4">
         <Link to="/" className="min-w-0 shrink truncate font-display text-lg font-semibold text-primary sm:text-xl">
-          <span className="font-bn">ডায়াবিকেয়ার</span>
-          <span className="hidden sm:inline"><span className="mx-1.5 text-muted-foreground">/</span>DiabeCare</span>
+          <span className="font-bn">ডায়াকেয়ার</span>
+          <span className="hidden sm:inline"><span className="mx-1.5 text-muted-foreground">/</span>Diacare</span>
         </Link>
         <nav className="hidden flex-1 gap-6 text-[0.95rem] lg:flex">
           {links.map((l) => (

@@ -12,7 +12,7 @@ import { formatDhaka, formatNumber, dhakaNowParts, dhakaToISO } from "@/lib/loca
 import { MAX_VALUE, MIN_VALUE, RANGE_HIGH, RANGE_LOW, UNIT, countToday, formatGlucose, glucoseState, parseGlucose, statusSentence } from "@/lib/glucose";
 
 export const Route = createFileRoute("/_authenticated/patient")({
-  head: () => ({ meta: [{ title: "My sugar diary — DiabeCare" }, { name: "description", content: "Record glucose readings and review your DiabeCare sugar diary." }, { property: "og:title", content: "My sugar diary — DiabeCare" }, { property: "og:description", content: "Record glucose readings and review your DiabeCare sugar diary." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "My sugar diary — Diacare" }, { name: "description", content: "Record glucose readings and review your Diacare sugar diary." }, { property: "og:title", content: "My sugar diary — Diacare" }, { property: "og:description", content: "Record glucose readings and review your Diacare sugar diary." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/articles/$slug")({
   },
   head: ({ loaderData }) => {
     const a = loaderData?.article;
-    const title = a ? `${a.titleEn} — DiabeCare` : "Article — DiabeCare";
+    const title = a ? `${a.titleEn} — Diacare` : "Article — Diacare";
     const desc = a ? (a.deckEn || a.body[0]?.en || "") : "";
     return { meta: [
       { title }, { name: "description", content: desc },

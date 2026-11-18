@@ -10,7 +10,7 @@ import { formatBDT, formatDhaka } from "@/lib/locale";
 import { specialties } from "@/lib/doctors";
 import { SortableTable, type Col } from "@/components/admin/sortable-table";
 
-export const Route = createFileRoute("/_authenticated/admin/applications")({ head: () => pageHead('Doctor application review', 'Review BMDC registration and doctor applications for DiabeCare.'), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/applications")({ head: () => pageHead('Doctor application review', 'Review BMDC registration and doctor applications for Diacare.'), component: Page });
 
 function Page() {
   const cms = useCms();

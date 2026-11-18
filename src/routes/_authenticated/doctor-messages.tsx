@@ -11,7 +11,7 @@ import { pageHead, appointmentLabels } from "@/lib/appointments";
 import { isChatOpen, latestByAppointment, useDoctorAppointments, type LastMessage } from "@/lib/doctor-portal";
 
 export const Route = createFileRoute("/_authenticated/doctor-messages")({
-  head: () => pageHead("Patient messages", "Chat with your accepted DiabeCare patients."),
+  head: () => pageHead("Patient messages", "Chat with your accepted Diacare patients."),
   validateSearch: (s: Record<string, unknown>): { a?: string } => (typeof s["a"] === "string" ? { a: s["a"] } : {}),
   component: Page,
 });

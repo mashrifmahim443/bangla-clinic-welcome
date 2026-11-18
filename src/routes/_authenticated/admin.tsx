@@ -6,7 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { homeForRoles, useMyRoles } from "@/lib/roles";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Admin — DiabeCare" }, { name: "description", content: "Manage DiabeCare users, doctors and site content." }, { property: "og:title", content: "Admin — DiabeCare" }, { property: "og:description", content: "Manage DiabeCare users, doctors and site content." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Admin — Diacare" }, { name: "description", content: "Manage Diacare users, doctors and site content." }, { property: "og:title", content: "Admin — Diacare" }, { property: "og:description", content: "Manage Diacare users, doctors and site content." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: AdminLayout,
 });
 
@@ -60,7 +60,7 @@ function AdminLayout() {
     <div className="min-h-screen text-sm md:grid md:grid-cols-[14rem_1fr]">
       <aside className="flex flex-col border-b border-border bg-card md:sticky md:top-0 md:h-screen md:border-r md:border-b-0">
         <div className="border-b border-border px-4 py-4">
-          <Link to="/" className="font-display text-lg font-semibold text-primary">DiabeCare</Link>
+          <Link to="/" className="font-display text-lg font-semibold text-primary">Diacare</Link>
           <p className="mt-0.5 text-xs font-medium tracking-wide text-accent uppercase">{t("অ্যাডমিন প্যানেল", "Admin panel")}</p>
         </div>
         <nav className="flex flex-1 gap-4 overflow-x-auto px-2 py-3 md:block md:overflow-y-auto">

@@ -32,7 +32,7 @@ export const sendPhoneCode = createServerFn({ method: "POST" })
     if (claimError) return { status: "unavailable" };
     if (claim !== "claimed") return { status: claim ?? "unavailable" };
     try {
-      const response = await fetch("https://api.automas.com.bd/smsapiv3", { method: "POST", redirect: "manual", signal: AbortSignal.timeout(30000), body: smsProviderParameters(data.phone, `DiabeCare: আপনার ফোন যাচাইয়ের কোড ${code}। ৫ মিনিটের মধ্যে লিখুন। কোড কাউকে দেবেন না।`, settings.sender_id, key) });
+      const response = await fetch("https://api.automas.com.bd/smsapiv3", { method: "POST", redirect: "manual", signal: AbortSignal.timeout(30000), body: smsProviderParameters(data.phone, `Diacare: আপনার ফোন যাচাইয়ের কোড ${code}। ৫ মিনিটের মধ্যে লিখুন। কোড কাউকে দেবেন না।`, settings.sender_id, key) });
       const payload: unknown = await response.json().catch(() => null);
       return { status: response.ok && smsProviderStatus(payload) === 0 ? "sent" : "send_failed" };
     } catch { return { status: "unknown" }; }

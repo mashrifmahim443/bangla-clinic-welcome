@@ -10,7 +10,7 @@ import { SortableTable, type Col } from "@/components/admin/sortable-table";
 import { adminDeleteUser } from "@/lib/admin.functions";
 import type { AppRole } from "@/lib/roles";
 
-export const Route = createFileRoute("/_authenticated/admin/users")({ head: () => pageHead('Admin users', 'Manage DiabeCare account approvals and patient deletion requests.'), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/users")({ head: () => pageHead('Admin users', 'Manage Diacare account approvals and patient deletion requests.'), component: Page });
 
 const statusLabel = { pending: ["অনুমোদনের অপেক্ষায়", "Waiting for approval"], active: ["চালু", "Active"], blocked: ["বন্ধ", "Blocked"] } as const;
 const statusColor = { pending: "text-glucose-high", active: "text-glucose-ok", blocked: "text-glucose-low" } as const;

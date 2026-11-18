@@ -7,7 +7,7 @@ import { useLang } from "@/lib/i18n";
 import { specialties } from "@/lib/doctors";
 
 export const Route = createFileRoute("/_authenticated/doctor-apply")({
-  head: () => pageHead('Join as a doctor', 'Submit your BMDC registration and professional details to DiabeCare.'),
+  head: () => pageHead('Join as a doctor', 'Submit your BMDC registration and professional details to Diacare.'),
   component: Page,
 });
 

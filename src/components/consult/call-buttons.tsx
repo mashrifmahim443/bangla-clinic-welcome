@@ -7,7 +7,7 @@ import { INTEGRATIONS_KEY, joinUrl, withDefaults } from "@/lib/integrations";
 export function CallButtons({ appointmentId }: { appointmentId: string }) {
   const { t } = useLang();
   const cms = useCms();
-  const room = joinUrl(withDefaults(cms.json(INTEGRATIONS_KEY, null)).jitsi_base, `DiabeCare-${appointmentId}`);
+  const room = joinUrl(withDefaults(cms.json(INTEGRATIONS_KEY, null)).jitsi_base, `Diacare-${appointmentId}`);
   const cls = "inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150";
   return (
     <div className="flex shrink-0 gap-2">

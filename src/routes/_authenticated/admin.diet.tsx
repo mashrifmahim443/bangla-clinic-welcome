@@ -6,7 +6,7 @@ import { useLang } from "@/lib/i18n";
 import { saveContent, useCms } from "@/lib/cms";
 import { days, meals, plan as defaultPlan, type Cell, type GI } from "@/lib/diet";
 
-export const Route = createFileRoute("/_authenticated/admin/diet")({ head: () => pageHead('Admin diet chart', 'Edit the public DiabeCare weekly meal chart.'), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/diet")({ head: () => pageHead('Admin diet chart', 'Edit the public Diacare weekly meal chart.'), component: Page });
 
 const inp = "w-full rounded-sm border border-input bg-card px-1 py-0.5 text-xs";
 

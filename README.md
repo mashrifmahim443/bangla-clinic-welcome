@@ -1,22 +1,13 @@
-# Bangla Clinic Welcome
+# Diacare
 
-Implement exactly the screenshot and nothing else
-
-This project was built with [Lovable](https://lovable.dev).
+A bilingual (Bangla/English) diabetes care platform for Bangladesh: glucose diary, doctor directory and appointments, video/audio consultations, prescriptions, diet plans, and SMS check-ins.
 
 **Live app**: https://bangla-clinic-welcome.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6d8d7bb2-80cf-4c3c-b0a6-bf22b0567066).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+**Domain**: diacare24.com
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
 git clone <this-repository-url>

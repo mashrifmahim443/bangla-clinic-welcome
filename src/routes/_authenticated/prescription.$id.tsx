@@ -6,7 +6,7 @@ import { useAppointment, usePrescription } from "@/lib/consult";
 import { medicineTimingText } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/prescription/$id")({
-  head: () => pageHead('Patient prescription', 'Read and print your private DiabeCare doctor prescription.'),
+  head: () => pageHead('Patient prescription', 'Read and print your private Diacare doctor prescription.'),
   component: Page,
 });
 
@@ -35,8 +35,8 @@ function Page() {
             <p className="mt-1 text-sm">BMDC Reg. No: <span className="font-semibold">{d?.bmdc_no}</span></p>
           </div>
           <div className="text-right text-sm">
-            <p className="text-lg font-semibold">ডায়াবিকেয়ার</p>
-            <p>DiabeCare Online Chamber</p>
+            <p className="text-lg font-semibold">ডায়াকেয়ার</p>
+            <p>Diacare Online Chamber</p>
             <p className="text-muted-foreground">{t("ধানমন্ডি, ঢাকা", "Dhanmondi, Dhaka")}</p>
           </div>
         </header>

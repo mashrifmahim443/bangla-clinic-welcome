@@ -7,9 +7,9 @@ import { useLang } from "@/lib/i18n";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set a new password — DiabeCare" },
-      { name: "description", content: "Choose a new password for your DiabeCare account." },
-      { property: "og:title", content: "Set a new password — DiabeCare" },
+      { title: "Set a new password — Diacare" },
+      { name: "description", content: "Choose a new password for your Diacare account." },
+      { property: "og:title", content: "Set a new password — Diacare" },
       { property: "og:description", content: "Choose a new password for your account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

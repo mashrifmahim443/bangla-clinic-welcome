@@ -14,10 +14,10 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Sign in — DiabeCare" },
-      { name: "description", content: "Sign in or open a DiabeCare account to log your sugar and see a doctor." },
-      { property: "og:title", content: "Sign in — DiabeCare" },
-      { property: "og:description", content: "Sign in or open a DiabeCare account." },
+      { title: "Sign in — Diacare" },
+      { name: "description", content: "Sign in or open a Diacare account to log your sugar and see a doctor." },
+      { property: "og:title", content: "Sign in — Diacare" },
+      { property: "og:description", content: "Sign in or open a Diacare account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

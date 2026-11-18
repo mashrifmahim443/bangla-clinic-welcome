@@ -16,7 +16,7 @@ import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors"
 import { consultationLabels, fieldClass, flatButton, useAppointmentRealtime, useDoctorRealtime } from "@/lib/appointments";
 
 export const Route = createFileRoute("/doctors/$slug")({
-  head: () => ({ meta: [{ title: "Doctor profile and booking — DiabeCare" }, { name: "description", content: "Doctor qualifications, patient reviews and available consultation times in Bangladesh." }, { property: "og:title", content: "Doctor profile and booking — DiabeCare" }, { property: "og:description", content: "Choose a doctor and request a video, audio or chat consultation." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: BookingPage,
+  head: () => ({ meta: [{ title: "Doctor profile and booking — Diacare" }, { name: "description", content: "Doctor qualifications, patient reviews and available consultation times in Bangladesh." }, { property: "og:title", content: "Doctor profile and booking — Diacare" }, { property: "og:description", content: "Choose a doctor and request a video, audio or chat consultation." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: BookingPage,
 });
 function BookingPage() {
   const { slug } = Route.useParams(); const { lang, t } = useLang(); const qc = useQueryClient();

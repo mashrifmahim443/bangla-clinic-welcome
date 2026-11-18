@@ -8,7 +8,7 @@ import { pageHead } from "@/lib/appointments";
 import { ageFromBirthYear } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated/rx-write/$id")({
-  head: () => pageHead("Write prescription", "Write and save a patient prescription in DiabeCare."),
+  head: () => pageHead("Write prescription", "Write and save a patient prescription in Diacare."),
   component: Page,
 });
 

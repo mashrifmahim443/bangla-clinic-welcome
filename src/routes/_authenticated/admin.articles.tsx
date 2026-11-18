@@ -7,7 +7,7 @@ import { saveContent, fileToDataUrl } from "@/lib/cms";
 import { useArticles } from "@/lib/use-articles";
 import type { Article, Block } from "@/lib/articles";
 
-export const Route = createFileRoute("/_authenticated/admin/articles")({ head: () => pageHead('Admin articles', 'Edit bilingual diabetes articles for DiabeCare.'), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/articles")({ head: () => pageHead('Admin articles', 'Edit bilingual diabetes articles for Diacare.'), component: Page });
 
 const inp = "mt-0.5 w-full rounded-md border border-input bg-card px-2 py-1 text-sm";
 const btn = "rounded-md border border-border bg-card px-2 py-1 transition-colors duration-150 hover:bg-secondary";

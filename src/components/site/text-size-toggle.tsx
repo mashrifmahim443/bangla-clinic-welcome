@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
 
-const KEY = "diabecare-big-text";
+const KEY = "diacare-big-text";
 
 export function TextSizeToggle({ className = "" }: { className?: string }) {
   const { t } = useLang();

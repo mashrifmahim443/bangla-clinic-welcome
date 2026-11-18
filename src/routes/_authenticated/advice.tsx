@@ -5,7 +5,7 @@ import { MedicineSchedules } from "@/components/consult/medicine-schedules";
 import { RoleShell } from "@/components/site/role-shell";
 
 export const Route = createFileRoute("/_authenticated/advice")({
-  head: () => pageHead('Doctor advice', 'Read your private DiabeCare prescriptions and doctor advice.'),
+  head: () => pageHead('Doctor advice', 'Read your private Diacare prescriptions and doctor advice.'),
   component: () => (
     <RoleShell role="patient">
       <DoctorAdvice />

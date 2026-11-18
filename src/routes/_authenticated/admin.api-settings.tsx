@@ -11,7 +11,7 @@ import { SmsComposer } from "@/components/admin/sms-composer";
 import { IntegrationsSettings } from "@/components/admin/integrations-settings";
 
 export const Route = createFileRoute("/_authenticated/admin/api-settings")({
-  head: () => pageHead("API settings", "Manage SMS, video call, BMDC, payment and email service settings for DiabeCare."),
+  head: () => pageHead("API settings", "Manage SMS, video call, BMDC, payment and email service settings for Diacare."),
   component: Page,
 });
 
@@ -69,7 +69,7 @@ function Page() {
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         <label className="block">{t("API কী (apikey)", "API key (apikey)")}<input disabled type="password" placeholder={t("নিরাপত্তার জন্য এখানে কী দেখানো হয় না", "Keys are never displayed here for security")} className={input} /></label>
       </div>
-      <p className="mt-2 text-sm text-muted-foreground">{t("API কী শুধু আলাদা নিরাপদ ফর্মে দিন। এটি এনক্রিপ্ট করে রাখা হয়; এই পাতায়, সাইটের লেখায় বা ব্রাউজারে রাখা হয় না। কী বদলাতে Lovable-এর Project Settings → Secrets খুলুন। শুধু কী রাখলেই SMS পাঠানো চালু হবে না।", "Enter the API key only through the separate secure form. It is encrypted, never stored on this page, in public site content or in browser storage. To replace it, open Lovable Project Settings → Secrets. Storing a key does not enable SMS sending.")}</p>
+      <p className="mt-2 text-sm text-muted-foreground">{t("API কী শুধু আলাদা নিরাপদ ফর্মে দিন। এটি এনক্রিপ্ট করে রাখা হয়; এই পাতায়, সাইটের লেখায় বা ব্রাউজারে রাখা হয় না। কী বদলাতে Project Settings → Secrets খুলুন। শুধু কী রাখলেই SMS পাঠানো চালু হবে না।", "Enter the API key only through the separate secure form. It is encrypted, never stored on this page, in public site content or in browser storage. To replace it, open Project Settings → Secrets. Storing a key does not enable SMS sending.")}</p>
     </section>
     <section className="mt-6 border-t border-border pt-4">
       <h2 className="text-base font-semibold">{t("অ্যাপয়েন্টমেন্টের SMS", "Appointment SMS")}</h2>

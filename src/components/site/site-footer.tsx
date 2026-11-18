@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-secondary">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <p className="font-display text-xl font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</p>
+          <p className="font-display text-xl font-semibold text-primary">ডায়াকেয়ার / Diacare</p>
           <p className="mt-3 text-sm text-muted-foreground">
             {c("footer.address")}
             <br />

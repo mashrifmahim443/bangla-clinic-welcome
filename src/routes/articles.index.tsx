@@ -9,9 +9,9 @@ import plate from "@/assets/articles/plate.jpg";
 
 export const Route = createFileRoute("/articles/")({
   head: () => ({ meta: [
-    { title: "Diabetes articles by Bangladeshi doctors — DiabeCare" },
+    { title: "Diabetes articles by Bangladeshi doctors — Diacare" },
     { name: "description", content: "Plain-language articles on food, sugar checks, Ramadan and foot care, written by doctors and nutritionists." },
-    { property: "og:title", content: "Articles — DiabeCare" },
+    { property: "og:title", content: "Articles — Diacare" },
     { property: "og:description", content: "Diabetes advice from Bangladeshi doctors, in Bangla and English." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),

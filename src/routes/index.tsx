@@ -21,9 +21,9 @@ import { DoctorBadges } from "@/components/consult/doctor-badges";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "DiabeCare — Log your sugar, tell your doctor" },
+      { title: "Diacare — Log your sugar, tell your doctor" },
       { name: "description", content: "Diabetes care for Bangladesh: log sugar three times a day, see BMDC-verified doctors online, and get food lists in Bangla." },
-      { property: "og:title", content: "DiabeCare — Log your sugar, tell your doctor" },
+      { property: "og:title", content: "Diacare — Log your sugar, tell your doctor" },
       { property: "og:description", content: "Log sugar, see BMDC-verified doctors, and get Bangla food lists. Built in Dhaka." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

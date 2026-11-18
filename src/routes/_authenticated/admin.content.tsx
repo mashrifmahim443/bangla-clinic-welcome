@@ -5,7 +5,7 @@ import { useLang } from "@/lib/i18n";
 import { fields, sections, saveContent, fileToDataUrl, useSiteContent, type Field } from "@/lib/cms";
 import heroImg from "@/assets/hero-sugar-check.jpg";
 
-export const Route = createFileRoute("/_authenticated/admin/content")({ head: () => ({ meta: [{ title: "Site text and images — DiabeCare Admin" }, { name: "description", content: "Edit bilingual DiabeCare site text and images." }, { property: "og:title", content: "Site text and images — DiabeCare Admin" }, { property: "og:description", content: "Edit bilingual DiabeCare site text and images." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/content")({ head: () => ({ meta: [{ title: "Site text and images — Diacare Admin" }, { name: "description", content: "Edit bilingual Diacare site text and images." }, { property: "og:title", content: "Site text and images — Diacare Admin" }, { property: "og:description", content: "Edit bilingual Diacare site text and images." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }), component: Page });
 
 const inp = "mt-0.5 w-full rounded-md border border-input bg-card px-2 py-1";
 const btn = "rounded-md border border-border bg-card px-2 py-1 transition-colors duration-150 hover:bg-secondary";

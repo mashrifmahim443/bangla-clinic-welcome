@@ -17,7 +17,7 @@ import { useAppointment, usePrescription } from "@/lib/consult";
 import { medicineTimingText } from "@/lib/medicine";
 
 export const Route = createFileRoute("/_authenticated/consult/$id")({
-  head: () => pageHead("Consultation room", "Private chat and consultation with your DiabeCare doctor."),
+  head: () => pageHead("Consultation room", "Private chat and consultation with your Diacare doctor."),
   component: Page,
 });
 

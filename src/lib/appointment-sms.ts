@@ -19,6 +19,6 @@ export function appointmentSmsMessage(input: { slot: string; patientName?: strin
   const name = smsSafeText(input.patientName, 60) || (language === "bn" ? "নাম জানা নাই" : "not given");
   const problem = smsSafeText(input.reason, 160) || (language === "bn" ? "জানানো হয়নি" : "not given");
   return language === "bn"
-    ? `DiabeCare: আপনার কাছে নতুন অ্যাপয়েন্টমেন্টের অনুরোধ এসেছে। রোগী: ${name}। সমস্যা: ${problem}। সময়: ${time}। ডাক্তার পোর্টালে ঢুকে অনুরোধটি দেখুন।`
-    : `DiabeCare: New appointment request from ${name}. Problem: ${problem}. Time: ${time}. Open the doctor portal to review it.`;
+    ? `Diacare: আপনার কাছে নতুন অ্যাপয়েন্টমেন্টের অনুরোধ এসেছে। রোগী: ${name}। সমস্যা: ${problem}। সময়: ${time}। ডাক্তার পোর্টালে ঢুকে অনুরোধটি দেখুন।`
+    : `Diacare: New appointment request from ${name}. Problem: ${problem}. Time: ${time}. Open the doctor portal to review it.`;
 }

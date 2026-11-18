@@ -16,9 +16,9 @@ import { StatusDot, doctorPhotos, specialties, statusInfo } from "@/lib/doctors"
 export const Route = createFileRoute("/doctors/")({
   head: () => ({
     meta: [
-      { title: "Diabetes doctors in Bangladesh — DiabeCare" },
+      { title: "Diabetes doctors in Bangladesh — Diacare" },
       { name: "description", content: "BMDC-registered diabetes doctors, endocrinologists and nutritionists. See fees in taka and book an online consultation." },
-      { property: "og:title", content: "Diabetes doctors — DiabeCare" },
+      { property: "og:title", content: "Diabetes doctors — Diacare" },
       { property: "og:description", content: "BMDC-registered doctors with fees in taka. Book online." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

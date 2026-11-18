@@ -5,7 +5,7 @@ import { RoleShell } from "@/components/site/role-shell";
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/old-prescriptions")({
-  head: () => pageHead('Prescriptions and test reports', 'Manage your private DiabeCare prescriptions and medical reports.'),
+  head: () => pageHead('Prescriptions and test reports', 'Manage your private Diacare prescriptions and medical reports.'),
   component: Page,
 });
 

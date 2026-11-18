@@ -45,7 +45,7 @@ export function AdminPopups({ role }: { role: AppRole }) {
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40" />
       <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-md border border-border bg-card p-6 shadow-none">
-        <p className="mb-2 text-sm font-medium text-primary">{t("ডায়াবিকেয়ার থেকে বার্তা", "A message from DiabeCare")}</p>
+        <p className="mb-2 text-sm font-medium text-primary">{t("ডায়াকেয়ার থেকে বার্তা", "A message from Diacare")}</p>
         <Dialog.Title className="break-words font-display text-2xl font-semibold">{t(message.title_bn, message.title_en || message.title_bn)}</Dialog.Title>
         <Dialog.Description className="mt-4 max-h-[50vh] overflow-y-auto whitespace-pre-wrap break-words text-base leading-relaxed">{t(message.body_bn, message.body_en || message.body_bn)}</Dialog.Description>
         {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}

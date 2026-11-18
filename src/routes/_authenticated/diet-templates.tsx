@@ -10,7 +10,7 @@ import { useDietTemplates, useMyDoctorId, useMyPatients } from "@/lib/diet-templ
 import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_authenticated/diet-templates")({
-  head: () => pageHead('Reusable diet charts', 'Manage private and shared DiabeCare doctor diet templates.'),
+  head: () => pageHead('Reusable diet charts', 'Manage private and shared Diacare doctor diet templates.'),
   component: Page,
 });
 

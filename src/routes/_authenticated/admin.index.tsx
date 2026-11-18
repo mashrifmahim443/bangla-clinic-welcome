@@ -10,7 +10,7 @@ import { formatDhaka, formatNumber } from "@/lib/locale";
 import { dhakaDay } from "@/lib/glucose";
 import { TARGETS, checkinRate, completionRate } from "@/lib/targets";
 
-export const Route = createFileRoute("/_authenticated/admin/")({ head: () => pageHead('Admin overview', 'Review DiabeCare patients, consultation totals and clinic targets.'), component: Page });
+export const Route = createFileRoute("/_authenticated/admin/")({ head: () => pageHead('Admin overview', 'Review Diacare patients, consultation totals and clinic targets.'), component: Page });
 
 const axis = { fontSize: 11, fill: "var(--muted-foreground)" };
 

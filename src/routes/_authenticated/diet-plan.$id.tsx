@@ -14,7 +14,7 @@ import { formatNumber } from "@/lib/locale";
 import { ageFromBirthYear, diabetesTypes, type DiabetesType } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated/diet-plan/$id")({
-  head: () => pageHead('Write a patient diet plan', 'Prepare a private weekly DiabeCare diet plan for your patient.'),
+  head: () => pageHead('Write a patient diet plan', 'Prepare a private weekly Diacare diet plan for your patient.'),
   component: Page,
 });
 

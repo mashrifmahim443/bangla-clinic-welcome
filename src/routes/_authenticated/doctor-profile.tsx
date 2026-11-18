@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { formatBDT } from "@/lib/locale";
 
 export const Route = createFileRoute("/_authenticated/doctor-profile")({
-  head: () => pageHead('My doctor profile', 'Manage your DiabeCare professional and private contact details.'),
+  head: () => pageHead('My doctor profile', 'Manage your Diacare professional and private contact details.'),
   component: Page,
 });
 

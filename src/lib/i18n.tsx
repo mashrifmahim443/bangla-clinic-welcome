@@ -7,7 +7,7 @@ const LangContext = createContext<Ctx>({ lang: "bn", setLang: () => {}, t: (bn) 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("bn");
   useEffect(() => {
-    const saved = localStorage.getItem("diabecare-lang");
+    const saved = localStorage.getItem("diacare-lang");
     if (saved === "en" || saved === "bn") setLangState(saved);
   }, []);
   useEffect(() => {
@@ -15,7 +15,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   }, [lang]);
   const setLang = (l: Lang) => {
     setLangState(l);
-    localStorage.setItem("diabecare-lang", l);
+    localStorage.setItem("diacare-lang", l);
   };
   const t = (bn: string, en: string) => (lang === "bn" ? bn : en);
   return <LangContext.Provider value={{ lang, setLang, t }}>{children}</LangContext.Provider>;

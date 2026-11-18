@@ -45,7 +45,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
     return (
       <main className="min-h-screen px-6 py-16 md:px-16">
         <div className="max-w-xl rounded-[10px] border border-border bg-card p-6">
-          <p className="font-display text-xl font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</p>
+          <p className="font-display text-xl font-semibold text-primary">ডায়াকেয়ার / Diacare</p>
           <h1 className="mt-4 font-display text-2xl font-semibold">{blocked ? t("আপনার অ্যাকাউন্ট বন্ধ আছে।", "Your account is blocked.") : t("আপনার অ্যাকাউন্ট এখনো অনুমোদন পায়নি।", "Your account is waiting for approval.")}</h1>
           <p className="mt-2 text-muted-foreground">{blocked ? t("কোনো প্রশ্ন থাকলে আমাদের ফোন করুন।", "Please call us if you have any questions.") : t("আমরা সাধারণত এক কর্মদিবসের মধ্যে অনুমোদন দিই। অনুমোদন হলে এই পাতা নিজে খুলে যাবে।", "We usually approve within one working day. This page opens by itself once approved.")}</p>
           <div className="mt-5 flex flex-wrap gap-2">
@@ -61,7 +61,7 @@ export function RoleShell({ role, children }: { role: AppRole; children: ReactNo
     <div className="min-h-screen md:grid md:grid-cols-[15rem_1fr]">
       <AdminPopups role={role} />
       <aside className="border-b border-border bg-card p-6 md:border-r md:border-b-0">
-        <Link to="/" className="font-display text-lg font-semibold text-primary">ডায়াবিকেয়ার / DiabeCare</Link>
+        <Link to="/" className="font-display text-lg font-semibold text-primary">ডায়াকেয়ার / Diacare</Link>
         <nav className="mt-8 space-y-1">
           {roles.map((r) => (
             <Link key={r} to={navByRole[r].to} className="block rounded-md px-3 py-2 hover:bg-secondary" activeProps={{ className: "bg-secondary text-primary font-medium" }}>

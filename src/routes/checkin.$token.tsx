@@ -7,7 +7,7 @@ import { MAX_VALUE, MIN_VALUE, UNIT, glucoseState, parseGlucose } from "@/lib/gl
 
 export const Route = createFileRoute("/checkin/$token")({
   ssr: false,
-  head: () => ({ meta: [{ title: "সুগার লিখুন — DiabeCare" }, { name: "description", content: "Write your meal, medicine and glucose check-in for DiabeCare." }, { property: "og:title", content: "সুগার লিখুন — DiabeCare" }, { property: "og:description", content: "Write your meal, medicine and glucose check-in for DiabeCare." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "সুগার লিখুন — Diacare" }, { name: "description", content: "Write your meal, medicine and glucose check-in for Diacare." }, { property: "og:title", content: "সুগার লিখুন — Diacare" }, { property: "og:description", content: "Write your meal, medicine and glucose check-in for Diacare." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Page,
 });
 

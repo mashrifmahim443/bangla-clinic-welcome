@@ -7,9 +7,9 @@ import { useCms } from "@/lib/cms";
 
 export const Route = createFileRoute("/diet")({
   head: () => ({ meta: [
-    { title: "Weekly diabetes diet chart in Bangla — DiabeCare" },
+    { title: "Weekly diabetes diet chart in Bangla — Diacare" },
     { name: "description", content: "A printable 7-day meal chart with Bangladeshi foods, portions and glycemic index tags." },
-    { property: "og:title", content: "Weekly diabetes diet chart — DiabeCare" },
+    { property: "og:title", content: "Weekly diabetes diet chart — Diacare" },
     { property: "og:description", content: "7-day chart of Bangladeshi meals with portions and GI tags." },
     { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" },
   ] }),
