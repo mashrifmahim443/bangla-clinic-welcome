@@ -218,6 +218,13 @@
       "when": 1794113943267,
       "tag": "0030_verified_registration_role_authorization",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1794989148517,
+      "tag": "0031_tighten_doctor_availability_reviews_media",
+      "breakpoints": true
     }
   ]
 }

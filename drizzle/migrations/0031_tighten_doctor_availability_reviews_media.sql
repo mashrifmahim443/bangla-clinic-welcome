@@ -1,0 +1,11 @@
+DROP POLICY IF EXISTS schedule_read ON public.doctor_schedule;
+CREATE POLICY schedule_read ON public.doctor_schedule FOR SELECT TO authenticated USING (doctor_id = public.my_doctor_id() OR public.has_role(auth.uid(),'admin'));
+DROP POLICY IF EXISTS leave_read ON public.doctor_leave;
+CREATE POLICY leave_read ON public.doctor_leave FOR SELECT TO authenticated USING (doctor_id = public.my_doctor_id() OR public.has_role(auth.uid(),'admin'));
+DROP POLICY IF EXISTS review_read ON public.doctor_reviews;
+CREATE POLICY review_read ON public.doctor_reviews FOR SELECT TO anon, authenticated USING (EXISTS (SELECT 1 FROM public.doctors d WHERE d.id = doctor_reviews.doctor_id AND d.active));
+REVOKE SELECT ON public.doctor_reviews FROM anon, authenticated;
+GRANT SELECT (id, appointment_id, doctor_id, rating, body, created_at) ON public.doctor_reviews TO anon, authenticated;
+DROP POLICY IF EXISTS "Site media public read" ON storage.objects;
+DROP POLICY IF EXISTS "Admin uploads site media" ON storage.objects;
+DROP POLICY IF EXISTS "Admin deletes site media" ON storage.objects;
